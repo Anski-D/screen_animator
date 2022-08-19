@@ -6,6 +6,7 @@ authors = ["David Anscombe <dave.anski@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
+pygame = "^2.1.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
