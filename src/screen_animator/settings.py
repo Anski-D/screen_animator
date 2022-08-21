@@ -1,4 +1,5 @@
 from pathlib import Path
+import random
 try:
     import tomlib
 except ModuleNotFoundError:
@@ -65,3 +66,28 @@ class SettingsImporter:
                 pass
             case _:
                 raise ValueError(f"Invalid configuration {self._settings}")
+
+
+class SettingsManager:
+    def __init__(self, importer: SettingsImporter, settings_file: str | Path) -> None:
+        self._importer = importer
+        self._settings = self._import_settings(settings_file)
+
+    @property
+    def settings(self) -> dict:
+        return self._settings
+
+    def set_colours(self):
+        if self._settings.get('bg') is None:
+            self._settings['bg'] = {}
+        self._settings['bg']['colour'] = random.choice(self._settings['colours'])
+
+        self._settings['messages']['colour'] = random.choice(self._settings['colours'])
+        while self._settings['messages']['colour'] == self._settings['bg']['colour']:
+            self._settings['messages']['colour'] = random.choice(self._settings['colours'])
+
+        self.settings['messages']['outline_colour'] = \
+            random.choice(self._settings['messages']['outline_colours'])
+
+    def _import_settings(self, settings_file: str | Path) -> dict:
+        return self._importer.import_settings(settings_file)

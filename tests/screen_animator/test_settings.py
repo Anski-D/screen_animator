@@ -1,5 +1,5 @@
 import pytest
-from screen_animator.settings import SettingsImporter
+from screen_animator.settings import SettingsImporter, SettingsManager
 
 
 @pytest.fixture
@@ -55,3 +55,25 @@ class TestSettingsImporter:
         importer = SettingsImporter()
         importer._settings = example_settings_dict
         assert importer._validate_settings() is None
+
+
+class TestSettingsManager:
+    @pytest.fixture
+    def setup_settings_manager(self, example_settings_dict, monkeypatch):
+        monkeypatch.setattr(SettingsManager, '_import_settings', lambda x, y: example_settings_dict)
+        return SettingsManager(None, None)
+
+    @pytest.mark.parametrize('group', ['bg', 'messages'])
+    def test_set_colours(self, setup_settings_manager, group):
+        settings_manager = setup_settings_manager
+        settings_manager.set_colours()
+
+        assert settings_manager.settings[group]['colour'] in settings_manager.settings['colours']
+
+    def test_set_outline_colour(self, setup_settings_manager):
+        settings_manager = setup_settings_manager
+        settings_manager.set_colours()
+
+        assert settings_manager.settings['messages']['outline_colour'] \
+               in settings_manager.settings['messages']['outline_colours']
+
