@@ -1,4 +1,5 @@
 import pytest
+import pygame as pg
 from screen_animator.settings import SettingsImporter, SettingsManager
 
 
@@ -60,6 +61,7 @@ class TestSettingsImporter:
 class TestSettingsManager:
     @pytest.fixture
     def setup_settings_manager(self, monkeypatch, example_settings_dict):
+        pg.init()
         monkeypatch.setattr(SettingsManager, '_import_settings', lambda x, y: example_settings_dict)
         return SettingsManager(None, None)
 
@@ -76,6 +78,12 @@ class TestSettingsManager:
 
         assert settings_manager.settings['messages']['outline_colour'] \
                in settings_manager.settings['messages']['outline_colours']
+
+    def test_set_font(self, setup_settings_manager):
+        settings_manager = setup_settings_manager
+        settings_manager._set_font()
+
+        assert isinstance(settings_manager.settings['messages']['font'], pg.font.Font)
 
     @pytest.mark.parametrize('repeat', range(5))
     def test_generate_text(self, repeat, setup_settings_manager, example_settings_dict):

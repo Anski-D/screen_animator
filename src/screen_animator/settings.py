@@ -1,5 +1,6 @@
 from pathlib import Path
 import random
+import pygame as pg
 try:
     import tomlib
 except ModuleNotFoundError:
@@ -75,9 +76,21 @@ class SettingsManager:
 
     @property
     def settings(self) -> dict:
+        """
+
+        Returns
+        -------
+
+        """
         return self._settings
 
-    def set_colours(self):
+    def set_colours(self) -> None:
+        """
+
+        Returns
+        -------
+
+        """
         if self._settings.get('bg') is None:
             self._settings['bg'] = {}
         self._settings['bg']['colour'] = random.choice(self._settings['colours'])
@@ -88,6 +101,15 @@ class SettingsManager:
 
         self.settings['messages']['outline_colour'] = \
             random.choice(self._settings['messages']['outline_colours'])
+
+    def _set_font(self) -> None:
+        messages_dict = self._settings['messages']
+        messages_dict['font'] = pg.font.SysFont(
+            messages_dict['typeface'],
+            messages_dict['size'],
+            bold=messages_dict['bold'],
+            italic=messages_dict['italic'],
+        )
 
     def _import_settings(self, settings_file: str | Path) -> dict:
         return self._importer.import_settings(settings_file)
