@@ -73,6 +73,7 @@ class SettingsManager:
     def __init__(self, importer: SettingsImporter, settings_file: str | Path) -> None:
         self._importer = importer
         self._settings = self._import_settings(settings_file)
+        self._setup_settings()
 
     @property
     def settings(self) -> dict:
@@ -102,6 +103,15 @@ class SettingsManager:
         self.settings['messages']['outline_colour'] = \
             random.choice(self._settings['messages']['outline_colours'])
 
+    def _import_settings(self, settings_file: str | Path) -> dict:
+        return self._importer.import_settings(settings_file)
+
+    def _setup_settings(self):
+        self.set_colours()
+        self._set_font()
+        self._settings['messages']['message'] = self._generate_message
+        self._load_images()
+
     def _set_font(self) -> None:
         messages_dict = self._settings['messages']
         messages_dict['font'] = pg.font.SysFont(
@@ -110,9 +120,6 @@ class SettingsManager:
             bold=messages_dict['bold'],
             italic=messages_dict['italic'],
         )
-
-    def _import_settings(self, settings_file: str | Path) -> dict:
-        return self._importer.import_settings(settings_file)
 
     def _generate_message_text(self) -> str:
         messages_dict = self._settings['messages']
@@ -135,5 +142,5 @@ class SettingsManager:
             for image in images_dict['sources']:
                 try:
                     images_dict['images'].append(pg.image.load(image))
-                except FileNotFoundError:
-                    pass
+                except FileNotFoundError as error:
+                    print(error)
