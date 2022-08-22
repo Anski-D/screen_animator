@@ -97,6 +97,14 @@ class TestSettingsManager:
                ]
 
     def test_generate_text_return_type(self, setup_settings_manager):
-        setting_manager = setup_settings_manager
+        settings_manager = setup_settings_manager
 
-        assert isinstance(setting_manager._generate_message_text(), str)
+        assert isinstance(settings_manager._generate_message_text(), str)
+
+    def test_generate_message(self, setup_settings_manager):
+        settings_manager = setup_settings_manager
+        messages_dict = settings_manager._settings['messages']
+        messages_dict['colour'] = [0, 0, 0]
+        messages_dict['font'] = pg.font.Font(None, 10)
+
+        assert isinstance(settings_manager._generate_message(), pg.Surface)

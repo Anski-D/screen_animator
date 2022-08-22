@@ -116,4 +116,14 @@ class SettingsManager:
 
     def _generate_message_text(self) -> str:
         messages_dict = self._settings['messages']
+
         return f"{random.choice(messages_dict['messages'])}{messages_dict['separator']}"
+
+    def _generate_message(self) -> pg.Surface:
+        messages_dict = self._settings['messages']
+
+        return messages_dict['font'].render(
+            self._generate_message_text(),
+            messages_dict['anti-aliasing'],
+            messages_dict['colour'],
+        )
