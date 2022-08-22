@@ -63,6 +63,7 @@ class TestSettingsManager:
     def setup_settings_manager(self, monkeypatch, example_settings_dict):
         pg.init()
         monkeypatch.setattr(SettingsManager, '_import_settings', lambda x, y: example_settings_dict)
+        monkeypatch.setattr(SettingsManager, '_setup_settings', lambda x: None)
 
         return SettingsManager(None, None)
 
@@ -118,8 +119,9 @@ class TestSettingsManager:
 
         assert len(images_dict['images']) == len(images_dict['sources'])
 
-    @pytest.mark.xfail
-    def test_load_images_raises_file_not_found_error(self, setup_settings_manager):
+    def test_load_images_file_not_found_error_not_raised(self, setup_settings_manager):
         settings_manager = setup_settings_manager
-        with pytest.raises(FileNotFoundError):
+        try:
             settings_manager._load_images()
+        except FileNotFoundError as error:
+            assert False, f"{error}"
