@@ -45,7 +45,7 @@ def example_settings_dict():
 
 
 class TestSettingsImporter:
-    def test_validate_settings_value_error(self, example_settings_dict):
+    def test_validate_settings_raises_value_error(self, example_settings_dict):
         del example_settings_dict["colours"]
         importer = SettingsImporter()
         importer._settings = example_settings_dict
@@ -63,6 +63,7 @@ class TestSettingsManager:
     def setup_settings_manager(self, monkeypatch, example_settings_dict):
         pg.init()
         monkeypatch.setattr(SettingsManager, '_import_settings', lambda x, y: example_settings_dict)
+
         return SettingsManager(None, None)
 
     @pytest.mark.parametrize('group', ['bg', 'messages'])
@@ -108,3 +109,17 @@ class TestSettingsManager:
         messages_dict['font'] = pg.font.Font(None, 10)
 
         assert isinstance(settings_manager._generate_message(), pg.Surface)
+
+    def test_load_images(self, monkeypatch, setup_settings_manager, example_settings_dict):
+        monkeypatch.setattr(pg.image, 'load', lambda x: pg.Surface((20, 10)))
+        settings_manager = setup_settings_manager
+        settings_manager._load_images()
+        images_dict = settings_manager.settings['images']
+
+        assert len(images_dict['images']) == len(images_dict['sources'])
+
+    @pytest.mark.xfail
+    def test_load_images_raises_file_not_found_error(self, setup_settings_manager):
+        settings_manager = setup_settings_manager
+        with pytest.raises(FileNotFoundError):
+            settings_manager._load_images()

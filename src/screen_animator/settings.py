@@ -127,3 +127,13 @@ class SettingsManager:
             messages_dict['anti-aliasing'],
             messages_dict['colour'],
         )
+
+    def _load_images(self):
+        images_dict = self._settings['images']
+        if len(images_dict['sources']) >= 1:
+            images_dict['images'] = []
+            for image in images_dict['sources']:
+                try:
+                    images_dict['images'].append(pg.image.load(image))
+                except FileNotFoundError:
+                    pass
