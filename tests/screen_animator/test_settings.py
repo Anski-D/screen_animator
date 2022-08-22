@@ -59,12 +59,12 @@ class TestSettingsImporter:
 
 class TestSettingsManager:
     @pytest.fixture
-    def setup_settings_manager(self, example_settings_dict, monkeypatch):
+    def setup_settings_manager(self, monkeypatch, example_settings_dict):
         monkeypatch.setattr(SettingsManager, '_import_settings', lambda x, y: example_settings_dict)
         return SettingsManager(None, None)
 
     @pytest.mark.parametrize('group', ['bg', 'messages'])
-    def test_set_colours(self, setup_settings_manager, group):
+    def test_set_colours(self, group, setup_settings_manager):
         settings_manager = setup_settings_manager
         settings_manager.set_colours()
 
@@ -77,3 +77,18 @@ class TestSettingsManager:
         assert settings_manager.settings['messages']['outline_colour'] \
                in settings_manager.settings['messages']['outline_colours']
 
+    @pytest.mark.parametrize('repeat', range(5))
+    def test_generate_text(self, repeat, setup_settings_manager, example_settings_dict):
+        settings_manager = setup_settings_manager
+
+        assert settings_manager._generate_message_text() \
+               in [
+                   f'{message}{example_settings_dict["messages"]["separator"]}'
+                   for message
+                   in example_settings_dict["messages"]["messages"]
+               ]
+
+    def test_generate_text_return_type(self, setup_settings_manager):
+        setting_manager = setup_settings_manager
+
+        assert isinstance(setting_manager._generate_message_text(), str)

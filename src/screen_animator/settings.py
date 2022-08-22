@@ -91,3 +91,7 @@ class SettingsManager:
 
     def _import_settings(self, settings_file: str | Path) -> dict:
         return self._importer.import_settings(settings_file)
+
+    def _generate_message_text(self) -> str:
+        messages_dict = self._settings['messages']
+        return f"{random.choice(messages_dict['messages'])}{messages_dict['separator']}"
