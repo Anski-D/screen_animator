@@ -29,18 +29,21 @@ def example_settings_dict():
             "outline_colours": [
                 [0, 0, 0],
                 [255, 255, 255],
-            ], },
+            ],
+        },
         "images": {
             "sources": [
                 "pic1.bmp",
                 "pic2.bmp",
                 "pic3.bmp",
             ],
-            "number": 10, },
+            "number": 10,
+        },
         "timings": {
             "fps": 30,
             "image_change_time": 2,
-            "colour_change_time": 15, }
+            "colour_change_time": 15,
+        },
     }
 
 
@@ -62,41 +65,46 @@ class TestSettingsManager:
     @pytest.fixture
     def setup_settings_manager(self, monkeypatch, example_settings_dict):
         pg.init()
-        monkeypatch.setattr(SettingsManager, '_import_settings', lambda x, y: example_settings_dict)
-        monkeypatch.setattr(SettingsManager, '_setup_settings', lambda x: None)
+        monkeypatch.setattr(
+            SettingsManager, "_import_settings", lambda x, y: example_settings_dict
+        )
+        monkeypatch.setattr(SettingsManager, "_setup_settings", lambda x: None)
 
         return SettingsManager(None, None)
 
-    @pytest.mark.parametrize('group', ['bg', 'messages'])
+    @pytest.mark.parametrize("group", ["bg", "messages"])
     def test_set_colours(self, group, setup_settings_manager):
         settings_manager = setup_settings_manager
         settings_manager.set_colours()
 
-        assert settings_manager.settings[group]['colour'] in settings_manager.settings['colours']
+        assert (
+            settings_manager.settings[group]["colour"]
+            in settings_manager.settings["colours"]
+        )
 
     def test_set_outline_colour(self, setup_settings_manager):
         settings_manager = setup_settings_manager
         settings_manager.set_colours()
 
-        assert settings_manager.settings['messages']['outline_colour'] \
-               in settings_manager.settings['messages']['outline_colours']
+        assert (
+            settings_manager.settings["messages"]["outline_colour"]
+            in settings_manager.settings["messages"]["outline_colours"]
+        )
 
     def test_set_font(self, setup_settings_manager):
         settings_manager = setup_settings_manager
         settings_manager._set_font()
 
-        assert isinstance(settings_manager.settings['messages']['font'], pg.font.Font)
+        assert isinstance(settings_manager.settings["messages"]["font"], pg.font.Font)
 
-    @pytest.mark.parametrize('repeat', range(5))
+    @pytest.mark.parametrize("repeat", range(5))
     def test_generate_text(self, repeat, setup_settings_manager, example_settings_dict):
         settings_manager = setup_settings_manager
 
-        assert settings_manager._generate_message_text() \
-               in [
-                   f'{message}{example_settings_dict["messages"]["separator"]}'
-                   for message
-                   in example_settings_dict["messages"]["messages"]
-               ]
+        assert settings_manager._generate_message_text() in [
+            f'{message}{example_settings_dict["messages"]["separator"]}'
+            for message in example_settings_dict["messages"]["messages"]
+        ]
 
     def test_generate_text_return_type(self, setup_settings_manager):
         settings_manager = setup_settings_manager
@@ -105,19 +113,21 @@ class TestSettingsManager:
 
     def test_generate_message(self, setup_settings_manager):
         settings_manager = setup_settings_manager
-        messages_dict = settings_manager._settings['messages']
-        messages_dict['colour'] = [0, 0, 0]
-        messages_dict['font'] = pg.font.Font(None, 10)
+        messages_dict = settings_manager._settings["messages"]
+        messages_dict["colour"] = [0, 0, 0]
+        messages_dict["font"] = pg.font.Font(None, 10)
 
         assert isinstance(settings_manager._generate_message(), pg.Surface)
 
-    def test_load_images(self, monkeypatch, setup_settings_manager, example_settings_dict):
-        monkeypatch.setattr(pg.image, 'load', lambda x: pg.Surface((20, 10)))
+    def test_load_images(
+        self, monkeypatch, setup_settings_manager, example_settings_dict
+    ):
+        monkeypatch.setattr(pg.image, "load", lambda x: pg.Surface((20, 10)))
         settings_manager = setup_settings_manager
         settings_manager._load_images()
-        images_dict = settings_manager.settings['images']
+        images_dict = settings_manager.settings["images"]
 
-        assert len(images_dict['images']) == len(images_dict['sources'])
+        assert len(images_dict["images"]) == len(images_dict["sources"])
 
     def test_load_images_file_not_found_error_not_raised(self, setup_settings_manager):
         settings_manager = setup_settings_manager

@@ -28,12 +28,13 @@ class TestItem:
 
 class TestScrollingMovement:
     @pytest.mark.parametrize(
-        'direction, output', [
-            ('up', ('y', -1)),
-            ('right', ('x', 1)),
-            ('down', ('y', 1)),
-            ('left', ('x', -1)),
-        ]
+        "direction, output",
+        [
+            ("up", ("y", -1)),
+            ("right", ("x", 1)),
+            ("down", ("y", 1)),
+            ("left", ("x", -1)),
+        ],
     )
     def test_set_direction(self, direction, output):
         movement = ScrollingMovement(0, direction)

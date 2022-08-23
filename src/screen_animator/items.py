@@ -16,7 +16,9 @@ class Movable(ABC):
 
 
 class Item(pg.sprite.Sprite):
-    def __init__(self, group: pg.sprite.Group, content: pg.Surface, perimeter: pg.Rect) -> None:
+    def __init__(
+        self, group: pg.sprite.Group, content: pg.Surface, perimeter: pg.Rect
+    ) -> None:
         super().__init__(group)
         self.content = content
 
@@ -32,27 +34,27 @@ class Item(pg.sprite.Sprite):
 
 class Movement(ABC):
     @abstractmethod
-    def move(self, movable: 'Movable'):
+    def move(self, movable: "Movable"):
         pass
 
 
 class ScrollingMovement(Movement):
     _directions = {
-        'up': ('y', -1),
-        'right': ('x', 1),
-        'down': ('y', 1),
-        'left': ('x', -1),
+        "up": ("y", -1),
+        "right": ("x", 1),
+        "down": ("y", 1),
+        "left": ("x", -1),
     }
 
-    def __init__(self, speed=0, direction='left'):
+    def __init__(self, speed=0, direction="left"):
         self._speed = speed
         self._direction = direction
         self._axis, self._sign = self._set_direction()
 
     def move(self, movable: Movable) -> None:
         rect = movable.rect
-        new_position = getattr(rect, self._axis) + self._sign*self._speed
+        new_position = getattr(rect, self._axis) + self._sign * self._speed
         setattr(rect, self._axis, new_position)
 
     def _set_direction(self) -> tuple[str, int]:
-        return self._directions.get(self._direction, self._directions['left'])
+        return self._directions.get(self._direction, self._directions["left"])
