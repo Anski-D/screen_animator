@@ -34,9 +34,10 @@ class TestScrollingMovement:
             ("right", ("x", 1)),
             ("down", ("y", 1)),
             ("left", ("x", -1)),
+            ("test", ("x", -1)),
         ],
     )
     def test_set_direction(self, direction, output):
-        movement = ScrollingMovement(0, direction)
+        movement = ScrollingMovement()
 
-        assert movement._set_direction() == output
+        assert movement._set_direction(direction) == output

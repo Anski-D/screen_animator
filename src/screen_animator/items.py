@@ -46,15 +46,14 @@ class ScrollingMovement(Movement):
         "left": ("x", -1),
     }
 
-    def __init__(self, speed=0, direction="left"):
+    def __init__(self, speed: int | float = 0, direction: str = "left"):
         self._speed = speed
-        self._direction = direction
-        self._axis, self._sign = self._set_direction()
+        self._axis, self._sign = self._set_direction(direction)
 
     def move(self, movable: Movable) -> None:
         rect = movable.rect
         new_position = getattr(rect, self._axis) + self._sign * self._speed
         setattr(rect, self._axis, new_position)
 
-    def _set_direction(self) -> tuple[str, int]:
-        return self._directions.get(self._direction, self._directions["left"])
+    def _set_direction(self, direction: str) -> tuple[str, int]:
+        return self._directions.get(direction, self._directions["left"])
