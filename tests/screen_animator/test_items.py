@@ -1,6 +1,6 @@
 import pygame as pg
 import pytest
-from screen_animator.items import Item
+from screen_animator.items import Item, ScrollingMovement
 
 
 @pytest.fixture
@@ -24,3 +24,18 @@ class TestItem:
 
     def test_content_setter(self, setup_item):
         assert setup_item._rect == pg.Rect(0, 0, 20, 10)
+
+
+class TestScrollingMovement:
+    @pytest.mark.parametrize(
+        'direction, output', [
+            ('up', ('y', -1)),
+            ('right', ('x', 1)),
+            ('down', ('y', 1)),
+            ('left', ('x', -1)),
+        ]
+    )
+    def test_set_direction(self, direction, output):
+        movement = ScrollingMovement(0, direction)
+
+        assert movement._set_direction() == output
