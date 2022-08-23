@@ -37,6 +37,13 @@ class Movement(ABC):
 
 
 class ScrollingMovement(Movement):
+    _directions = {
+        'up': ('y', -1),
+        'right': ('x', 1),
+        'down': ('y', 1),
+        'left': ('x', -1),
+    }
+
     def __init__(self, speed=0, direction='left'):
         self._speed = speed
         self._direction = direction
@@ -48,12 +55,4 @@ class ScrollingMovement(Movement):
         setattr(rect, self._axis, new_position)
 
     def _set_direction(self) -> tuple[str, int]:
-        match self._direction:
-            case 'up':
-                return 'y', -1
-            case 'right':
-                return 'x', 1
-            case 'down':
-                return 'y', 1
-            case _:
-                return 'x', -1
+        return self._directions.get(self._direction, self._directions['left'])
