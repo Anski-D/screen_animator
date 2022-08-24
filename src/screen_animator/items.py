@@ -1,5 +1,8 @@
 import pygame as pg
 from abc import ABC, abstractmethod
+import logging
+
+log = logging.getLogger(__name__)
 
 
 class Movable(ABC):
@@ -34,7 +37,7 @@ class Item(pg.sprite.Sprite):
 
 class Movement(ABC):
     @abstractmethod
-    def move(self, movable: "Movable"):
+    def move(self, movable: Movable):
         pass
 
 

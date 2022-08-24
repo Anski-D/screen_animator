@@ -1,11 +1,14 @@
 from pathlib import Path
 import random
 import pygame as pg
+import logging
 
 try:
     import tomlib
 except ModuleNotFoundError:
     import tomli as tomlib
+
+log = logging.getLogger(__name__)
 
 
 class SettingsImporter:
@@ -143,5 +146,5 @@ class SettingsManager:
             for image in images_dict["sources"]:
                 try:
                     images_dict["images"].append(pg.image.load(image))
-                except FileNotFoundError as error:
-                    print(error)
+                except FileNotFoundError:
+                    log.exception("%s not found", image)
