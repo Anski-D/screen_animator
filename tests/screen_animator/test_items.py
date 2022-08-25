@@ -1,6 +1,6 @@
 import pygame as pg
 import pytest
-from screen_animator.items import Movable, Item, ScrollingMovement
+from screen_animator.items import Movable, Item, ScrollingMovement, RandomMovement
 
 
 @pytest.fixture
@@ -19,10 +19,11 @@ def example_item(example_content, example_perimeter):
 
 
 @pytest.fixture
-def example_movable():
+def example_movable(example_perimeter):
     Movable.__abstractmethods__ = set()
     movable = Movable()
     movable.rect = pg.Rect(100, 50, 20, 10)
+    movable.perimeter = example_perimeter
 
     return movable
 
@@ -59,19 +60,32 @@ class TestScrollingMovement:
             (2, "right", "x", 104),
             (3, "down", "y", 56),
             (5, "left", "x", 90),
-        ]
+        ],
     )
     def test_move(self, example_movable, speed, direction, axis, value):
         movable = example_movable
-
         movement = ScrollingMovement(speed, direction)
         movement.move(movable)
         movement.move(movable)
-
         rect = movable.rect
 
         assert getattr(rect, axis) == value
 
 
 class TestRandomMovement:
-    pass
+    @pytest.mark.parametrize("repeat", range(5))
+    def test_move_perimeter_contains(self, repeat, example_movable):
+        movable = example_movable
+        movement = RandomMovement()
+        movement.move(movable)
+
+        assert movable.perimeter.contains(movable)
+
+    def test_move_repeat_move(self, example_movable):
+        movable = example_movable
+        movement = RandomMovement()
+        movement.move(movable)
+        rect1 = movable.rect.copy()
+        movement.move(movable)
+
+        assert movable.rect != rect1

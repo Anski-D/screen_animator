@@ -1,5 +1,4 @@
 import random
-
 import pygame as pg
 from abc import ABC, abstractmethod
 import logging
@@ -83,7 +82,9 @@ class ScrollingMovement(Movement):
     @direction.setter
     def direction(self, direction: str) -> None:
         self._direction = direction
-        self._axis, self._sign = self._directions.get(self._direction, self._directions["left"])
+        self._axis, self._sign = self._directions.get(
+            self._direction, self._directions["left"]
+        )
 
     def move(self, movable: Movable) -> None:
         rect = movable.rect
@@ -93,5 +94,9 @@ class ScrollingMovement(Movement):
 
 class RandomMovement(Movement):
     def move(self, movable: Movable):
-        movable.rect.left = random.randint(0, movable.perimeter.right - movable.rect.width)
-        movable.rect.top = random.randint(0, movable.perimeter.bottom - movable.rect.height)
+        movable.rect.left = random.randint(
+            0, movable.perimeter.right - movable.rect.width
+        )
+        movable.rect.top = random.randint(
+            0, movable.perimeter.bottom - movable.rect.height
+        )
