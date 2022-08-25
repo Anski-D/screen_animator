@@ -1,6 +1,6 @@
 import pygame as pg
 import pytest
-from screen_animator.items import Item, ScrollingMovement
+from screen_animator.items import Movable, Item, ScrollingMovement
 
 
 @pytest.fixture
@@ -16,6 +16,12 @@ def example_content():
 @pytest.fixture
 def setup_item(example_content, example_perimeter):
     return Item(pg.sprite.Group(), example_content, example_perimeter)
+
+
+@pytest.fixture
+def setup_movable():
+    Movable.__abstractmethods__ = set()
+    return Movable()
 
 
 class TestItem:
@@ -41,3 +47,24 @@ class TestScrollingMovement:
         movement = ScrollingMovement()
 
         assert movement._set_direction(direction) == output
+
+    @pytest.mark.parametrize(
+        "speed, direction, axis, value",
+        [
+            (1, "up", "y", 48),
+            (2, "right", "x", 104),
+            (3, "down", "y", 56),
+            (5, "left", "x", 90),
+        ]
+    )
+    def test_move(self, setup_movable, speed, direction, axis, value):
+        movable = setup_movable
+        movable.rect = pg.Rect(100, 50, 20, 10)
+
+        movement = ScrollingMovement(speed, direction)
+        movement.move(movable)
+        movement.move(movable)
+
+        rect = movable.rect
+
+        assert getattr(rect, axis) == value

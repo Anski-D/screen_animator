@@ -13,6 +13,10 @@ class Movable(ABC):
     def rect(self) -> pg.Rect:
         return self._rect
 
+    @rect.setter
+    def rect(self, rect: pg.Rect):
+        self._rect = rect
+
     @abstractmethod
     def move(self):
         pass
@@ -60,3 +64,8 @@ class ScrollingMovement(Movement):
 
     def _set_direction(self, direction: str) -> tuple[str, int]:
         return self._directions.get(direction, self._directions["left"])
+
+
+class RandomMovement(Movement):
+    def move(self):
+        pass
