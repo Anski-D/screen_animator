@@ -64,17 +64,31 @@ class ScrollingMovement(Movement):
         "left": ("x", -1),
     }
 
-    def __init__(self, speed: int = 0, direction: str = "left"):
+    def __init__(self, speed: int = 0, direction: str = "left") -> None:
         self._speed = speed
-        self._axis, self._sign = self._set_direction(direction)
+        self.direction = direction
+
+    @property
+    def speed(self) -> int:
+        return self._speed
+
+    @speed.setter
+    def speed(self, speed: int) -> None:
+        self._speed = speed
+
+    @property
+    def direction(self) -> str:
+        return self._direction
+
+    @direction.setter
+    def direction(self, direction: str) -> None:
+        self._direction = direction
+        self._axis, self._sign = self._directions.get(self._direction, self._directions["left"])
 
     def move(self, movable: Movable) -> None:
         rect = movable.rect
         new_position = getattr(rect, self._axis) + self._sign * self._speed
         setattr(rect, self._axis, new_position)
-
-    def _set_direction(self, direction: str) -> tuple[str, int]:
-        return self._directions.get(direction, self._directions["left"])
 
 
 class RandomMovement(Movement):

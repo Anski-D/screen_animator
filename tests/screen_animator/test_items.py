@@ -46,10 +46,11 @@ class TestScrollingMovement:
             ("test", ("x", -1)),
         ],
     )
-    def test_set_direction(self, direction, output):
+    def test_direction_setter(self, direction, output):
         movement = ScrollingMovement()
+        movement.direction = direction
 
-        assert movement._set_direction(direction) == output
+        assert movement._axis, movement._sign == output
 
     @pytest.mark.parametrize(
         "speed, direction, axis, value",
