@@ -1,3 +1,5 @@
+import random
+
 import pygame as pg
 from abc import ABC, abstractmethod
 import logging
@@ -8,6 +10,7 @@ log = logging.getLogger(__name__)
 class Movable(ABC):
     def __init__(self):
         self._rect = None
+        self._perimeter = None
 
     @property
     def rect(self) -> pg.Rect:
@@ -16,6 +19,14 @@ class Movable(ABC):
     @rect.setter
     def rect(self, rect: pg.Rect):
         self._rect = rect
+
+    @property
+    def perimeter(self) -> pg.Rect:
+        return self._perimeter
+
+    @perimeter.setter
+    def perimeter(self, perimeter: pg.Rect) -> None:
+        self._perimeter = perimeter
 
     @abstractmethod
     def move(self):
@@ -53,7 +64,7 @@ class ScrollingMovement(Movement):
         "left": ("x", -1),
     }
 
-    def __init__(self, speed: int | float = 0, direction: str = "left"):
+    def __init__(self, speed: int = 0, direction: str = "left"):
         self._speed = speed
         self._axis, self._sign = self._set_direction(direction)
 
@@ -67,5 +78,6 @@ class ScrollingMovement(Movement):
 
 
 class RandomMovement(Movement):
-    def move(self):
-        pass
+    def move(self, movable: Movable):
+        movable.rect.left = random.randint(0, movable.perimeter.right - movable.rect.width)
+        movable.rect.top = random.randint(0, movable.perimeter.bottom - movable.rect.height)

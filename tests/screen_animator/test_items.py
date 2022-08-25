@@ -14,22 +14,25 @@ def example_content():
 
 
 @pytest.fixture
-def setup_item(example_content, example_perimeter):
+def example_item(example_content, example_perimeter):
     return Item(pg.sprite.Group(), example_content, example_perimeter)
 
 
 @pytest.fixture
-def setup_movable():
+def example_movable():
     Movable.__abstractmethods__ = set()
-    return Movable()
+    movable = Movable()
+    movable.rect = pg.Rect(100, 50, 20, 10)
+
+    return movable
 
 
 class TestItem:
-    def test_content_return_type(self, setup_item):
-        assert isinstance(setup_item.content, pg.Surface)
+    def test_content_return_type(self, example_item):
+        assert isinstance(example_item.content, pg.Surface)
 
-    def test_content_setter(self, setup_item):
-        assert setup_item._rect == pg.Rect(0, 0, 20, 10)
+    def test_content_setter(self, example_item):
+        assert example_item._rect == pg.Rect(0, 0, 20, 10)
 
 
 class TestScrollingMovement:
@@ -57,9 +60,8 @@ class TestScrollingMovement:
             (5, "left", "x", 90),
         ]
     )
-    def test_move(self, setup_movable, speed, direction, axis, value):
-        movable = setup_movable
-        movable.rect = pg.Rect(100, 50, 20, 10)
+    def test_move(self, example_movable, speed, direction, axis, value):
+        movable = example_movable
 
         movement = ScrollingMovement(speed, direction)
         movement.move(movable)
@@ -68,3 +70,7 @@ class TestScrollingMovement:
         rect = movable.rect
 
         assert getattr(rect, axis) == value
+
+
+class TestRandomMovement:
+    pass
