@@ -22,7 +22,7 @@ def example_item(example_content, example_perimeter):
 def example_movable(example_perimeter):
     Movable.__abstractmethods__ = set()
     movable = Movable()
-    movable.rect = pg.Rect(100, 50, 20, 10)
+    movable.rect_box = pg.Rect(100, 50, 20, 10)
     movable.perimeter = example_perimeter
 
     return movable
@@ -67,7 +67,7 @@ class TestScrollingMovement:
         movement = ScrollingMovement(speed, direction)
         movement.move(movable)
         movement.move(movable)
-        rect = movable.rect
+        rect = movable.rect_box
 
         assert getattr(rect, axis) == value
 
@@ -79,13 +79,13 @@ class TestRandomMovement:
         movement = RandomMovement()
         movement.move(movable)
 
-        assert movable.perimeter.contains(movable)
+        assert movable.perimeter.contains(movable.rect_box)
 
     def test_move_repeat_move(self, example_movable):
         movable = example_movable
         movement = RandomMovement()
         movement.move(movable)
-        rect1 = movable.rect.copy()
+        rect1 = movable.rect_box.copy()
         movement.move(movable)
 
-        assert movable.rect != rect1
+        assert movable.rect_box != rect1
