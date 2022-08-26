@@ -1,18 +1,22 @@
 import random
-import pygame as pg
 from abc import ABC, abstractmethod
 import logging
+import pygame as pg
 
 log = logging.getLogger(__name__)
 
 
 class Movable(ABC):
-    def __init__(self):
-        self._rect = None
-        self._perimeter = None
+    """
+    An interface for movable items in `pygame`.
+    """
+
+    _rect: pg.Rect
+    _perimeter: pg.Rect
 
     @property
     def rect(self) -> pg.Rect:
+        """The defining rectangle that can be moved."""
         return self._rect
 
     @rect.setter
@@ -21,6 +25,10 @@ class Movable(ABC):
 
     @property
     def perimeter(self) -> pg.Rect:
+        """The outer perimeter of where the movable object is located.
+
+        Movable objects are not required to be within the perimeter, only have a reference to them.
+        """
         return self._perimeter
 
     @perimeter.setter
@@ -28,16 +36,20 @@ class Movable(ABC):
         self._perimeter = perimeter
 
     @abstractmethod
-    def move(self):
-        pass
+    def move(self) -> None:
+        """Subclasses should implement behaviour to move the instance, typically by manipulating the `rect` property."""
 
 
 class Item(pg.sprite.Sprite):
+    """
+    A `pygame` item.
+    """
     def __init__(
         self, group: pg.sprite.Group, content: pg.Surface, perimeter: pg.Rect
     ) -> None:
         super().__init__(group)
         self.content = content
+        self.perimeter = perimeter
 
     @property
     def content(self) -> pg.Surface:
@@ -93,7 +105,7 @@ class ScrollingMovement(Movement):
 
 
 class RandomMovement(Movement):
-    def move(self, movable: Movable):
+    def move(self, movable: Movable) -> None:
         movable.rect.left = random.randint(
             0, movable.perimeter.right - movable.rect.width
         )
