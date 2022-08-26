@@ -1,7 +1,7 @@
 from pathlib import Path
 import random
-import pygame as pg
 import logging
+import pygame as pg
 
 try:
     import tomlib
@@ -12,23 +12,34 @@ log = logging.getLogger(__name__)
 
 
 class SettingsImporter:
-    """ """
+    """
+    Imports settings from a TOML file and validates, ready for further use.
+
+    Methods
+    -------
+    import_settings
+        Imports the settings from specified file and validates imported values.
+    """
 
     def __init__(self):
-        """ """
+        """Initialise the importer. Nothing much is done at this stage."""
         self._settings = None
 
     def import_settings(self, settings_file: str | Path) -> dict:
         """
+        Imports the settings from the specified file, validates, and stores and returns a dictionary.
 
         Parameters
         ----------
         settings_file
+            Path to the TOML file containing settings.
 
         Returns
         -------
-
+        dict
+            The imported and validated settings.
         """
+
         settings_path = Path(settings_file)
         self._read_settings(settings_path)
         self._validate_settings()
@@ -71,28 +82,39 @@ class SettingsImporter:
 
 
 class SettingsManager:
+    """
+    Reads in settings, manipulates, and provides provisions for generating dynamic settings.
+
+    Methods
+    -------
+    set_colours
+        Randomly set the background, text, and text outline colour.
+    """
+
     def __init__(self, importer: SettingsImporter, settings_file: str | Path) -> None:
+        """
+        Initialise by using a settings importer to imported a specified file, then setting up some initial settings.
+
+        Parameters
+        ----------
+        importer
+            Low-level importer for reading and validating settings file.
+        settings_file
+            Path to settings file.
+        """
+
         self._importer = importer
         self._settings = self._import_settings(settings_file)
         self._setup_settings()
 
     @property
     def settings(self) -> dict:
-        """
-
-        Returns
-        -------
-
-        """
+        """Dictionary of all settings."""
         return self._settings
 
     def set_colours(self) -> None:
-        """
+        """Set background, text, and text outline colours from the available options in the settings provided."""
 
-        Returns
-        -------
-
-        """
         if self._settings.get("bg") is None:
             self._settings["bg"] = {}
         self._settings["bg"]["colour"] = random.choice(self._settings["colours"])
