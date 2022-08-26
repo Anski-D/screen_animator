@@ -54,6 +54,8 @@ class Item(pg.sprite.Sprite, Movable):
     -------
     move
         Move as defined by the provided `Movement` type.
+    update
+        Hook used to execute `move` through a group.
     """
 
     def __init__(
@@ -95,6 +97,10 @@ class Item(pg.sprite.Sprite, Movable):
         """Move the instance using a `Movement` object, if defined."""
         if self._movement is not None:
             self._movement.move(self)
+
+    def update(self, *_args, **_kwargs) -> None:
+        """Update the instance (move it)."""
+        self.move()
 
 
 class Movement(ABC):
