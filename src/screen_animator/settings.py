@@ -54,7 +54,7 @@ class SettingsImporter:
     def _validate_settings(self) -> None:
         match self._settings:
             case {
-                "colours": list(),
+                "colors": list(),
                 "messages": {
                     "messages": list() | str(),
                     "separator": str(),
@@ -65,7 +65,7 @@ class SettingsImporter:
                     "anti-aliasing": bool(),
                     "scroll_speed": float() | int(),
                     "outline_width": int(),
-                    "outline_colours": list(),
+                    "outline_colors": list(),
                 },
                 "images": {
                     "sources": list() | str(),
@@ -74,7 +74,7 @@ class SettingsImporter:
                 "timings": {
                     "fps": int(),
                     "image_change_time": int(),
-                    "colour_change_time": int(),
+                    "color_change_time": int(),
                 },
             }:
                 pass
@@ -88,7 +88,10 @@ class SettingsImporter:
             case list():
                 return [self._convert_colors_to_tuples(item) for item in input_item]
             case dict():
-                return {key: self._convert_colors_to_tuples(value) for key, value in input_item.items()}
+                return {
+                    key: self._convert_colors_to_tuples(value)
+                    for key, value in input_item.items()
+                }
             case _:
                 return input_item
 
@@ -99,8 +102,8 @@ class SettingsManager:
 
     Methods
     -------
-    set_colours
-        Randomly set the background, text, and text outline colour.
+    set_colors
+        Randomly set the background, text, and text outline color.
     """
 
     def __init__(self, importer: SettingsImporter, settings_file: str | Path) -> None:
@@ -124,28 +127,28 @@ class SettingsManager:
         """Dictionary of all settings."""
         return self._settings
 
-    def set_colours(self) -> None:
-        """Set background, text, and text outline colours from the available options in the settings provided."""
+    def set_colors(self) -> None:
+        """Set background, text, and text outline colors from the available options in the settings provided."""
 
         if self._settings.get("bg") is None:
             self._settings["bg"] = {}
-        self._settings["bg"]["colour"] = random.choice(self._settings["colours"])
+        self._settings["bg"]["color"] = random.choice(self._settings["colors"])
 
-        self._settings["messages"]["colour"] = random.choice(self._settings["colours"])
-        while self._settings["messages"]["colour"] == self._settings["bg"]["colour"]:
-            self._settings["messages"]["colour"] = random.choice(
-                self._settings["colours"]
+        self._settings["messages"]["color"] = random.choice(self._settings["colors"])
+        while self._settings["messages"]["color"] == self._settings["bg"]["color"]:
+            self._settings["messages"]["color"] = random.choice(
+                self._settings["colors"]
             )
 
-        self.settings["messages"]["outline_colour"] = random.choice(
-            self._settings["messages"]["outline_colours"]
+        self.settings["messages"]["outline_color"] = random.choice(
+            self._settings["messages"]["outline_colors"]
         )
 
     def _import_settings(self, settings_file: str | Path) -> dict:
         return self._importer.import_settings(settings_file)
 
     def _setup_settings(self):
-        self.set_colours()
+        self.set_colors()
         self._set_font()
         self._settings["messages"]["message"] = self._generate_message
         self._load_images()
@@ -170,7 +173,7 @@ class SettingsManager:
         return messages_dict["font"].render(
             self._generate_message_text(),
             messages_dict["anti-aliasing"],
-            messages_dict["colour"],
+            messages_dict["color"],
         )
 
     def _load_images(self):

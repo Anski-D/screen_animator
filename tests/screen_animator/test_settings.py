@@ -6,7 +6,7 @@ from screen_animator.settings import SettingsImporter, SettingsManager
 @pytest.fixture
 def example_settings_dict():
     return {
-        "colours": [
+        "colors": [
             [255, 0, 0],
             [0, 255, 0],
             [0, 0, 255],
@@ -26,7 +26,7 @@ def example_settings_dict():
             "anti-aliasing": False,
             "scroll_speed": 240.0,
             "outline_width": 3,
-            "outline_colours": [
+            "outline_colors": [
                 [0, 0, 0],
                 [255, 255, 255],
             ],
@@ -42,7 +42,7 @@ def example_settings_dict():
         "timings": {
             "fps": 30,
             "image_change_time": 2,
-            "colour_change_time": 15,
+            "color_change_time": 15,
         },
     }
 
@@ -54,19 +54,19 @@ def example_settings_dict_with_tuples(example_settings_dict):
         (0, 255, 0),
         (0, 0, 255),
     ]
-    outline_colours = [
+    outline_colors = [
         (0, 0, 0),
         (255, 255, 255),
     ]
-    example_settings_dict['colours'] = colors
-    example_settings_dict['messages']['outline_colours'] = outline_colours
+    example_settings_dict["colors"] = colors
+    example_settings_dict["messages"]["outline_colors"] = outline_colors
 
     return example_settings_dict
 
 
 class TestSettingsImporter:
     def test_validate_settings_raises_value_error(self, example_settings_dict):
-        del example_settings_dict["colours"]
+        del example_settings_dict["colors"]
         importer = SettingsImporter()
         importer._settings = example_settings_dict
         with pytest.raises(ValueError):
@@ -77,10 +77,15 @@ class TestSettingsImporter:
         importer._settings = example_settings_dict
         assert importer._validate_settings() is None
 
-    def test_convert_colors_to_tuples(self, example_settings_dict, example_settings_dict_with_tuples):
+    def test_convert_colors_to_tuples(
+        self, example_settings_dict, example_settings_dict_with_tuples
+    ):
         importer = SettingsImporter()
 
-        assert importer._convert_colors_to_tuples(example_settings_dict) == example_settings_dict_with_tuples
+        assert (
+            importer._convert_colors_to_tuples(example_settings_dict)
+            == example_settings_dict_with_tuples
+        )
 
 
 class TestSettingsManager:
@@ -95,22 +100,22 @@ class TestSettingsManager:
         return SettingsManager(None, None)
 
     @pytest.mark.parametrize("group", ["bg", "messages"])
-    def test_set_colours(self, group, setup_settings_manager):
+    def test_set_colors(self, group, setup_settings_manager):
         settings_manager = setup_settings_manager
-        settings_manager.set_colours()
+        settings_manager.set_colors()
 
         assert (
-            settings_manager.settings[group]["colour"]
-            in settings_manager.settings["colours"]
+            settings_manager.settings[group]["color"]
+            in settings_manager.settings["colors"]
         )
 
-    def test_set_outline_colour(self, setup_settings_manager):
+    def test_set_outline_color(self, setup_settings_manager):
         settings_manager = setup_settings_manager
-        settings_manager.set_colours()
+        settings_manager.set_colors()
 
         assert (
-            settings_manager.settings["messages"]["outline_colour"]
-            in settings_manager.settings["messages"]["outline_colours"]
+            settings_manager.settings["messages"]["outline_color"]
+            in settings_manager.settings["messages"]["outline_colors"]
         )
 
     def test_set_font(self, setup_settings_manager):
@@ -136,7 +141,7 @@ class TestSettingsManager:
     def test_generate_message(self, setup_settings_manager):
         settings_manager = setup_settings_manager
         messages_dict = settings_manager._settings["messages"]
-        messages_dict["colour"] = [0, 0, 0]
+        messages_dict["color"] = [0, 0, 0]
         messages_dict["font"] = pg.font.Font(None, 10)
 
         assert isinstance(settings_manager._generate_message(), pg.Surface)
