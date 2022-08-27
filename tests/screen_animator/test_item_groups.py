@@ -2,10 +2,10 @@ import pytest
 import pygame as pg
 import math
 from screen_animator.settings import SettingsManager
-from screen_animator.item_groups import LeftScrollingText
+from screen_animator.item_groups import LeftScrollingTextGroup
 
 
-class TestLeftScrollingText:
+class TestLeftScrollingTextGroup:
     @pytest.fixture
     def example_left_scrolling_text(
         self, monkeypatch, example_settings_dict_with_tuples, example_perimeter
@@ -18,7 +18,7 @@ class TestLeftScrollingText:
         )
         settings_manager = SettingsManager(None, None)
 
-        return LeftScrollingText(settings_manager.settings, example_perimeter)
+        return LeftScrollingTextGroup(settings_manager.settings, example_perimeter)
 
     @pytest.mark.parametrize("num_of_items", [1, 2, 3, 5, 8])
     def test_create(self, num_of_items, example_left_scrolling_text):
@@ -54,7 +54,7 @@ class TestLeftScrollingText:
         width = item.rect_box.width + item_group._perimeter.width
         speed = 100
         item._movement._speed = speed
-        monkeypatch.setattr(LeftScrollingText, "create", lambda x: None)
+        monkeypatch.setattr(LeftScrollingTextGroup, "create", lambda x: None)
         for _ in range(math.ceil(width / speed)):
             item_group.update()
 

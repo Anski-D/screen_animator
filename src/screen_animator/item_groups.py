@@ -39,7 +39,7 @@ class ItemGroup(ABC):
         """Update item(s) in group, to be implemented by sublasses."""
 
 
-class LeftScrollingText(ItemGroup):
+class LeftScrollingTextGroup(ItemGroup):
     """
     Group of items that will scroll messages to the left.
 
