@@ -6,37 +6,7 @@ import pygame as pg
 log = logging.getLogger(__name__)
 
 
-class Movable(pg.sprite.Sprite):
-    """
-    An interface for movable items in `pygame`.
-
-    Methods
-    -------
-    move
-        Move the instance, to be implemented by sublasses.
-    """
-
-    _perimeter: pg.Rect
-
-    @property
-    def perimeter(self) -> pg.Rect:
-        """
-        The outer perimeter of where the movable object is located.
-
-        Movable objects are not required to be within the perimeter, only have a reference to them.
-        """
-        return self._perimeter
-
-    @perimeter.setter
-    def perimeter(self, perimeter: pg.Rect) -> None:
-        self._perimeter = perimeter
-
-    @abstractmethod
-    def move(self) -> None:
-        """Subclasses should implement behaviour to move the instance."""
-
-
-class Item(Movable):
+class Item(pg.sprite.Sprite):
     """
     A wrapper for `pygame` sprite-type objects that are then can be moved on a `pygame` 'canvas'.
 
@@ -55,7 +25,8 @@ class Item(Movable):
         perimeter: pg.Rect,
         movement: "Movement" = None,
     ) -> None:
-        """Initialise a wrapped `Sprite` that has a group, render-capable content, a defined perimeter and a `Movement` type.
+        """Initialise a wrapped `Sprite` that has a group, render-capable content, a defined
+        perimeter and a `Movement` type.
 
         Parameters
         ----------
@@ -83,6 +54,19 @@ class Item(Movable):
         self._content = content
         self.rect = self._content.get_rect()
 
+    @property
+    def perimeter(self) -> pg.Rect:
+        """
+        The outer perimeter of where the movable object is located.
+
+        Movable objects are not required to be within the perimeter, only have a reference to them.
+        """
+        return self._perimeter
+
+    @perimeter.setter
+    def perimeter(self, perimeter: pg.Rect) -> None:
+        self._perimeter = perimeter
+
     def move(self) -> None:
         """Move the instance using a `Movement` object, if defined."""
         if self._movement is not None:
@@ -104,7 +88,7 @@ class Movement(ABC):
     """
 
     @abstractmethod
-    def move(self, movable: Movable):
+    def move(self, item: Item):
         """Sublasses should implement a means of moving `Movable`."""
 
 
@@ -160,16 +144,16 @@ class ScrollingMovement(Movement):
             self._direction, self._directions["left"]
         )
 
-    def move(self, movable: Movable) -> None:
+    def move(self, item: Item) -> None:
         """
         Move input in the direction defined, at the speed set.
 
         Parameters
         ----------
-        movable
+        item
             Object to move.
         """
-        rect = movable.rect
+        rect = item.rect
         new_position = getattr(rect, self._axis) + self._sign * self._speed
         setattr(rect, self._axis, new_position)
 
@@ -184,18 +168,14 @@ class RandomMovement(Movement):
         Move randomly within a perimeter.
     """
 
-    def move(self, movable: Movable) -> None:
+    def move(self, item: Item) -> None:
         """
         Move input randomly within a perimeter.
 
         Parameters
         ----------
-        movable
+        item
             Object to move.
         """
-        movable.rect.left = random.randint(
-            0, movable.perimeter.right - movable.rect.width
-        )
-        movable.rect.top = random.randint(
-            0, movable.perimeter.bottom - movable.rect.height
-        )
+        item.rect.left = random.randint(0, item.perimeter.right - item.rect.width)
+        item.rect.top = random.randint(0, item.perimeter.bottom - item.rect.height)

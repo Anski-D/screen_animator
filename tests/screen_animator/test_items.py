@@ -1,21 +1,13 @@
 import pygame as pg
 import pytest
-from screen_animator.items import Movable, Item, ScrollingMovement, RandomMovement
+from screen_animator.items import Item, ScrollingMovement, RandomMovement
 
 
 @pytest.fixture
 def example_item(example_content, example_perimeter):
+    Item.__abstractmethods__ = set()
+
     return Item(pg.sprite.Group(), example_content, example_perimeter)
-
-
-@pytest.fixture
-def example_movable(example_perimeter):
-    Movable.__abstractmethods__ = set()
-    movable = Movable()
-    movable.rect = pg.Rect(100, 50, 20, 10)
-    movable.perimeter = example_perimeter
-
-    return movable
 
 
 class TestItem:
@@ -46,36 +38,36 @@ class TestScrollingMovement:
     @pytest.mark.parametrize(
         "speed, direction, axis, value",
         [
-            (1, "up", "y", 48),
-            (2, "right", "x", 104),
-            (3, "down", "y", 56),
-            (5, "left", "x", 90),
+            (1, "up", "y", 248),
+            (2, "right", "x", 504),
+            (3, "down", "y", 256),
+            (5, "left", "x", 490),
         ],
     )
-    def test_move(self, example_movable, speed, direction, axis, value):
-        movable = example_movable
+    def test_move(self, speed, direction, axis, value, example_item):
+        item = example_item
+        item.rect.topleft = item.perimeter.center
         movement = ScrollingMovement(speed, direction)
-        movement.move(movable)
-        movement.move(movable)
-        rect = movable.rect
+        movement.move(item)
+        movement.move(item)
 
-        assert getattr(rect, axis) == value
+        assert getattr(item.rect, axis) == value
 
 
 class TestRandomMovement:
     @pytest.mark.parametrize("repeat", range(5))
-    def test_move_perimeter_contains(self, repeat, example_movable):
-        movable = example_movable
+    def test_move_perimeter_contains(self, repeat, example_item):
+        item = example_item
         movement = RandomMovement()
-        movement.move(movable)
+        movement.move(item)
 
-        assert movable.perimeter.contains(movable.rect)
+        assert item.perimeter.contains(item.rect)
 
-    def test_move_repeat_move(self, example_movable):
-        movable = example_movable
+    def test_move_repeat_move(self, example_item):
+        item = example_item
         movement = RandomMovement()
-        movement.move(movable)
-        rect1 = movable.rect.copy()
-        movement.move(movable)
+        movement.move(item)
+        rect1 = item.rect.copy()
+        movement.move(item)
 
-        assert movable.rect != rect1
+        assert item.rect != rect1
