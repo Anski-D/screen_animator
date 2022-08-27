@@ -1,3 +1,4 @@
+import pygame as pg
 import pytest
 
 
@@ -60,3 +61,13 @@ def example_settings_dict_with_tuples(example_settings_dict):
     example_settings_dict["messages"]["outline_colors"] = outline_colors
 
     return example_settings_dict
+
+
+@pytest.fixture
+def example_perimeter():
+    return pg.Rect(0, 0, 1000, 500)
+
+
+@pytest.fixture
+def example_content():
+    return pg.Surface((20, 10))

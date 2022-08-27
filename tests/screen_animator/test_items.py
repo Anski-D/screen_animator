@@ -4,16 +4,6 @@ from screen_animator.items import Movable, Item, ScrollingMovement, RandomMoveme
 
 
 @pytest.fixture
-def example_perimeter():
-    return pg.Rect(0, 0, 1000, 500)
-
-
-@pytest.fixture
-def example_content():
-    return pg.Surface((20, 10))
-
-
-@pytest.fixture
 def example_item(example_content, example_perimeter):
     return Item(pg.sprite.Group(), example_content, example_perimeter)
 
