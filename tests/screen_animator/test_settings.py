@@ -47,6 +47,23 @@ def example_settings_dict():
     }
 
 
+@pytest.fixture
+def example_settings_dict_with_tuples(example_settings_dict):
+    colors = [
+        (255, 0, 0),
+        (0, 255, 0),
+        (0, 0, 255),
+    ]
+    outline_colours = [
+        (0, 0, 0),
+        (255, 255, 255),
+    ]
+    example_settings_dict['colours'] = colors
+    example_settings_dict['messages']['outline_colours'] = outline_colours
+
+    return example_settings_dict
+
+
 class TestSettingsImporter:
     def test_validate_settings_raises_value_error(self, example_settings_dict):
         del example_settings_dict["colours"]
@@ -59,6 +76,11 @@ class TestSettingsImporter:
         importer = SettingsImporter()
         importer._settings = example_settings_dict
         assert importer._validate_settings() is None
+
+    def test_convert_colors_to_tuples(self, example_settings_dict, example_settings_dict_with_tuples):
+        importer = SettingsImporter()
+
+        assert importer._convert_colors_to_tuples(example_settings_dict) == example_settings_dict_with_tuples
 
 
 class TestSettingsManager:

@@ -43,6 +43,7 @@ class SettingsImporter:
         settings_path = Path(settings_file)
         self._read_settings(settings_path)
         self._validate_settings()
+        self._settings = self._convert_colors_to_tuples(self._settings)
 
         return self._settings
 
@@ -79,6 +80,17 @@ class SettingsImporter:
                 pass
             case _:
                 raise ValueError(f"Invalid configuration {self._settings}")
+
+    def _convert_colors_to_tuples(self, input_item):
+        match input_item:
+            case [int(), int(), int()]:
+                return tuple(input_item)
+            case list():
+                return [self._convert_colors_to_tuples(item) for item in input_item]
+            case dict():
+                return {key: self._convert_colors_to_tuples(value) for key, value in input_item.items()}
+            case _:
+                return input_item
 
 
 class SettingsManager:
