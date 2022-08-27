@@ -92,9 +92,21 @@ class LeftScrollingTextGroup(ItemGroup):
 
 
 class RandomImagesGroup(ItemGroup):
+    """
+    Group of items that will remove randomly within the specified perimeter.
+
+    Methods
+    -------
+    create
+        Create all the image items.
+    update
+        Update the position of all image items.
+    """
+
     _movement = RandomMovement
 
     def create(self) -> None:
+        """Create all the image items, set to move randomly within the perimeter."""
         image_settings = self._settings["images"]
         for _ in range(image_settings["number"]):
             for image in image_settings["images"]:
@@ -102,6 +114,12 @@ class RandomImagesGroup(ItemGroup):
                 Item(self._group, image, self._perimeter, movement)
 
     def update(self) -> None:
+        """
+        Update the position, randomly, of all the images in the group.
+
+        Image position is updated sequentially, and each is compared to the position of newly
+        positioned images to ensure no collisions.
+        """
         group = pg.sprite.Group()
         for image in self._group.sprites():
             self._group.remove(image)
