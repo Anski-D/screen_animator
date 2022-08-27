@@ -16,17 +16,7 @@ class Movable(ABC):
         Move the instance, to be implemented by sublasses.
     """
 
-    _rect: pg.Rect
     _perimeter: pg.Rect
-
-    @property
-    def rect(self) -> pg.Rect:
-        """The defining rectangle that can be moved."""
-        return self._rect
-
-    @rect.setter
-    def rect(self, rect: pg.Rect):
-        self._rect = rect
 
     @property
     def perimeter(self) -> pg.Rect:
@@ -91,7 +81,7 @@ class Item(pg.sprite.Sprite, Movable):
     @content.setter
     def content(self, content: pg.Surface) -> None:
         self._content = content
-        self._rect = self._content.get_rect()
+        self.rect = self._content.get_rect()
 
     def move(self) -> None:
         """Move the instance using a `Movement` object, if defined."""

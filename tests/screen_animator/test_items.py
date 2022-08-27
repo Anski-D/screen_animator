@@ -23,7 +23,7 @@ class TestItem:
         assert isinstance(example_item.content, pg.Surface)
 
     def test_content_setter(self, example_item):
-        assert example_item._rect == pg.Rect(0, 0, 20, 10)
+        assert example_item.rect == pg.Rect(0, 0, 20, 10)
 
 
 class TestScrollingMovement:
