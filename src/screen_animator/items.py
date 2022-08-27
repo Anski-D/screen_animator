@@ -20,12 +20,12 @@ class Movable(ABC):
     _perimeter: pg.Rect
 
     @property
-    def rect_box(self) -> pg.Rect:
+    def rect(self) -> pg.Rect:
         """The defining rectangle that can be moved."""
         return self._rect
 
-    @rect_box.setter
-    def rect_box(self, rect: pg.Rect):
+    @rect.setter
+    def rect(self, rect: pg.Rect):
         self._rect = rect
 
     @property
@@ -179,7 +179,7 @@ class ScrollingMovement(Movement):
         movable
             Object to move.
         """
-        rect = movable.rect_box
+        rect = movable.rect
         new_position = getattr(rect, self._axis) + self._sign * self._speed
         setattr(rect, self._axis, new_position)
 
@@ -203,9 +203,9 @@ class RandomMovement(Movement):
         movable
             Object to move.
         """
-        movable.rect_box.left = random.randint(
-            0, movable.perimeter.right - movable.rect_box.width
+        movable.rect.left = random.randint(
+            0, movable.perimeter.right - movable.rect.width
         )
-        movable.rect_box.top = random.randint(
-            0, movable.perimeter.bottom - movable.rect_box.height
+        movable.rect.top = random.randint(
+            0, movable.perimeter.bottom - movable.rect.height
         )

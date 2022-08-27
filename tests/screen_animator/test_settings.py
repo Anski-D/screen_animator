@@ -101,7 +101,9 @@ class TestSettingsManager:
             example_settings_dict_with_tuples["images"]["sources"]
         )
 
-    def test_load_images_file_not_found_error_not_raised(self, example_settings_manager):
+    def test_load_images_file_not_found_error_not_raised(
+        self, example_settings_manager
+    ):
         settings_manager = example_settings_manager
         try:
             settings_manager._load_images()

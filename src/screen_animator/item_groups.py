@@ -71,7 +71,7 @@ class LeftScrollingTextGroup(ItemGroup):
             self._perimeter,
             movement,
         )
-        message.rect_box.midleft = self._perimeter.midright
+        message.rect.midleft = self._perimeter.midright
 
     def update(self) -> None:
         """
@@ -82,10 +82,10 @@ class LeftScrollingTextGroup(ItemGroup):
         """
         self._group.update()
         for message in self._group.sprites():
-            if message.rect_box.right < self._perimeter.left:
+            if message.rect.right < self._perimeter.left:
                 message.kill()
         if all(
-            message.rect_box.right <= self._perimeter.right
+            message.rect.right <= self._perimeter.right
             for message in self._group.sprites()
         ):
             self.create()
@@ -102,4 +102,11 @@ class RandomImagesGroup(ItemGroup):
                 Item(self._group, image, self._perimeter, movement)
 
     def update(self) -> None:
-        pass
+        group = pg.sprite.Group()
+        for image in self._group.sprites():
+            self._group.remove(image)
+            image.update()
+            while pg.sprite.spritecollideany(image, group):
+                image.update()
+            group.add(image)
+        self._group = group
