@@ -4,24 +4,62 @@ from .items import ScrollingMovement, Item
 
 
 class ItemGroup(ABC):
-    def __init__(self, settings: dict, perimeter: pg.Rect):
+    """
+    Interface for `Item` groups.
+
+    Methods
+    -------
+    create
+        Create items in group (sublasses to implement).
+    update
+        Update items in group (sublasses to implement).
+    """
+
+    def __init__(self, settings: dict, perimeter: pg.Rect) -> None:
+        """
+        Initialise group with settings and context perimeter.
+
+        Parameters
+        ----------
+        settings
+            Dictionary of settings.
+        perimeter
+            Outer limit of 'canvas' in `pygame`.
+        """
         self._settings = settings
         self._perimeter = perimeter
         self._group = pg.sprite.Group()
 
     @abstractmethod
-    def create(self):
-        pass
+    def create(self) -> None:
+        """Create item(s) in group, to be implemented by sublasses."""
 
     @abstractmethod
-    def update(self):
-        pass
+    def update(self) -> None:
+        """Update item(s) in group, to be implemented by sublasses."""
 
 
 class LeftScrollingText(ItemGroup):
+    """
+    Group of items that will scroll messages to the left.
+
+    Methods
+    -------
+    create
+        Create a message with a set speed to the left.
+    update
+        Update messages depending on message position.
+    """
+
     _movement = ScrollingMovement
 
-    def create(self):
+    def create(self) -> None:
+        """
+        Create a message `Item` that scrolls to the left with a set speed.
+
+        Message is initially placed with middle-left set at the middle-right of the perimeter,
+        i.e. off-screen to the right.
+        """
         speed = (
             self._settings["messages"]["scroll_speed"]
             / self._settings["timings"]["fps"]
@@ -35,7 +73,13 @@ class LeftScrollingText(ItemGroup):
         )
         message.rect_box.midleft = self._perimeter.midright
 
-    def update(self):
+    def update(self) -> None:
+        """
+        Update messages in group.
+
+        If the message has left the left side of the perimeter entirely, it will be deleted. If
+        all messages are within the right-hand perimeter, a new message will be generated.
+        """
         self._group.update()
         for message in self._group.sprites():
             if message.rect_box.right < self._perimeter.left:
