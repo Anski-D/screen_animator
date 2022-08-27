@@ -6,7 +6,7 @@ import pygame as pg
 log = logging.getLogger(__name__)
 
 
-class Movable(ABC):
+class Movable(pg.sprite.Sprite):
     """
     An interface for movable items in `pygame`.
 
@@ -36,7 +36,7 @@ class Movable(ABC):
         """Subclasses should implement behaviour to move the instance."""
 
 
-class Item(pg.sprite.Sprite, Movable):
+class Item(Movable):
     """
     A wrapper for `pygame` sprite-type objects that are then can be moved on a `pygame` 'canvas'.
 
