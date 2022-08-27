@@ -2,18 +2,22 @@ import pytest
 import pygame as pg
 import math
 from screen_animator.settings import SettingsManager
-from screen_animator.item_groups import LeftScrollingTextGroup
+from screen_animator.item_groups import LeftScrollingTextGroup, RandomImagesGroup
 
 
 @pytest.fixture
-def example_settings_manager(monkeypatch, example_settings_dict_with_tuples):
+def example_settings_manager(monkeypatch, example_settings_dict_with_tuples, example_content):
     pg.init()
+    settings_dict = example_settings_dict_with_tuples
     monkeypatch.setattr(
         SettingsManager,
         "_import_settings",
-        lambda x, y: example_settings_dict_with_tuples,
+        lambda x, y: settings_dict,
     )
-    return SettingsManager(None, None)
+    monkeypatch.setattr(SettingsManager, "_load_images", lambda x: None)
+    settings_manager = SettingsManager(None, None)
+    settings_manager._settings["images"]["images"] = [example_content for _ in range(len(example_settings_dict_with_tuples["images"]["sources"]))]
+    return settings_manager
 
 
 class TestLeftScrollingTextGroup:
@@ -60,3 +64,16 @@ class TestLeftScrollingTextGroup:
             item_group.update()
 
         assert len(item_group._group.sprites()) == 0
+
+
+class TestRandomImagesGroup:
+    @pytest.fixture
+    def example_random_images_group(self, example_settings_manager, example_perimeter):
+        return RandomImagesGroup(example_settings_manager.settings, example_perimeter)
+
+    def test_create(self, example_random_images_group, example_settings_dict_with_tuples):
+        item_group = example_random_images_group
+        item_group.create()
+        image_settings = example_settings_dict_with_tuples["images"]
+
+        assert len(item_group._group.sprites()) == len(image_settings["sources"]) * image_settings["number"]

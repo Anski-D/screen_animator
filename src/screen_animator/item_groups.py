@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 import pygame as pg
-from .items import ScrollingMovement, Item
+from .items import ScrollingMovement, RandomMovement, Item
 
 
 class ItemGroup(ABC):
@@ -89,3 +89,17 @@ class LeftScrollingTextGroup(ItemGroup):
             for message in self._group.sprites()
         ):
             self.create()
+
+
+class RandomImagesGroup(ItemGroup):
+    _movement = RandomMovement
+
+    def create(self) -> None:
+        image_settings = self._settings["images"]
+        for _ in range(image_settings["number"]):
+            for image in image_settings["images"]:
+                movement = self._movement()
+                Item(self._group, image, self._perimeter, movement)
+
+    def update(self) -> None:
+        pass
