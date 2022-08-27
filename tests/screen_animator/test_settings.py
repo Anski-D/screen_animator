@@ -90,10 +90,12 @@ class TestSettingsImporter:
 
 class TestSettingsManager:
     @pytest.fixture
-    def setup_settings_manager(self, monkeypatch, example_settings_dict):
+    def setup_settings_manager(self, monkeypatch, example_settings_dict_with_tuples):
         pg.init()
         monkeypatch.setattr(
-            SettingsManager, "_import_settings", lambda x, y: example_settings_dict
+            SettingsManager,
+            "_import_settings",
+            lambda x, y: example_settings_dict_with_tuples,
         )
         monkeypatch.setattr(SettingsManager, "_setup_settings", lambda x: None)
 
@@ -125,12 +127,14 @@ class TestSettingsManager:
         assert isinstance(settings_manager.settings["messages"]["font"], pg.font.Font)
 
     @pytest.mark.parametrize("repeat", range(5))
-    def test_generate_text(self, repeat, setup_settings_manager, example_settings_dict):
+    def test_generate_text(
+        self, repeat, setup_settings_manager, example_settings_dict_with_tuples
+    ):
         settings_manager = setup_settings_manager
 
         assert settings_manager._generate_message_text() in [
-            f'{message}{example_settings_dict["messages"]["separator"]}'
-            for message in example_settings_dict["messages"]["messages"]
+            f'{message}{example_settings_dict_with_tuples["messages"]["separator"]}'
+            for message in example_settings_dict_with_tuples["messages"]["messages"]
         ]
 
     def test_generate_text_return_type(self, setup_settings_manager):
@@ -147,14 +151,16 @@ class TestSettingsManager:
         assert isinstance(settings_manager._generate_message(), pg.Surface)
 
     def test_load_images(
-        self, monkeypatch, setup_settings_manager, example_settings_dict
+        self, monkeypatch, setup_settings_manager, example_settings_dict_with_tuples
     ):
         monkeypatch.setattr(pg.image, "load", lambda x: pg.Surface((20, 10)))
         settings_manager = setup_settings_manager
         settings_manager._load_images()
         images_dict = settings_manager.settings["images"]
 
-        assert len(images_dict["images"]) == len(images_dict["sources"])
+        assert len(images_dict["images"]) == len(
+            example_settings_dict_with_tuples["images"]["sources"]
+        )
 
     def test_load_images_file_not_found_error_not_raised(self, setup_settings_manager):
         settings_manager = setup_settings_manager
