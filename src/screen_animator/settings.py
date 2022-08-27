@@ -108,7 +108,8 @@ class SettingsManager:
 
     def __init__(self, importer: SettingsImporter, settings_file: str | Path) -> None:
         """
-        Initialise by using a settings importer to imported a specified file, then setting up some initial settings.
+        Initialise by using a settings importer to imported a specified file,
+        then setting up some initial settings.
 
         Parameters
         ----------
@@ -128,7 +129,8 @@ class SettingsManager:
         return self._settings
 
     def set_colors(self) -> None:
-        """Set background, text, and text outline colors from the available options in the settings provided."""
+        """Set background, text, and text outline colors from the available options
+        in the settings provided. """
 
         if self._settings.get("bg") is None:
             self._settings["bg"] = {}

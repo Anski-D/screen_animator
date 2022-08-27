@@ -1,6 +1,6 @@
+import math
 import pytest
 import pygame as pg
-import math
 from screen_animator.settings import SettingsManager
 from screen_animator.item_groups import LeftScrollingTextGroup, RandomImagesGroup
 

@@ -57,8 +57,8 @@ class LeftScrollingTextGroup(ItemGroup):
         """
         Create a message `Item` that scrolls to the left with a set speed.
 
-        Message is initially placed with middle-left set at the middle-right of the perimeter,
-        i.e. off-screen to the right.
+        Message is initially placed with middle-left set at the middle-right of the
+        perimeter, i.e. off-screen to the right.
         """
         speed = (
             self._settings["messages"]["scroll_speed"]
@@ -77,8 +77,9 @@ class LeftScrollingTextGroup(ItemGroup):
         """
         Update messages in group.
 
-        If the message has left the left side of the perimeter entirely, it will be deleted. If
-        all messages are within the right-hand perimeter, a new message will be generated.
+        If the message has left the left side of the perimeter entirely, it will be
+        deleted. If all messages are within the right-hand perimeter, a new message
+        will be generated.
         """
         self._group.update()
         for message in self._group.sprites():
@@ -117,8 +118,8 @@ class RandomImagesGroup(ItemGroup):
         """
         Update the position, randomly, of all the images in the group.
 
-        Image position is updated sequentially, and each is compared to the position of newly
-        positioned images to ensure no collisions.
+        Image position is updated sequentially, and each is compared to the position
+        of newly positioned images to ensure no collisions.
         """
         group = pg.sprite.Group()
         for image in self._group.sprites():
