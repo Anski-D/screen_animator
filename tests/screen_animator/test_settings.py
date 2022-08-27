@@ -22,8 +22,8 @@ class TestSettingsImporter:
         importer = SettingsImporter()
 
         assert (
-                importer._convert_colors_to_tuples(example_settings_dict)
-                == example_settings_dict_with_tuples
+            importer._convert_colors_to_tuples(example_settings_dict)
+            == example_settings_dict_with_tuples
         )
 
 

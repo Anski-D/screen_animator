@@ -1,12 +1,15 @@
 import pytest
 import pygame as pg
+import math
 from screen_animator.settings import SettingsManager
 from screen_animator.item_groups import LeftScrollingText
 
 
 class TestLeftScrollingText:
     @pytest.fixture
-    def example_left_scrolling_text(self, monkeypatch, example_settings_dict_with_tuples, example_perimeter):
+    def example_left_scrolling_text(
+        self, monkeypatch, example_settings_dict_with_tuples, example_perimeter
+    ):
         pg.init()
         monkeypatch.setattr(
             SettingsManager,
@@ -25,3 +28,34 @@ class TestLeftScrollingText:
             item_group.create()
 
         assert len(item_group._group) == num_of_items
+
+    def test_create_position(self, example_left_scrolling_text, example_perimeter):
+        item_group = example_left_scrolling_text
+        item_group.create()
+
+        assert item_group._group.sprites()[0].rect_box.left == example_perimeter.right
+
+    def test_update_create(self, example_left_scrolling_text):
+        item_group = example_left_scrolling_text
+        item_group.create()
+        item = item_group._group.sprites()[0]
+        width = item.rect_box.width
+        speed = 100
+        item._movement._speed = speed
+        for _ in range(math.ceil(width / speed)):
+            item_group.update()
+
+        assert len(item_group._group.sprites()) == 2
+
+    def test_update_delete(self, monkeypatch, example_left_scrolling_text):
+        item_group = example_left_scrolling_text
+        item_group.create()
+        item = item_group._group.sprites()[0]
+        width = item.rect_box.width + item_group._perimeter.width
+        speed = 100
+        item._movement._speed = speed
+        monkeypatch.setattr(LeftScrollingText, "create", lambda x: None)
+        for _ in range(math.ceil(width / speed)):
+            item_group.update()
+
+        assert len(item_group._group.sprites()) == 0
