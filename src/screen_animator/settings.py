@@ -130,7 +130,7 @@ class SettingsManager:
 
     def set_colors(self) -> None:
         """Set background, text, and text outline colors from the available options
-        in the settings provided. """
+        in the settings provided."""
 
         if self._settings.get("bg") is None:
             self._settings["bg"] = {}
