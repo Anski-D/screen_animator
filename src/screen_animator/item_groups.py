@@ -53,6 +53,15 @@ class LeftScrollingTextGroup(ItemGroup):
 
     _movement = ScrollingMovement
 
+    def __init__(self, settings: dict, perimeter: pg.Rect) -> None:
+        super().__init__(settings, perimeter)
+
+        speed = (
+            self._settings["messages"]["scroll_speed"]
+            / self._settings["timings"]["fps"]
+        )
+        self._scrolling_movement = self._movement(speed, "left")
+
     def create(self) -> None:
         """
         Create a message `Item` that scrolls to the left with a set speed.
@@ -60,16 +69,11 @@ class LeftScrollingTextGroup(ItemGroup):
         Message is initially placed with middle-left set at the middle-right of the
         perimeter, i.e. off-screen to the right.
         """
-        speed = (
-            self._settings["messages"]["scroll_speed"]
-            / self._settings["timings"]["fps"]
-        )
-        movement = self._movement(speed, "left")
         message = Item(
             self._group,
             self._settings["messages"]["message"](),
             self._perimeter,
-            movement,
+            self._scrolling_movement,
         )
         message.rect.midleft = self._perimeter.midright
 
@@ -109,9 +113,9 @@ class RandomImagesGroup(ItemGroup):
     def create(self) -> None:
         """Create all the image items, set to move randomly within the perimeter."""
         image_settings = self._settings["images"]
+        movement = self._movement()
         for _ in range(image_settings["number"]):
             for image in image_settings["images"]:
-                movement = self._movement()
                 Item(self._group, image, self._perimeter, movement)
 
     def update(self) -> None:
