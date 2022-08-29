@@ -3,7 +3,7 @@ import pytest
 
 
 @pytest.fixture
-def example_settings_dict():
+def example_settings_dict() -> dict:
     return {
         "colors": [
             [255, 0, 0],
@@ -47,7 +47,7 @@ def example_settings_dict():
 
 
 @pytest.fixture
-def example_settings_dict_with_tuples(example_settings_dict):
+def example_settings_dict_with_tuples(example_settings_dict: dict) -> dict:
     colors = [
         (255, 0, 0),
         (0, 255, 0),
@@ -64,10 +64,10 @@ def example_settings_dict_with_tuples(example_settings_dict):
 
 
 @pytest.fixture
-def example_perimeter():
+def example_perimeter() -> pg.Rect:
     return pg.Rect(0, 0, 1000, 500)
 
 
 @pytest.fixture
-def example_content():
+def example_content() -> pg.Surface:
     return pg.Surface((20, 10))

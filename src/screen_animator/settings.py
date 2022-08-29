@@ -136,15 +136,17 @@ class SettingsManager:
             self._settings["bg"] = {}
         self._settings["bg"]["color"] = random.choice(self._settings["colors"])
 
-        self._settings["messages"]["color"] = random.choice(self._settings["colors"])
-        while self._settings["messages"]["color"] == self._settings["bg"]["color"]:
-            self._settings["messages"]["color"] = random.choice(
-                self._settings["colors"]
-            )
+        messages_dict = self._settings["messages"]
+        messages_dict["color"] = random.choice(self._settings["colors"])
+        while messages_dict["color"] == self._settings["bg"]["color"]:
+            messages_dict["color"] = random.choice(self._settings["colors"])
 
-        self.settings["messages"]["outline_color"] = random.choice(
-            self._settings["messages"]["outline_colors"]
-        )
+        match messages_dict["outline_colors"]:
+            case (int(), int(), int()) as outline_color:
+                pass
+            case outline_colors:
+                outline_color = random.choice(outline_colors)
+        messages_dict["outline_color"] = outline_color
 
     def _import_settings(self, settings_file: str | Path) -> dict:
         return self._importer.import_settings(settings_file)
