@@ -12,7 +12,7 @@ class Model:
     ) -> None:
         self._settings_manager = settings_manager
         self._perimeter = perimeter
-        self._item_groups = [
+        self.item_groups = [
             group(self._settings_manager.settings, self._perimeter)
             for group in item_group_types
         ]
@@ -23,11 +23,11 @@ class Model:
         return self._initialized
 
     def init(self) -> None:
-        for item_group in self._item_groups:
+        for item_group in self.item_groups:
             item_group.create()
 
         self._initialized = True
 
     def update(self) -> None:
-        for item_group in self._item_groups:
+        for item_group in self.item_groups:
             item_group.update()
