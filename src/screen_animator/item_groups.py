@@ -30,6 +30,11 @@ class ItemGroup(ABC):
         self._perimeter = perimeter
         self._group = pg.sprite.Group()
 
+    @property
+    def items(self) -> list[Item]:
+        """List of items in group."""
+        return self._group.sprites()
+
     @abstractmethod
     def create(self) -> None:
         """Create item(s) in group, to be implemented by sublasses."""
@@ -86,12 +91,12 @@ class LeftScrollingTextGroup(ItemGroup):
         will be generated.
         """
         self._group.update()
-        for message in self._group.sprites():
+        for message in self.items:
             if message.rect.right < self._perimeter.left:
                 message.kill()
         if all(
             message.rect.right <= self._perimeter.right
-            for message in self._group.sprites()
+            for message in self.items
         ):
             self.create()
 
@@ -126,7 +131,7 @@ class RandomImagesGroup(ItemGroup):
         of newly positioned images to ensure no collisions.
         """
         group = pg.sprite.Group()
-        for image in self._group.sprites():
+        for image in self.items:
             self._group.remove(image)
             image.update()
             while pg.sprite.spritecollideany(image, group):

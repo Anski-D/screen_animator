@@ -45,7 +45,7 @@ class TestLeftScrollingTextGroup:
         for _ in range(num_of_items):
             item_group.create()
 
-        assert len(item_group._group) == num_of_items
+        assert len(item_group.items) == num_of_items
 
     def test_create_position(
         self,
@@ -55,28 +55,28 @@ class TestLeftScrollingTextGroup:
         item_group = example_left_scrolling_text_group
         item_group.create()
 
-        assert item_group._group.sprites()[0].rect.left == example_perimeter.right
+        assert item_group.items[0].rect.left == example_perimeter.right
 
     def test_update_create(
         self, example_left_scrolling_text_group: LeftScrollingTextGroup
     ) -> None:
         item_group = example_left_scrolling_text_group
         item_group.create()
-        item = item_group._group.sprites()[0]
+        item = item_group.items[0]
         width = item.rect.width
         speed = 100
         item._movement._speed = speed
         for _ in range(math.ceil(width / speed)):
             item_group.update()
 
-        assert len(item_group._group.sprites()) == 2
+        assert len(item_group.items) == 2
 
     def test_update_delete(
         self, monkeypatch, example_left_scrolling_text_group: LeftScrollingTextGroup
     ) -> None:
         item_group = example_left_scrolling_text_group
         item_group.create()
-        item = item_group._group.sprites()[0]
+        item = item_group.items[0]
         width = item.rect.width + item_group._perimeter.width
         speed = 100
         item._movement._speed = speed
@@ -84,7 +84,7 @@ class TestLeftScrollingTextGroup:
         for _ in range(math.ceil(width / speed)):
             item_group.update()
 
-        assert len(item_group._group.sprites()) == 0
+        assert len(item_group.items) == 0
 
 
 class TestRandomImagesGroup:
@@ -104,7 +104,7 @@ class TestRandomImagesGroup:
         image_settings = example_settings_dict_with_tuples["images"]
 
         assert (
-            len(item_group._group.sprites())
+            len(item_group.items)
             == len(image_settings["sources"]) * image_settings["number"]
         )
 
@@ -118,8 +118,5 @@ class TestRandomImagesGroup:
             item_group.update()
 
         assert all(
-            [
-                item_group._perimeter.contains(image)
-                for image in item_group._group.sprites()
-            ]
+            [item_group._perimeter.contains(image) for image in item_group.items]
         )
