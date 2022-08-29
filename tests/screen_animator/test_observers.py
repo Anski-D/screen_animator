@@ -42,7 +42,7 @@ class TestObservable:
         observable.add_observer(observer2)
         observer3 = copy.copy(observer1)
         observable.add_observer(observer3)
-        del observer2
+        observer2 = None
 
         assert len(observable._observers) == 2
 

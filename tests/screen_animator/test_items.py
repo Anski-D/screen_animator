@@ -4,17 +4,17 @@ from screen_animator.items import Item, ScrollingMovement, RandomMovement
 
 
 @pytest.fixture
-def example_item(example_content, example_perimeter):
+def example_item(example_content: pg.Surface, example_perimeter: pg.Rect) -> Item:
     Item.__abstractmethods__ = set()
 
     return Item(pg.sprite.Group(), example_content, example_perimeter)
 
 
 class TestItem:
-    def test_content_return_type(self, example_item):
+    def test_content_return_type(self, example_item) -> None:
         assert isinstance(example_item.content, pg.Surface)
 
-    def test_content_setter(self, example_item):
+    def test_content_setter(self, example_item) -> None:
         assert example_item.rect == pg.Rect(0, 0, 20, 10)
 
 
@@ -29,7 +29,7 @@ class TestScrollingMovement:
             ("test", ("x", -1)),
         ],
     )
-    def test_direction_setter(self, direction, output):
+    def test_direction_setter(self, direction: str, output: tuple[str, int]) -> None:
         movement = ScrollingMovement()
         movement.direction = direction
 
@@ -44,7 +44,9 @@ class TestScrollingMovement:
             (5, "left", "x", 490),
         ],
     )
-    def test_move(self, speed, direction, axis, value, example_item):
+    def test_move(
+        self, speed: int, direction: str, axis: str, value: int, example_item: Item
+    ) -> None:
         item = example_item
         item.rect.topleft = item.perimeter.center
         movement = ScrollingMovement(speed, direction)
@@ -56,14 +58,14 @@ class TestScrollingMovement:
 
 class TestRandomMovement:
     @pytest.mark.parametrize("repeat", range(5))
-    def test_move_perimeter_contains(self, repeat, example_item):
+    def test_move_perimeter_contains(self, repeat: int, example_item: Item) -> None:
         item = example_item
         movement = RandomMovement()
         movement.move(item)
 
         assert item.perimeter.contains(item.rect)
 
-    def test_move_repeat_move(self, example_item):
+    def test_move_repeat_move(self, example_item: Item) -> None:
         item = example_item
         movement = RandomMovement()
         movement.move(item)
