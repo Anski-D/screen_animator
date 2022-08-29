@@ -74,7 +74,6 @@ def example_content() -> pg.Surface:
     return pg.Surface((20, 10))
 
 
-
 @pytest.fixture
 def example_settings_manager(
     monkeypatch, example_settings_dict_with_tuples: dict
