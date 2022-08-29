@@ -30,20 +30,6 @@ class TestSettingsImporter:
 
 
 class TestSettingsManager:
-    @pytest.fixture
-    def example_settings_manager(
-        self, monkeypatch, example_settings_dict_with_tuples: dict
-    ) -> SettingsManager:
-        pg.init()
-        monkeypatch.setattr(
-            SettingsManager,
-            "_import_settings",
-            lambda x, y: example_settings_dict_with_tuples,
-        )
-        monkeypatch.setattr(SettingsManager, "_setup_settings", lambda x: None)
-
-        return SettingsManager(None, None)
-
     @pytest.mark.parametrize("group", ["bg", "messages"])
     def test_set_colors(
         self, group: pg.sprite.Group, example_settings_manager: SettingsManager

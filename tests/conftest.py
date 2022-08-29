@@ -1,5 +1,6 @@
 import pygame as pg
 import pytest
+from screen_animator.settings import SettingsManager
 
 
 @pytest.fixture
@@ -71,3 +72,19 @@ def example_perimeter() -> pg.Rect:
 @pytest.fixture
 def example_content() -> pg.Surface:
     return pg.Surface((20, 10))
+
+
+
+@pytest.fixture
+def example_settings_manager(
+    monkeypatch, example_settings_dict_with_tuples: dict
+) -> SettingsManager:
+    pg.init()
+    monkeypatch.setattr(
+        SettingsManager,
+        "_import_settings",
+        lambda x, y: example_settings_dict_with_tuples,
+    )
+    monkeypatch.setattr(SettingsManager, "_setup_settings", lambda x: None)
+
+    return SettingsManager(None, None)
