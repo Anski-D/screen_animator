@@ -74,12 +74,14 @@ class LeftScrollingTextGroup(ItemGroup):
         Message is initially placed with middle-left set at the middle-right of the
         perimeter, i.e. off-screen to the right.
         """
+        message_text = self._settings["messages"]["message"]()
         message = Item(
             self._group,
-            self._settings["messages"]["message"](),
+            self._generate_message(message_text),
             self._perimeter,
             self._scrolling_movement,
         )
+        setattr(message, "message_text", message_text)
         message.rect.midleft = self._perimeter.midright
 
     def update(self) -> None:
@@ -91,14 +93,26 @@ class LeftScrollingTextGroup(ItemGroup):
         will be generated.
         """
         self._group.update()
+
         for message in self.items:
             if message.rect.right < self._perimeter.left:
                 message.kill()
-        if all(
-            message.rect.right <= self._perimeter.right
-            for message in self.items
-        ):
+            else:
+                message.content = self._generate_message(
+                    getattr(message, "message_text")
+                )
+
+        if all(message.rect.right <= self._perimeter.right for message in self.items):
             self.create()
+
+    def _generate_message(self, message_text: str) -> pg.Surface:
+        messages_dict = self._settings["messages"]
+
+        return messages_dict["font"].render(
+            message_text,
+            messages_dict["anti-aliasing"],
+            messages_dict["color"],
+        )
 
 
 class RandomImagesGroup(ItemGroup):

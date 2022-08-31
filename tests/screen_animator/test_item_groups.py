@@ -86,6 +86,16 @@ class TestLeftScrollingTextGroup:
 
         assert len(item_group.items) == 0
 
+    def test_generate_message(
+        self,
+        example_left_scrolling_text_group: LeftScrollingTextGroup,
+        example_settings_dict_with_tuples: dict,
+    ) -> None:
+
+        assert isinstance(
+            example_left_scrolling_text_group._generate_message("Test"), pg.Surface
+        )
+
 
 class TestRandomImagesGroup:
     @pytest.fixture

@@ -41,18 +41,9 @@ class Item(pg.sprite.Sprite):
         """
         super().__init__(group)
         self.content = content
+        self.rect = self.content.get_rect()
         self.perimeter = perimeter
         self._movement = movement
-
-    @property
-    def content(self) -> pg.Surface:
-        """The `pygame`-type content that can be rendered."""
-        return self._content
-
-    @content.setter
-    def content(self, content: pg.Surface) -> None:
-        self._content = content
-        self.rect = self._content.get_rect()
 
     @property
     def perimeter(self) -> pg.Rect:

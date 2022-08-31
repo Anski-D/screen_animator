@@ -154,7 +154,7 @@ class SettingsManager:
     def _setup_settings(self):
         self.set_colors()
         self._set_font()
-        self._settings["messages"]["message"] = self._generate_message
+        self._settings["messages"]["message"] = self._generate_message_text
         self._load_images()
 
     def _set_font(self) -> None:
@@ -170,15 +170,6 @@ class SettingsManager:
         messages_dict = self._settings["messages"]
 
         return f"{random.choice(messages_dict['messages'])}{messages_dict['separator']}"
-
-    def _generate_message(self) -> pg.Surface:
-        messages_dict = self._settings["messages"]
-
-        return messages_dict["font"].render(
-            self._generate_message_text(),
-            messages_dict["anti-aliasing"],
-            messages_dict["color"],
-        )
 
     def _load_images(self):
         images_dict = self._settings["images"]

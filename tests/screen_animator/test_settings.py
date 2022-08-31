@@ -86,14 +86,6 @@ class TestSettingsManager:
 
         assert isinstance(settings_manager._generate_message_text(), str)
 
-    def test_generate_message(self, example_settings_manager: SettingsManager) -> None:
-        settings_manager = example_settings_manager
-        messages_dict = settings_manager.settings["messages"]
-        messages_dict["color"] = (0, 0, 0)
-        messages_dict["font"] = pg.font.Font(None, 10)
-
-        assert isinstance(settings_manager._generate_message(), pg.Surface)
-
     def test_load_images(
         self,
         monkeypatch,
