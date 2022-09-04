@@ -7,22 +7,22 @@ class Model:
     def __init__(
         self,
         settings_manager: SettingsManager,
-        perimeter: pg.Rect,
         item_group_types: list[type[ItemGroup]],
     ) -> None:
         self._settings_manager = settings_manager
-        self._perimeter = perimeter
-        self.item_groups = [
-            group(self._settings_manager.settings, self._perimeter)
-            for group in item_group_types
-        ]
+        self._item_group_types = item_group_types
         self._initialized = False
 
     @property
     def initialized(self) -> bool:
         return self._initialized
 
-    def init(self) -> None:
+    def init(self, perimeter: pg.Rect) -> None:
+        self._perimeter = perimeter
+        self.item_groups = [
+            group(self._settings_manager.settings, self._perimeter)
+            for group in self._item_group_types
+        ]
         for item_group in self.item_groups:
             item_group.create()
 
