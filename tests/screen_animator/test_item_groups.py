@@ -2,7 +2,7 @@ import math
 import pytest
 import pygame as pg
 from screen_animator.settings import SettingsManager
-from screen_animator.item_groups import LeftScrollingTextGroup, RandomImagesGroup
+from screen_animator.item_groups import LeftScrollingTextGroup, RandomImagesGroup, ColorChangeGroup
 
 
 @pytest.fixture
@@ -128,3 +128,17 @@ class TestRandomImagesGroup:
         assert all(
             [item_group._perimeter.contains(image) for image in item_group.items]
         )
+
+
+class TestColorChangeGroup:
+    @pytest.fixture
+    def example_color_change_group(
+        self, example_settings_manager: SettingsManager, example_perimeter: pg.Rect
+    ) -> ColorChangeGroup:
+        return ColorChangeGroup(example_settings_manager, example_perimeter)
+
+    def test_create(self, example_color_change_group: ColorChangeGroup) -> None:
+        item_group = example_color_change_group
+        item_group.create()
+
+        assert isinstance(item_group._time, int)
