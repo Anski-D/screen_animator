@@ -4,6 +4,9 @@ from .item_groups import ItemGroup
 
 
 class Model:
+    _perimeter: pg.Rect
+    item_groups: list[ItemGroup]
+
     def __init__(
         self,
         settings_manager: SettingsManager,
@@ -20,7 +23,7 @@ class Model:
     def init(self, perimeter: pg.Rect) -> None:
         self._perimeter = perimeter
         self.item_groups = [
-            group(self._settings_manager.settings, self._perimeter)
+            group(self._settings_manager, self._perimeter)
             for group in self._item_group_types
         ]
         for item_group in self.item_groups:

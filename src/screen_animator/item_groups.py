@@ -27,8 +27,8 @@ class ItemGroup(ABC):
         perimeter
             Outer limit of 'canvas' in `pygame`.
         """
-        self._setting_manager = settings_manager
-        self._settings = self._setting_manager.settings
+        self._settings_manager = settings_manager
+        self._settings = self._settings_manager.settings
         self._perimeter = perimeter
         self._group = pg.sprite.Group()
 
@@ -154,3 +154,38 @@ class RandomImagesGroup(ItemGroup):
                 image.update()
             group.add(image)
         self._group = group
+
+
+class ColorChangeGroup(ItemGroup):
+    _time: int
+
+    def create(self) -> None:
+        self._time = pg.time.get_ticks()
+
+    def update(self) -> None:
+        time = pg.time.get_ticks()
+        if time - self._time >= self._settings["timings"]["color_change_time"] * 1000:
+            self._settings_manager.set_colors()
+
+        self._time = time
+
+
+class TimedRandomImagesGroup(ItemGroup):
+    _wrapped_group_type = RandomImagesGroup
+    _time: int
+
+    def __init__(self, settings_manager: SettingsManager, perimeter: pg.Rect):
+        super().__init__(settings_manager, perimeter)
+
+        self._wrapped_group = self._wrapped_group_type(settings_manager, perimeter)
+
+    def create(self) -> None:
+        self._wrapped_group.create()
+        self._time = pg.time.get_ticks()
+
+    def update(self) -> None:
+        time = pg.time.get_ticks()
+        if time - self._time >= self._settings["timings"]["image_change_time"] * 1000:
+            self._wrapped_group.update()
+
+        self._time = time
