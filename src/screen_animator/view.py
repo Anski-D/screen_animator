@@ -1,9 +1,10 @@
 import pygame as pg
+from .observers import Observer
 from .model import Model
 from .controller import Controller
 
 
-class View:
+class View(Observer):
     _screen: pg.Surface
     perimeter: pg.Rect
 
@@ -30,6 +31,9 @@ class View:
                 self._screen.blit(item.content, item.rect)
 
         pg.display.flip()
+
+    def notify(self) -> None:
+        self.update()
 
     def _set_bg(self) -> None:
         self._screen.fill(self._settings["bg"]["color"])

@@ -1,9 +1,10 @@
 import pygame as pg
+from .observers import Observable
 from .settings import SettingsManager
 from .item_groups import ItemGroup
 
 
-class Model:
+class Model(Observable):
     _perimeter: pg.Rect
     item_groups: list[ItemGroup]
 
@@ -12,6 +13,8 @@ class Model:
         settings_manager: SettingsManager,
         item_group_types: list[type[ItemGroup]],
     ) -> None:
+        super().__init__()
+
         self._settings_manager = settings_manager
         self._item_group_types = item_group_types
         self._initialized = False
