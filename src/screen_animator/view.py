@@ -1,14 +1,13 @@
 import pygame as pg
 from .observers import Observer
 from .model import Model
-from .controller import Controller
 
 
 class View(Observer):
     _screen: pg.Surface
     perimeter: pg.Rect
 
-    def __init__(self, model: Model, controller: Controller, settings: dict) -> None:
+    def __init__(self, model: Model, controller: "Controller", settings: dict) -> None:
         self._model = model
         self._controller = controller
         self._settings = settings
@@ -19,7 +18,9 @@ class View(Observer):
         return self._initialized
 
     def init(self) -> None:
-        self._screen = pg.display.set_mode((0, 0), pg.FULLSCREEN)
+        # self._screen = pg.display.set_mode((0, 0), pg.FULLSCREEN)
+        self._screen = pg.display.set_mode((800, 600))
+        pg.display.set_caption("Screen_Animator")
         self.perimeter = self._screen.get_rect()
         self._set_bg()
         self._initialized = True

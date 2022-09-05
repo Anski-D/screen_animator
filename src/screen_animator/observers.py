@@ -15,7 +15,7 @@ class Observable(ABC):
     def add_observer(self, observer: Observer):
         self._observers[observer] = 1
 
-    def notify_observer(self):
+    def notify_observers(self):
         for observer in self._observers.keys():
             observer.notify()
 

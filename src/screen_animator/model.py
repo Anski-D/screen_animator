@@ -37,3 +37,5 @@ class Model(Observable):
     def update(self) -> None:
         for item_group in self.item_groups:
             item_group.update()
+
+        self.notify_observers()
