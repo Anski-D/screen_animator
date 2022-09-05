@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 import pygame as pg
 from .items import ScrollingMovement, RandomMovement, Item
+from .settings import SettingsManager
 
 
 class ItemGroup(ABC):
@@ -15,18 +16,19 @@ class ItemGroup(ABC):
         Update items in group (sublasses to implement).
     """
 
-    def __init__(self, settings: dict, perimeter: pg.Rect) -> None:
+    def __init__(self, settings_manager: SettingsManager, perimeter: pg.Rect) -> None:
         """
         Initialise group with settings and context perimeter.
 
         Parameters
         ----------
-        settings
+        settings_manager
             Dictionary of settings.
         perimeter
             Outer limit of 'canvas' in `pygame`.
         """
-        self._settings = settings
+        self._setting_manager = settings_manager
+        self._settings = self._setting_manager.settings
         self._perimeter = perimeter
         self._group = pg.sprite.Group()
 
@@ -58,8 +60,8 @@ class LeftScrollingTextGroup(ItemGroup):
 
     _movement = ScrollingMovement
 
-    def __init__(self, settings: dict, perimeter: pg.Rect) -> None:
-        super().__init__(settings, perimeter)
+    def __init__(self, settings_manager: SettingsManager, perimeter: pg.Rect) -> None:
+        super().__init__(settings_manager, perimeter)
 
         speed = (
             self._settings["messages"]["scroll_speed"]

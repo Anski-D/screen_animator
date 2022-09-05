@@ -30,9 +30,7 @@ class TestLeftScrollingTextGroup:
     def example_left_scrolling_text_group(
         self, example_settings_manager: SettingsManager, example_perimeter: pg.Rect
     ) -> LeftScrollingTextGroup:
-        return LeftScrollingTextGroup(
-            example_settings_manager.settings, example_perimeter
-        )
+        return LeftScrollingTextGroup(example_settings_manager, example_perimeter)
 
     @pytest.mark.parametrize("num_of_items", [1, 2, 3, 5, 8])
     def test_create(
@@ -102,7 +100,7 @@ class TestRandomImagesGroup:
     def example_random_images_group(
         self, example_settings_manager: SettingsManager, example_perimeter: pg.Rect
     ) -> RandomImagesGroup:
-        return RandomImagesGroup(example_settings_manager.settings, example_perimeter)
+        return RandomImagesGroup(example_settings_manager, example_perimeter)
 
     def test_create(
         self,
