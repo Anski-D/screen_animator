@@ -11,18 +11,17 @@ class Controller:
         self._model = model
         self._view = View(model, self, settings_manager.settings)
         self._clock = pg.time.Clock()
-        self._initialized = False
+
+    def initialized(self) -> bool:
+        return self._view.initialized and self._model.initialized
 
     def init(self) -> None:
         self._view.init()
         self._model.init(self._view.perimeter)
         self._model.add_observer(self._view)
 
-        if self._view.initialized and self._model.initialized:
-            self._initialized = True
-
     def run(self):
-        while self._initialized:
+        while self.initialized:
             self._clock.tick(self._settings["timings"]["fps"])
 
             self._model.update()

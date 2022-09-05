@@ -166,8 +166,7 @@ class ColorChangeGroup(ItemGroup):
         time = pg.time.get_ticks()
         if time - self._time >= self._settings["timings"]["color_change_time"] * 1000:
             self._settings_manager.set_colors()
-
-        self._time = time
+            self._time = time
 
 
 class TimedRandomImagesGroup(ItemGroup):
@@ -187,5 +186,4 @@ class TimedRandomImagesGroup(ItemGroup):
         time = pg.time.get_ticks()
         if time - self._time >= self._settings["timings"]["image_change_time"] * 1000:
             self._wrapped_group.update()
-
-        self._time = time
+            self._time = time
