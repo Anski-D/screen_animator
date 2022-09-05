@@ -19,7 +19,8 @@ class TestModel:
         patch_item_group,
     ) -> None:
         """init dunder creates ItemGroup instances."""
-        model = Model(example_settings_manager, example_perimeter, [ItemGroup])
+        model = Model(example_settings_manager, [ItemGroup])
+        model.init(example_perimeter)
 
         assert all(
             isinstance(item_group, ItemGroup) for item_group in model.item_groups
@@ -34,7 +35,7 @@ class TestModel:
         """Set initialized attribute to True."""
         monkeypatch.setattr(ItemGroup, "__init__", lambda x, y, z: None)
         monkeypatch.setattr(ItemGroup, "create", lambda x: None)
-        model = Model(example_settings_manager, example_perimeter, [ItemGroup])
-        model.init()
+        model = Model(example_settings_manager, [ItemGroup])
+        model.init(example_perimeter)
 
         assert model.initialized
