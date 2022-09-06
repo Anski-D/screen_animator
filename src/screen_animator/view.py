@@ -7,10 +7,15 @@ class View(Observer):
     _screen: pg.Surface
     perimeter: pg.Rect
 
-    def __init__(self, model: Model, controller: "Controller", settings: dict) -> None:
+    def __init__(
+        self,
+        model: Model,
+        controller: "Controller",
+        settings: dict, display_size: tuple[int, int] = None) -> None:
         self._model = model
         self._controller = controller
         self._settings = settings
+        self._display_size = display_size
         self._initialized = False
 
     @property
@@ -18,8 +23,10 @@ class View(Observer):
         return self._initialized
 
     def init(self) -> None:
-        # self._screen = pg.display.set_mode((0, 0), pg.FULLSCREEN)
-        self._screen = pg.display.set_mode((800, 600))
+        if self._display_size is None:
+            self._screen = pg.display.set_mode((0, 0), pg.FULLSCREEN)
+        else:
+            self._screen = pg.display.set_mode(self._display_size)
         pg.display.set_caption("Screen_Animator")
         self.perimeter = self._screen.get_rect()
         self._set_bg()
