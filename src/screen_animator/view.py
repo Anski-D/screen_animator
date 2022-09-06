@@ -43,5 +43,8 @@ class View(Observer):
     def notify(self) -> None:
         self.update()
 
+    def quit(self) -> None:
+        self._initialized = False
+
     def _set_bg(self) -> None:
         self._screen.fill(self._settings["bg"]["color"])

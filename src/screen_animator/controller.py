@@ -17,6 +17,7 @@ class Controller:
         self._view = View(model, self, settings_manager.settings, display_size)
         self._clock = pg.time.Clock()
 
+    @property
     def initialized(self) -> bool:
         return self._view.initialized and self._model.initialized
 
@@ -28,7 +29,18 @@ class Controller:
     def run(self) -> None:
         while self.initialized:
             self._clock.tick(self._settings["timings"]["fps"])
-
             self._model.update()
+            self._check_events()
 
-            pg.event.pump()
+    def _check_events(self) -> None:
+        for event in pg.event.get():
+            if is_quit(event):
+                self._view.quit()
+                self._model.quit()
+
+
+def is_quit(event: pg.event.Event) -> bool:
+    if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_q):
+        return True
+
+    return False

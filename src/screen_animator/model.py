@@ -39,3 +39,6 @@ class Model(Observable):
             item_group.update()
 
         self.notify_observers()
+
+    def quit(self) -> None:
+        self._initialized = False
