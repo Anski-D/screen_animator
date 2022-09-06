@@ -11,7 +11,9 @@ class View(Observer):
         self,
         model: Model,
         controller: "Controller",
-        settings: dict, display_size: tuple[int, int] = None) -> None:
+        settings: dict,
+        display_size: tuple[int, int] = None,
+    ) -> None:
         self._model = model
         self._controller = controller
         self._settings = settings

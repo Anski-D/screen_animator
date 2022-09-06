@@ -1,6 +1,10 @@
 from pathlib import Path
 import pygame as pg
-from .item_groups import LeftScrollingTextGroup, ColorChangeGroup, TimedRandomImagesGroup
+from .item_groups import (
+    LeftScrollingTextGroup,
+    ColorChangeGroup,
+    TimedRandomImagesGroup,
+)
 from .settings import SettingsManager, SettingsImporter
 from .model import Model
 from .controller import Controller

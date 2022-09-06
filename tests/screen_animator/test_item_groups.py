@@ -2,7 +2,11 @@ import math
 import pytest
 import pygame as pg
 from screen_animator.settings import SettingsManager
-from screen_animator.item_groups import LeftScrollingTextGroup, RandomImagesGroup, ColorChangeGroup
+from screen_animator.item_groups import (
+    LeftScrollingTextGroup,
+    RandomImagesGroup,
+    ColorChangeGroup,
+)
 
 
 @pytest.fixture

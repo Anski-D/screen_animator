@@ -1,8 +1,14 @@
 [tool.poetry]
-name = "screen_animator"
+name = "screen-animator"
 version = "0.1.0"
 description = ""
+license = "MIT"
 authors = ["David Anscombe <dave.anski@gmail.com>"]
+repository = "https://github.com/Anski-D/screen_animator"
+packages = [
+    { include = "screen_animator", from = "src" },
+]
+include = ["example"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
