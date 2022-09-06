@@ -147,13 +147,18 @@ class SettingsManager:
                 outline_color = random.choice(outline_colors)
         messages_dict["outline_color"] = outline_color
 
+    def generate_message_text(self) -> str:
+        messages_dict = self._settings["messages"]
+
+        return f"{random.choice(messages_dict['messages'])}{messages_dict['separator']}"
+
     def _import_settings(self, settings_file: str | Path) -> dict:
         return self._importer.import_settings(settings_file)
 
     def _setup_settings(self):
         self.set_colors()
         self._set_font()
-        self._settings["messages"]["message"] = self._generate_message_text
+        # self._settings["messages"]["message"] = self._generate_message_text
         self._load_images()
 
     def _set_font(self) -> None:
@@ -164,11 +169,6 @@ class SettingsManager:
             bold=messages_dict["bold"],
             italic=messages_dict["italic"],
         )
-
-    def _generate_message_text(self) -> str:
-        messages_dict = self._settings["messages"]
-
-        return f"{random.choice(messages_dict['messages'])}{messages_dict['separator']}"
 
     def _load_images(self):
         images_dict = self._settings["images"]

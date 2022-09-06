@@ -74,7 +74,7 @@ class TestSettingsManager:
         settings_manager = example_settings_manager
         messages_dict = example_settings_dict_with_tuples["messages"]
 
-        assert settings_manager._generate_message_text() in [
+        assert settings_manager.generate_message_text() in [
             f'{message}{messages_dict["separator"]}'
             for message in messages_dict["messages"]
         ]
@@ -84,7 +84,7 @@ class TestSettingsManager:
     ) -> None:
         settings_manager = example_settings_manager
 
-        assert isinstance(settings_manager._generate_message_text(), str)
+        assert isinstance(settings_manager.generate_message_text(), str)
 
     def test_load_images(
         self,
