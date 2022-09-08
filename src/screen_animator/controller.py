@@ -35,8 +35,8 @@ class Controller:
     def _check_events(self) -> None:
         for event in pg.event.get():
             if is_quit(event):
-                self._view.quit()
-                self._model.quit()
+                for component in [self._view, self._model]:
+                    component.quit()
 
 
 def is_quit(event: pg.event.Event) -> bool:
