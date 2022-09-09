@@ -8,7 +8,12 @@ repository = "https://github.com/Anski-D/screen_animator"
 packages = [
     { include = "screen_animator", from = "src" },
 ]
-include = ["example"]
+include = [
+    { path = "example", format = ["sdist", "wheel"] }
+]
+
+[tool.poetry.scripts]
+copy_examples = "screen_animator:copy_examples"
 
 [tool.poetry.dependencies]
 python = "^3.10"
