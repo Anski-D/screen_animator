@@ -14,7 +14,7 @@ import example
 
 __version__ = "0.1.0"
 
-item_groups = [LeftScrollingTextGroup, ColorChangeGroup, TimedRandomImagesGroup]
+item_groups = [ColorChangeGroup, TimedRandomImagesGroup, LeftScrollingTextGroup]
 example_files = ["inputs.toml", "script.py"]
 
 
@@ -41,7 +41,7 @@ class ScreenAnimator:
         controller.run()
 
     def _debug_setup(self) -> None:
-        self._display_size = (800, 600)
+        self._display_size = (800, 480)
 
 
 def copy_examples():

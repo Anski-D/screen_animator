@@ -178,6 +178,10 @@ class TimedRandomImagesGroup(ItemGroup):
 
         self._wrapped_group = self._wrapped_group_type(settings_manager, perimeter)
 
+    @property
+    def items(self) -> list[Item]:
+        return self._wrapped_group.items
+
     def create(self) -> None:
         self._wrapped_group.create()
         self._time = pg.time.get_ticks()
