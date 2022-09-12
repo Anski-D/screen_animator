@@ -10,11 +10,12 @@ class Controller:
         settings_manager: SettingsManager,
         model: Model,
         display_size: tuple[int, int] = None,
+        flipped=False,
     ) -> None:
         self._settings_manager = settings_manager
         self._settings = self._settings_manager.settings
         self._model = model
-        self._view = View(model, self, settings_manager.settings, display_size)
+        self._view = View(model, self, settings_manager.settings, display_size, flipped)
         self._clock = pg.time.Clock()
 
     @property

@@ -25,10 +25,12 @@ class ScreenAnimator:
         self,
         input_file: str | Path = "inputs.toml",
         display_size: tuple[int, int] = None,
+        flipped=False,
         debug=False,
     ) -> None:
         self._settings_file = input_file
         self._display_size = display_size
+        self._flipped = flipped
         if debug:
             self._debug_setup()
 
@@ -36,7 +38,9 @@ class ScreenAnimator:
         pg.init()
         settings_manager = SettingsManager(SettingsImporter(), self._settings_file)
         model = Model(settings_manager, self._item_groups)
-        controller = Controller(settings_manager, model, self._display_size)
+        controller = Controller(
+            settings_manager, model, self._display_size, self._flipped
+        )
         controller.init()
         controller.run()
 

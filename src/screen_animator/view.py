@@ -13,11 +13,13 @@ class View(Observer):
         controller: "Controller",
         settings: dict,
         display_size: tuple[int, int] = None,
+        flipped=False,
     ) -> None:
         self._model = model
         self._controller = controller
         self._settings = settings
         self._display_size = display_size
+        self._flipped = flipped
         self._initialized = False
 
     @property
@@ -39,6 +41,9 @@ class View(Observer):
         for group in self._model.item_groups:
             for item in group.items:
                 self._screen.blit(item.content, item.rect)
+
+        if self._flipped:
+            self._screen.blit(pg.transform.rotate(self._screen, 180), (0, 0))
 
         pg.display.flip()
 
