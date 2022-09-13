@@ -79,7 +79,7 @@ class Movement(ABC):
     """
 
     @abstractmethod
-    def move(self, item: Item):
+    def move(self, item: Item) -> None:
         """Sublasses should implement a means of moving `Movable`."""
 
 

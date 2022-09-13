@@ -61,6 +61,16 @@ class LeftScrollingTextGroup(ItemGroup):
     _movement = ScrollingMovement
 
     def __init__(self, settings_manager: SettingsManager, perimeter: pg.Rect) -> None:
+        """
+        Initialize group with a settings manager and defined perimeter.
+
+        Parameters
+        ----------
+        settings_manager
+            Manages settings.
+        perimeter
+            Defines outer perimeter.
+        """
         super().__init__(settings_manager, perimeter)
 
         speed = (
@@ -157,12 +167,25 @@ class RandomImagesGroup(ItemGroup):
 
 
 class ColorChangeGroup(ItemGroup):
+    """
+    Manages when colors are changed.
+
+    Methods
+    -------
+    create
+        Set the initial time tracked by `pygame`.
+    update
+        Change colors if time threshold reached.
+    """
+
     _time: int
 
     def create(self) -> None:
+        """Set the elapsed time according to `pygame`."""
         self._time = pg.time.get_ticks()
 
     def update(self) -> None:
+        """Check elapsed time, update colors if sufficient time has passed."""
         time = pg.time.get_ticks()
         if time - self._time >= self._settings["timings"]["color_change_time"] * 1000:
             self._settings_manager.set_colors()
@@ -170,23 +193,47 @@ class ColorChangeGroup(ItemGroup):
 
 
 class TimedRandomImagesGroup(ItemGroup):
+    """
+    Wraps a RandomImagesGroup and restricts updates to defined elapsed time threshold.
+
+    Methods
+    -------
+    create
+        Initialize a group with randomly moving images, set initial time.
+    update
+        Update wrapped group if time threshold reached.
+    """
+
     _wrapped_group_type = RandomImagesGroup
     _time: int
 
     def __init__(self, settings_manager: SettingsManager, perimeter: pg.Rect) -> None:
+        """
+        Initialize the group with a settings manager and outer perimeter.
+
+        Parameters
+        ----------
+        settings_manager
+            Manages settings.
+        perimeter
+            Defines outer perimeter.
+        """
         super().__init__(settings_manager, perimeter)
 
         self._wrapped_group = self._wrapped_group_type(settings_manager, perimeter)
 
     @property
     def items(self) -> list[Item]:
+        """Constituent items of group."""
         return self._wrapped_group.items
 
     def create(self) -> None:
+        """Create the wrapped group of random moving images."""
         self._wrapped_group.create()
         self._time = pg.time.get_ticks()
 
     def update(self) -> None:
+        """Update item positions if time threshold met."""
         time = pg.time.get_ticks()
         if time - self._time >= self._settings["timings"]["image_change_time"] * 1000:
             self._wrapped_group.update()
@@ -194,12 +241,34 @@ class TimedRandomImagesGroup(ItemGroup):
 
 
 class FpsCounterGroup(ItemGroup):
+    """
+    Counter for fps.
+
+    Methods
+    -------
+    create
+        Create the fps counter.
+    update
+        Update the fps counter.
+    """
+
     def __init__(self, settings_manager: SettingsManager, perimeter: pg.Rect) -> None:
+        """
+        Initialize the fps counter.
+
+        Parameters
+        ----------
+        settings_manager
+            Manages settings.
+        perimeter
+            Defines the outer perimeter.
+        """
         super().__init__(settings_manager, perimeter)
 
         self._clock = pg.time.Clock()
 
     def create(self) -> None:
+        """Create the fps counter."""
         self._group = pg.sprite.Group()
         messages_dict = self._settings["messages"]
         fps_font = pg.font.SysFont(messages_dict["typeface"], 36)
@@ -211,4 +280,5 @@ class FpsCounterGroup(ItemGroup):
         fps.rect.y = 10
 
     def update(self) -> None:
+        """Update the fps counter."""
         self.create()

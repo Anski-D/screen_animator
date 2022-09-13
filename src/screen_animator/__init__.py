@@ -1,7 +1,7 @@
 from pathlib import Path
-import pygame as pg
 import importlib.resources
 import shutil
+import pygame as pg
 from .item_groups import (
     LeftScrollingTextGroup,
     ColorChangeGroup,

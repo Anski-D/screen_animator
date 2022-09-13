@@ -41,6 +41,17 @@ class Controller:
 
 
 def is_quit(event: pg.event.Event) -> bool:
+    """
+    Checks if the `pygame` event is a quit event.
+
+    Parameters
+    ----------
+    event
+        `pygame` event to be checked.
+    Returns
+    -------
+        True if a quit event, False otherwise.
+    """
     if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_q):
         return True
 
