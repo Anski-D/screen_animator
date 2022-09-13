@@ -6,6 +6,7 @@ from .item_groups import (
     LeftScrollingTextGroup,
     ColorChangeGroup,
     TimedRandomImagesGroup,
+    FpsCounterGroup,
 )
 from .settings import SettingsManager, SettingsImporter
 from .model import Model
@@ -46,6 +47,7 @@ class ScreenAnimator:
 
     def _debug_setup(self) -> None:
         self._display_size = (800, 480)
+        self._item_groups.append(FpsCounterGroup)
 
 
 def copy_examples():

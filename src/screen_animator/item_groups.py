@@ -173,7 +173,7 @@ class TimedRandomImagesGroup(ItemGroup):
     _wrapped_group_type = RandomImagesGroup
     _time: int
 
-    def __init__(self, settings_manager: SettingsManager, perimeter: pg.Rect):
+    def __init__(self, settings_manager: SettingsManager, perimeter: pg.Rect) -> None:
         super().__init__(settings_manager, perimeter)
 
         self._wrapped_group = self._wrapped_group_type(settings_manager, perimeter)
@@ -191,3 +191,24 @@ class TimedRandomImagesGroup(ItemGroup):
         if time - self._time >= self._settings["timings"]["image_change_time"] * 1000:
             self._wrapped_group.update()
             self._time = time
+
+
+class FpsCounterGroup(ItemGroup):
+    def __init__(self, settings_manager: SettingsManager, perimeter: pg.Rect) -> None:
+        super().__init__(settings_manager, perimeter)
+
+        self._clock = pg.time.Clock()
+
+    def create(self) -> None:
+        self._group = pg.sprite.Group()
+        messages_dict = self._settings['messages']
+        fps_font = pg.font.SysFont(messages_dict['typeface'], 36)
+        self._clock.tick()
+        text = f'{self._clock.get_fps():.2f}'
+        content = fps_font.render(text, messages_dict["anti-aliasing"], (0, 0, 0))
+        fps = Item(self._group, content, self._perimeter)
+        fps.rect.x = 10
+        fps.rect.y = 10
+
+    def update(self) -> None:
+        self.create()
