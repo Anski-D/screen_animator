@@ -27,11 +27,14 @@ class ScreenAnimator:
         input_file: str | Path = "inputs.toml",
         display_size: tuple[int, int] = None,
         flipped=False,
+        fps_on=False,
         debug=False,
     ) -> None:
         self._settings_file = input_file
         self._display_size = display_size
         self._flipped = flipped
+        if fps_on:
+            self._fps_on()
         if debug:
             self._debug_setup()
 
@@ -47,7 +50,11 @@ class ScreenAnimator:
 
     def _debug_setup(self) -> None:
         self._display_size = (800, 480)
-        self._item_groups.append(FpsCounterGroup)
+        self._fps_on()
+
+    def _fps_on(self) -> None:
+        if FpsCounterGroup not in self._item_groups:
+            self._item_groups.append(FpsCounterGroup)
 
 
 def copy_examples():

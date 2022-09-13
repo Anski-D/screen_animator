@@ -201,10 +201,10 @@ class FpsCounterGroup(ItemGroup):
 
     def create(self) -> None:
         self._group = pg.sprite.Group()
-        messages_dict = self._settings['messages']
-        fps_font = pg.font.SysFont(messages_dict['typeface'], 36)
+        messages_dict = self._settings["messages"]
+        fps_font = pg.font.SysFont(messages_dict["typeface"], 36)
         self._clock.tick()
-        text = f'{self._clock.get_fps():.2f}'
+        text = f"{self._clock.get_fps():.2f}"
         content = fps_font.render(text, messages_dict["anti-aliasing"], (0, 0, 0))
         fps = Item(self._group, content, self._perimeter)
         fps.rect.x = 10
