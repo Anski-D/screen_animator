@@ -47,9 +47,9 @@ class View(Observer):
         settings
             User-defined settings.
         display_size : optional
-            Set a custom display size (default is None, fullscreen).
+            Set a custom display size (default is None, full-screen).
         flipped : optional
-            Flips the display across the horizontal axis (default is None, not flipped).
+            Flips the display across the horizontal axis (default is False, not flipped).
         """
         self._model = model
         self._controller = controller

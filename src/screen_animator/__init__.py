@@ -18,6 +18,15 @@ example_files = ["inputs.toml", "script.py"]
 
 
 class ScreenAnimator:
+    """
+    Bring together models of `screen_animator` and run.
+
+    Methods
+    -------
+    run
+        Run `screen_animator`.
+    """
+
     _item_groups = item_groups
 
     def __init__(
@@ -28,6 +37,22 @@ class ScreenAnimator:
         fps_on=False,
         debug=False,
     ) -> None:
+        """
+        Perform setup of `screen_animator`.
+
+        Parameters
+        ----------
+        input_file
+            File with user settings, default is `inputs.toml` in working directory.
+        display_size : optional
+            User-defined screen size (default is None, full-screen).
+        flipped : optional
+            Flip display across the horizontal axis (default is False).
+        fps_on
+            FPS counter is on (default is False).
+        debug
+            Turns on debug model (default is False).
+        """
         self._settings_file = input_file
         self._display_size = display_size
         self._flipped = flipped
@@ -37,6 +62,7 @@ class ScreenAnimator:
             self._debug_setup()
 
     def run(self) -> None:
+        """Run `screen_animator`."""
         pg.init()
         settings_manager = SettingsManager(SettingsImporter(), self._settings_file)
         model = Model(settings_manager, self._item_groups)
@@ -55,8 +81,9 @@ class ScreenAnimator:
             self._item_groups.append(FpsCounterGroup)
 
 
-def copy_examples():
+def copy_examples() -> None:
+    """Copies example files to working directory."""
     for file in example_files:
-        path = importlib.resources.path(example, file)
-        with path as p:
-            shutil.copy2(p, p.name)
+        example_path = importlib.resources.path(example, file)
+        with example_path as path:
+            shutil.copy2(path, path.name)

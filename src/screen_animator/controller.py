@@ -33,9 +33,9 @@ class Controller:
         model
             The model to manipulate.
         display_size: optional
-            Set a custom display size (default is None, fullscreen).
+            Set a custom display size (default is None, full-screen).
         flipped : optional
-            Flips the display across the horizontal axis (default is None, not flipped).
+            Flips the display across the horizontal axis (default is False, not flipped).
         """
         self._settings_manager = settings_manager
         self._settings = self._settings_manager.settings
