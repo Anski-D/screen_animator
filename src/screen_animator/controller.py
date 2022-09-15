@@ -5,6 +5,17 @@ from .settings import SettingsManager
 
 
 class Controller:
+    """
+    Allows manipulation of the `screen_animator` model.
+
+    Methods
+    -------
+    init
+        Manually perform some initialization.
+    run
+        Run `screen_animator`.
+    """
+
     def __init__(
         self,
         settings_manager: SettingsManager,
@@ -12,6 +23,20 @@ class Controller:
         display_size: tuple[int, int] = None,
         flipped=False,
     ) -> None:
+        """
+        Set-up some initial parameters.
+
+        Parameters
+        ----------
+        settings_manager
+            Manages settings.
+        model
+            The model to manipulate.
+        display_size: optional
+            Set a custom display size (default is None, fullscreen).
+        flipped : optional
+            Flips the display across the horizontal axis (default is None, not flipped).
+        """
         self._settings_manager = settings_manager
         self._settings = self._settings_manager.settings
         self._model = model
@@ -20,14 +45,17 @@ class Controller:
 
     @property
     def initialized(self) -> bool:
+        """Are view and model ready to use."""
         return self._view.initialized and self._model.initialized
 
     def init(self) -> None:
+        """Manually finish initializing the controller."""
         self._view.init()
         self._model.init(self._view.perimeter)
         self._model.add_observer(self._view)
 
     def run(self) -> None:
+        """Run `screen_animator` if view and model are ready."""
         while self.initialized:
             self._clock.tick(self._settings["timings"]["fps"])
             self._model.update()
