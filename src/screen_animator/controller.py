@@ -21,7 +21,7 @@ class Controller:
         settings_manager: SettingsManager,
         model: Model,
         display_size: tuple[int, int] = None,
-        flipped=False,
+        flipped: bool = False,
     ) -> None:
         """
         Set-up some initial parameters.

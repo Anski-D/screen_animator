@@ -33,7 +33,7 @@ class View(Observer):
         controller: "Controller",
         settings: dict,
         display_size: tuple[int, int] = None,
-        flipped=False,
+        flipped: bool = False,
     ) -> None:
         """
         Set-up some initial parameters for the display.

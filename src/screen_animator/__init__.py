@@ -33,9 +33,9 @@ class ScreenAnimator:
         self,
         input_file: str | Path = "inputs.toml",
         display_size: tuple[int, int] = None,
-        flipped=False,
-        fps_on=False,
-        debug=False,
+        flipped: bool = False,
+        fps_on: bool = False,
+        debug: bool = False,
     ) -> None:
         """
         Perform setup of `screen_animator`.
