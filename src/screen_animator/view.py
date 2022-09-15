@@ -4,8 +4,28 @@ from .model import Model
 
 
 class View(Observer):
-    _screen: pg.Surface
+    """
+    Display for the `screen_animator` model.
+
+    Attributes
+    ----------
+    perimeter
+        Defines outer perimeter of the display.
+
+    Methods
+    -------
+    init
+        Manually perform some initialization.
+    update
+        Update the display.
+    notify
+        Tell the display to update.
+    quit
+        Set the view as ready to quit.
+    """
+
     perimeter: pg.Rect
+    _screen: pg.Surface
 
     def __init__(
         self,
@@ -15,6 +35,22 @@ class View(Observer):
         display_size: tuple[int, int] = None,
         flipped=False,
     ) -> None:
+        """
+        Set-up some initial parameters for the display.
+
+        Parameters
+        ----------
+        model
+            Model to be displayed.
+        controller
+            Used to manipulate model.
+        settings
+            User-defined settings.
+        display_size : optional
+            Set a custom display size (default is None, fullscreen).
+        flipped : optional
+            Flips the display across the horizontal axis (default is None, not flipped).
+        """
         self._model = model
         self._controller = controller
         self._settings = settings
@@ -24,9 +60,11 @@ class View(Observer):
 
     @property
     def initialized(self) -> bool:
+        """Is view ready to use."""
         return self._initialized
 
     def init(self) -> None:
+        """Manually finish initializing the display."""
         if self._display_size is None:
             self._screen = pg.display.set_mode((0, 0), pg.FULLSCREEN)
         else:
@@ -37,6 +75,7 @@ class View(Observer):
         self._initialized = True
 
     def update(self) -> None:
+        """Update the display."""
         self._set_bg()
         for group in self._model.item_groups:
             for item in group.items:
@@ -48,9 +87,11 @@ class View(Observer):
         pg.display.flip()
 
     def notify(self) -> None:
+        """Notify view of change to the model."""
         self.update()
 
     def quit(self) -> None:
+        """Tell view to quit."""
         self._initialized = False
 
     def _set_bg(self) -> None:
