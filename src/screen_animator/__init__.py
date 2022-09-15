@@ -13,8 +13,6 @@ from .model import Model
 from .controller import Controller
 import example
 
-__version__ = "0.1.0"
-
 item_groups = [ColorChangeGroup, TimedRandomImagesGroup, LeftScrollingTextGroup]
 example_files = ["inputs.toml", "script.py"]
 
