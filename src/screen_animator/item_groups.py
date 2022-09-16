@@ -114,8 +114,8 @@ class LeftScrollingTextGroup(ItemGroup):
             else:
                 try:
                     message.content = self._generate_message(
-                    getattr(message, "message_text")
-                )
+                        getattr(message, "message_text")
+                    )
                 except AttributeError:
                     pass
 
@@ -135,19 +135,31 @@ class LeftScrollingTextGroup(ItemGroup):
         messages_dict = self._settings["messages"]
         outline_width = messages_dict["outline_width"]
         if outline_width > 0:
-            outline_text = messages_dict["font"].render(message_text, messages_dict["anti-aliasing"], messages_dict["outline_color"])
-            outline1 = Item(self._group, outline_text, self._perimeter, self._scrolling_movement)
+            outline_text = messages_dict["font"].render(
+                message_text,
+                messages_dict["anti-aliasing"],
+                messages_dict["outline_color"],
+            )
+            outline1 = Item(
+                self._group, outline_text, self._perimeter, self._scrolling_movement
+            )
             outline1.rect.midleft = self._perimeter.midright
             outline1.rect.y -= outline_width
-            outline2 = Item(self._group, outline_text, self._perimeter, self._scrolling_movement)
+            outline2 = Item(
+                self._group, outline_text, self._perimeter, self._scrolling_movement
+            )
             outline2.rect.midleft = self._perimeter.midright
             outline2.rect.x += 2 * outline_width
             outline2.rect.y -= outline_width
-            outline3 = Item(self._group, outline_text, self._perimeter, self._scrolling_movement)
+            outline3 = Item(
+                self._group, outline_text, self._perimeter, self._scrolling_movement
+            )
             outline3.rect.midleft = self._perimeter.midright
             outline3.rect.x += 2 * outline_width
             outline3.rect.y += outline_width
-            outline4 = Item(self._group, outline_text, self._perimeter, self._scrolling_movement)
+            outline4 = Item(
+                self._group, outline_text, self._perimeter, self._scrolling_movement
+            )
             outline4.rect.midleft = self._perimeter.midright
             outline4.rect.y += outline_width
 
