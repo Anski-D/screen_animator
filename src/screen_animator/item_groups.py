@@ -87,6 +87,7 @@ class LeftScrollingTextGroup(ItemGroup):
         perimeter, i.e. off-screen to the right.
         """
         message_text = self._settings_manager.generate_message_text()
+        self._set_outline(message_text)
         message = Item(
             self._group,
             self._generate_message(message_text),
@@ -95,6 +96,7 @@ class LeftScrollingTextGroup(ItemGroup):
         )
         setattr(message, "message_text", message_text)
         message.rect.midleft = self._perimeter.midright
+        message.rect.x += self._settings["messages"]["outline_width"]
 
     def update(self) -> None:
         """
@@ -110,9 +112,12 @@ class LeftScrollingTextGroup(ItemGroup):
             if message.rect.right < self._perimeter.left:
                 message.kill()
             else:
-                message.content = self._generate_message(
+                try:
+                    message.content = self._generate_message(
                     getattr(message, "message_text")
                 )
+                except AttributeError:
+                    pass
 
         if all(message.rect.right <= self._perimeter.right for message in self.items):
             self.create()
@@ -125,6 +130,26 @@ class LeftScrollingTextGroup(ItemGroup):
             messages_dict["anti-aliasing"],
             messages_dict["color"],
         )
+
+    def _set_outline(self, message_text: str) -> None:
+        messages_dict = self._settings["messages"]
+        outline_width = messages_dict["outline_width"]
+        if outline_width > 0:
+            outline_text = messages_dict["font"].render(message_text, messages_dict["anti-aliasing"], messages_dict["outline_color"])
+            outline1 = Item(self._group, outline_text, self._perimeter, self._scrolling_movement)
+            outline1.rect.midleft = self._perimeter.midright
+            outline1.rect.y -= outline_width
+            outline2 = Item(self._group, outline_text, self._perimeter, self._scrolling_movement)
+            outline2.rect.midleft = self._perimeter.midright
+            outline2.rect.x += 2 * outline_width
+            outline2.rect.y -= outline_width
+            outline3 = Item(self._group, outline_text, self._perimeter, self._scrolling_movement)
+            outline3.rect.midleft = self._perimeter.midright
+            outline3.rect.x += 2 * outline_width
+            outline3.rect.y += outline_width
+            outline4 = Item(self._group, outline_text, self._perimeter, self._scrolling_movement)
+            outline4.rect.midleft = self._perimeter.midright
+            outline4.rect.y += outline_width
 
 
 class RandomImagesGroup(ItemGroup):
