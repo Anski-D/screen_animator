@@ -37,7 +37,21 @@ class TestLeftScrollingTextGroup:
         return LeftScrollingTextGroup(example_settings_manager, example_perimeter)
 
     @pytest.mark.parametrize("num_of_items", [1, 2, 3, 5, 8])
-    def test_create(
+    def test_create_no_outline(
+        self,
+        num_of_items: int,
+        example_left_scrolling_text_group: LeftScrollingTextGroup,
+    ) -> None:
+        item_group = example_left_scrolling_text_group
+        item_group._settings["messages"]["outline_width"] = 0
+
+        for _ in range(num_of_items):
+            item_group.create()
+
+        assert len(item_group.items) == num_of_items
+
+    @pytest.mark.parametrize("num_of_items", [1, 2, 3, 5, 8])
+    def test_create_with_outline(
         self,
         num_of_items: int,
         example_left_scrolling_text_group: LeftScrollingTextGroup,
@@ -47,7 +61,7 @@ class TestLeftScrollingTextGroup:
         for _ in range(num_of_items):
             item_group.create()
 
-        assert len(item_group.items) == num_of_items
+        assert len(item_group.items) == num_of_items + 4 * num_of_items
 
     def test_create_position(
         self,
@@ -63,6 +77,7 @@ class TestLeftScrollingTextGroup:
         self, example_left_scrolling_text_group: LeftScrollingTextGroup
     ) -> None:
         item_group = example_left_scrolling_text_group
+        item_group._settings["messages"]["outline_width"] = 0
         item_group.create()
         item = item_group.items[0]
         width = item.rect.width
@@ -89,14 +104,19 @@ class TestLeftScrollingTextGroup:
         assert len(item_group.items) == 0
 
     def test_generate_message(
-        self,
-        example_left_scrolling_text_group: LeftScrollingTextGroup,
-        example_settings_dict_with_tuples: dict,
+        self, example_left_scrolling_text_group: LeftScrollingTextGroup
     ) -> None:
-
         assert isinstance(
             example_left_scrolling_text_group._generate_message("Test"), pg.Surface
         )
+
+    def test_set_outline(
+        self, example_left_scrolling_text_group: LeftScrollingTextGroup
+    ) -> None:
+        item_group = example_left_scrolling_text_group
+        item_group._set_outline("Test")
+
+        assert len(item_group.items) == 4
 
 
 class TestRandomImagesGroup:
