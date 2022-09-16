@@ -10,6 +10,15 @@ class Item(pg.sprite.Sprite):
     """
     A wrapper for `pygame` sprite-type objects that are then can be moved on a `pygame` 'canvas'.
 
+    Attributes
+    ----------
+    content
+        The content of the item.
+    rect
+        The positioning rectangle of the item.
+    perimeter
+        The defined outer limits.
+
     Methods
     -------
     move
@@ -18,10 +27,12 @@ class Item(pg.sprite.Sprite):
         Hook used to execute `move` through a group.
     """
 
+    rect: pg.Rect | pg.rect.Rect
+
     def __init__(
         self,
         group: pg.sprite.Group,
-        content: pg.Surface,
+        content: pg.Surface | pg.surface.Surface,
         perimeter: pg.Rect,
         movement: "Movement" = None,
     ) -> None:
@@ -40,23 +51,11 @@ class Item(pg.sprite.Sprite):
             A method of moving.
         """
         super().__init__(group)
+
         self.content = content
         self.rect = self.content.get_rect()
         self.perimeter = perimeter
         self._movement = movement
-
-    @property
-    def perimeter(self) -> pg.Rect:
-        """
-        The outer perimeter of where the movable object is located.
-
-        Movable objects are not required to be within the perimeter, only have a reference to them.
-        """
-        return self._perimeter
-
-    @perimeter.setter
-    def perimeter(self, perimeter: pg.Rect) -> None:
-        self._perimeter = perimeter
 
     def move(self) -> None:
         """Move the instance using a `Movement` object, if defined."""
