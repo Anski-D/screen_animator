@@ -148,6 +148,14 @@ class SettingsManager:
         messages_dict["outline_color"] = outline_color
 
     def generate_message_text(self) -> str:
+        """
+        Get a message from the available options.
+
+        Returns
+        -------
+        str
+            The selected message.
+        """
         messages_dict = self._settings["messages"]
 
         return f"{random.choice(messages_dict['messages'])}{messages_dict['separator']}"
