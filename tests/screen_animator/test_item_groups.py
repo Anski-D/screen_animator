@@ -1,4 +1,5 @@
 import math
+import time
 import pytest
 import pygame as pg
 from screen_animator.settings import SettingsManager
@@ -166,3 +167,16 @@ class TestColorChangeGroup:
         item_group.create()
 
         assert isinstance(item_group._time, int)
+
+    @pytest.mark.skip
+    @pytest.mark.parametrize("sleep, output", [(1, True), (2, True), (3, True), (5, False), (8, False)])
+    def test_update(self, sleep: int, output: bool, example_color_change_group: ColorChangeGroup) -> None:
+        item_group = example_color_change_group
+        item_group._settings["timings"]["color_change_time"] = 4
+        item_group.create()
+        time1 = item_group._time
+        time.sleep(sleep)
+        item_group.update()
+        time2 = item_group._time
+
+        assert (time1 == time2) is output
