@@ -4,6 +4,7 @@ version = "0.2.0"
 description = ""
 license = "MIT"
 authors = ["David Anscombe <dave.anski@gmail.com>"]
+readme = "README.md"
 repository = "https://github.com/Anski-D/screen_animator"
 packages = [
     { include = "screen_animator", from = "src" },
