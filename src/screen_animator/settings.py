@@ -27,7 +27,8 @@ class SettingsImporter:
 
     def import_settings(self, settings_file: str | Path) -> dict:
         """
-        Imports the settings from the specified file, validates, and stores and returns a dictionary.
+        Imports the settings from the specified file, validates, and stores and
+        returns a dictionary.
 
         Parameters
         ----------
@@ -39,7 +40,6 @@ class SettingsImporter:
         dict
             The imported and validated settings.
         """
-
         settings_path = Path(settings_file)
         self._read_settings(settings_path)
         self._validate_settings()
@@ -118,7 +118,6 @@ class SettingsManager:
         settings_file
             Path to settings file.
         """
-
         self._importer = importer
         self._settings = self._import_settings(settings_file)
         self._setup_settings()
