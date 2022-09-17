@@ -170,7 +170,7 @@ class TestColorChangeGroup:
 
         assert isinstance(item_group._time, int)
 
-    @pytest.mark.skip
+    @pytest.mark.slow
     @pytest.mark.parametrize(
         "sleep, output", [(1, True), (2, True), (3, True), (5, False), (8, False)]
     )
