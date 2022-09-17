@@ -73,8 +73,8 @@ class SettingsImporter:
                 },
                 "timings": {
                     "fps": int(),
-                    "image_change_time": int(),
-                    "color_change_time": int(),
+                    "image_change_time": int() | float(),
+                    "color_change_time": int() | float(),
                 },
             }:
                 pass
