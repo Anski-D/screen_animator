@@ -56,10 +56,12 @@ class Controller:
 
     def run(self) -> None:
         """Run `screen_animator` if view and model are ready."""
+        timings_dict = self._settings["timings"]
         while self.initialized:
-            self._clock.tick(self._settings["timings"]["fps"])
+            self._clock.tick(timings_dict["fps"])
             self._model.update()
             self._check_events()
+            timings_dict["fps_actual"] = self._clock.get_fps()
 
     def _check_events(self) -> None:
         for event in pg.event.get():

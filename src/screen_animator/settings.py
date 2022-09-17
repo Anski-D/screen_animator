@@ -166,8 +166,8 @@ class SettingsManager:
     def _setup_settings(self):
         self.set_colors()
         self._set_font()
-        # self._settings["messages"]["message"] = self._generate_message_text
         self._load_images()
+        self._settings["timings"]["fps_actual"] = self._settings["timings"]["fps"]
 
     def _set_font(self) -> None:
         messages_dict = self._settings["messages"]

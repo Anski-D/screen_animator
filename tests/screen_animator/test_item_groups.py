@@ -75,8 +75,9 @@ class TestLeftScrollingTextGroup:
         assert item_group.items[0].rect.left == example_perimeter.right
 
     def test_update_create(
-        self, example_left_scrolling_text_group: LeftScrollingTextGroup
+        self, monkeypatch, example_left_scrolling_text_group: LeftScrollingTextGroup
     ) -> None:
+        monkeypatch.setattr(LeftScrollingTextGroup, "_set_speed", lambda x: None)
         item_group = example_left_scrolling_text_group
         item_group._settings["messages"]["outline_width"] = 0
         item_group.create()
@@ -92,6 +93,7 @@ class TestLeftScrollingTextGroup:
     def test_update_delete(
         self, monkeypatch, example_left_scrolling_text_group: LeftScrollingTextGroup
     ) -> None:
+        monkeypatch.setattr(LeftScrollingTextGroup, "_set_speed", lambda x: None)
         item_group = example_left_scrolling_text_group
         item_group.create()
         item = item_group.items[0]

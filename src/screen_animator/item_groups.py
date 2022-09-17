@@ -106,6 +106,7 @@ class LeftScrollingTextGroup(ItemGroup):
         deleted. If all messages are within the right-hand perimeter, a new message
         will be generated.
         """
+        self._set_speed()
         self._group.update()
 
         for message in self.items:
@@ -162,6 +163,12 @@ class LeftScrollingTextGroup(ItemGroup):
             )
             outline4.rect.midleft = self._perimeter.midright
             outline4.rect.y += outline_width
+
+    def _set_speed(self) -> None:
+        fps_actual = self._settings["timings"]["fps_actual"]
+        if fps_actual > 0:
+            speed = self._settings["messages"]["scroll_speed"] / fps_actual
+            self._scrolling_movement.speed = speed
 
 
 class RandomImagesGroup(ItemGroup):
@@ -289,28 +296,13 @@ class FpsCounterGroup(ItemGroup):
         Update the fps counter.
     """
 
-    def __init__(self, settings_manager: SettingsManager, perimeter: pg.Rect) -> None:
-        """
-        Initialize the fps counter.
-
-        Parameters
-        ----------
-        settings_manager
-            Manages settings.
-        perimeter
-            Defines the outer perimeter.
-        """
-        super().__init__(settings_manager, perimeter)
-
-        self._clock = pg.time.Clock()
-
     def create(self) -> None:
         """Create the fps counter."""
         self._group = pg.sprite.Group()
         messages_dict = self._settings["messages"]
         fps_font = pg.font.SysFont(messages_dict["typeface"], 36)
-        self._clock.tick()
-        text = f"{self._clock.get_fps():.2f}"
+        fps_actual = self._settings["timings"]["fps_actual"]
+        text = f"{fps_actual:.2f}"
         content = fps_font.render(text, messages_dict["anti-aliasing"], (0, 0, 0))
         fps = Item(self._group, content, self._perimeter)
         fps.rect.x = 10
