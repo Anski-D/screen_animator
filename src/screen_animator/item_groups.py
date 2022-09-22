@@ -141,28 +141,57 @@ class LeftScrollingTextGroup(ItemGroup):
                 messages_dict["anti-aliasing"],
                 messages_dict["outline_color"],
             )
+
             outline1 = Item(
                 self._group, outline_text, self._perimeter, self._scrolling_movement
             )
             outline1.rect.midleft = self._perimeter.midright
+            outline1.rect.x += outline_width
             outline1.rect.y -= outline_width
+
             outline2 = Item(
                 self._group, outline_text, self._perimeter, self._scrolling_movement
             )
             outline2.rect.midleft = self._perimeter.midright
             outline2.rect.x += 2 * outline_width
             outline2.rect.y -= outline_width
+
             outline3 = Item(
                 self._group, outline_text, self._perimeter, self._scrolling_movement
             )
             outline3.rect.midleft = self._perimeter.midright
             outline3.rect.x += 2 * outline_width
-            outline3.rect.y += outline_width
+
             outline4 = Item(
                 self._group, outline_text, self._perimeter, self._scrolling_movement
             )
             outline4.rect.midleft = self._perimeter.midright
+            outline4.rect.x += 2 * outline_width
             outline4.rect.y += outline_width
+
+            outline5 = Item(
+                self._group, outline_text, self._perimeter, self._scrolling_movement
+            )
+            outline5.rect.midleft = self._perimeter.midright
+            outline5.rect.x += outline_width
+            outline5.rect.y += outline_width
+
+            outline6 = Item(
+                self._group, outline_text, self._perimeter, self._scrolling_movement
+            )
+            outline6.rect.midleft = self._perimeter.midright
+            outline6.rect.y += outline_width
+
+            outline7 = Item(
+                self._group, outline_text, self._perimeter, self._scrolling_movement
+            )
+            outline7.rect.midleft = self._perimeter.midright
+
+            outline8 = Item(
+                self._group, outline_text, self._perimeter, self._scrolling_movement
+            )
+            outline8.rect.midleft = self._perimeter.midright
+            outline8.rect.y -= outline_width
 
     def _set_speed(self) -> None:
         fps_actual = self._settings["timings"]["fps_actual"]
