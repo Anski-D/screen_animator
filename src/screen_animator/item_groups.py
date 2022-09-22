@@ -233,7 +233,9 @@ class RandomImagesGroup(ItemGroup):
         for image in self.items:
             self._group.remove(image)
             image.update()
-            while pg.sprite.spritecollideany(image, group):
+            attempts = 0
+            while pg.sprite.spritecollideany(image, group) and attempts < 100:
+                attempts += 1
                 image.update()
             group.add(image)
         self._group = group
