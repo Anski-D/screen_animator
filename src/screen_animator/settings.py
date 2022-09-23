@@ -70,6 +70,7 @@ class SettingsImporter:
                 "images": {
                     "sources": list() | str(),
                     "number": int(),
+                    "reposition_attempts": int(),
                 },
                 "timings": {
                     "fps": int(),

@@ -38,6 +38,7 @@ def example_settings_dict() -> dict:
                 "pic3.bmp",
             ],
             "number": 10,
+            "reposition_attempts": -1,
         },
         "timings": {
             "fps": 30,
