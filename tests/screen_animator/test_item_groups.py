@@ -62,7 +62,7 @@ class TestLeftScrollingTextGroup:
         for _ in range(num_of_items):
             item_group.create()
 
-        assert len(item_group.items) == num_of_items + 4 * num_of_items
+        assert len(item_group.items) == num_of_items + 8 * num_of_items
 
     def test_create_position(
         self,
@@ -72,7 +72,7 @@ class TestLeftScrollingTextGroup:
         item_group = example_left_scrolling_text_group
         item_group.create()
 
-        assert item_group.items[0].rect.left == example_perimeter.right
+        assert item_group.items[7].rect.left == example_perimeter.right
 
     def test_update_create(
         self, monkeypatch, example_left_scrolling_text_group: LeftScrollingTextGroup
@@ -119,7 +119,7 @@ class TestLeftScrollingTextGroup:
         item_group = example_left_scrolling_text_group
         item_group._set_outline("Test")
 
-        assert len(item_group.items) == 4
+        assert len(item_group.items) == 8
 
 
 class TestRandomImagesGroup:
