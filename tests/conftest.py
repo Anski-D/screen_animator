@@ -5,6 +5,7 @@ from screen_animator.settings import SettingsManager
 
 @pytest.fixture
 def example_settings_dict() -> dict:
+    """Provide example settings dict prior to conversion to tuples."""
     return {
         "colors": [
             [255, 0, 0],
@@ -50,6 +51,7 @@ def example_settings_dict() -> dict:
 
 @pytest.fixture
 def example_settings_dict_with_tuples(example_settings_dict: dict) -> dict:
+    """Provide example settings dict after conversion to tuples."""
     colors = [
         (255, 0, 0),
         (0, 255, 0),
@@ -67,11 +69,13 @@ def example_settings_dict_with_tuples(example_settings_dict: dict) -> dict:
 
 @pytest.fixture
 def example_perimeter() -> pg.Rect:
+    """Provide example perimeter."""
     return pg.Rect(0, 0, 1000, 500)
 
 
 @pytest.fixture
 def example_content() -> pg.Surface:
+    """Provide example content surface."""
     return pg.Surface((20, 10))
 
 
@@ -79,6 +83,7 @@ def example_content() -> pg.Surface:
 def example_settings_manager(
     monkeypatch, example_settings_dict_with_tuples: dict
 ) -> SettingsManager:
+    """Provide an initialised `SettingsManager`."""
     pg.init()
     monkeypatch.setattr(
         SettingsManager,
