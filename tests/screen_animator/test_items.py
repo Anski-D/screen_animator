@@ -5,6 +5,7 @@ from screen_animator.items import Item, ScrollingMovement, RandomMovement
 
 @pytest.fixture
 def example_item(example_content: pg.Surface, example_perimeter: pg.Rect) -> Item:
+    """Provide example `Item` by removing abstract methods."""
     Item.__abstractmethods__ = set()
 
     return Item(pg.sprite.Group(), example_content, example_perimeter)
@@ -12,9 +13,11 @@ def example_item(example_content: pg.Surface, example_perimeter: pg.Rect) -> Ite
 
 class TestItem:
     def test_content_return_type(self, example_item) -> None:
+        """Content is of correct type."""
         assert isinstance(example_item.content, pg.Surface)
 
     def test_content_setter(self, example_item) -> None:
+        """Content setter sets correctly."""
         assert example_item.rect == pg.Rect(0, 0, 20, 10)
 
 
@@ -30,6 +33,7 @@ class TestScrollingMovement:
         ],
     )
     def test_direction_setter(self, direction: str, output: tuple[str, int]) -> None:
+        """Direction set correctly."""
         movement = ScrollingMovement()
         movement.direction = direction
 
@@ -47,6 +51,7 @@ class TestScrollingMovement:
     def test_move(
         self, speed: int, direction: str, axis: str, value: int, example_item: Item
     ) -> None:
+        """Move in certain amount in correct direction."""
         item = example_item
         item.rect.topleft = item.perimeter.center
         movement = ScrollingMovement(speed, direction)
@@ -59,6 +64,7 @@ class TestScrollingMovement:
 class TestRandomMovement:
     @pytest.mark.parametrize("repeat", range(5))
     def test_move_perimeter_contains(self, repeat: int, example_item: Item) -> None:
+        """Random movement confined to perimeter."""
         item = example_item
         movement = RandomMovement()
         movement.move(item)
@@ -66,6 +72,7 @@ class TestRandomMovement:
         assert item.perimeter.contains(item.rect)
 
     def test_move_repeat_move(self, example_item: Item) -> None:
+        """Subsequent random movements result in different resulting locations."""
         item = example_item
         movement = RandomMovement()
         movement.move(item)
