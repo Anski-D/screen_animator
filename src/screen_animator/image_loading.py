@@ -57,11 +57,7 @@ def load_svg_image(image_loc: str, width: int) -> pg.Surface:
     try:
         image = sg.fromfile(str(image_loc))
         view_box = image.root.attrib["viewBox"]
-        width_old, height_old = tuple(
-            int(number)
-            for number
-            in view_box.split(" ")[2:]
-        )
+        width_old, height_old = tuple(int(number) for number in view_box.split(" ")[2:])
         image.set_size((str(width), str(int(width / (width_old / height_old)))))
         image_str = image.to_str()
 
@@ -82,6 +78,7 @@ class ImageLoader:
     load_image
         Return a loaded image as a `pygame` Surface.
     """
+
     _loaders = {}
 
     @classmethod
