@@ -26,9 +26,9 @@ outline_colors = [
 
 [images]
 sources = [
-    "pic1.bmp",
-    "pic2.bmp",
-    "pic3.bmp",
+    ["pic1.svg", 64],
+    ["pic2.bmp", -1],
+    ["pic3.bmp", 10],
 ]
 number = 10
 reposition_attempts = -1
