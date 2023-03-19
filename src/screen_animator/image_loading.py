@@ -10,6 +10,21 @@ log = logging.getLogger(__name__)
 
 
 def load_raster_image(image_loc: str, width: int) -> pg.Surface:
+    """
+    Loads raster images (e.g., BMP, JPG, PNG) for use in `pygame`.
+
+    Parameters
+    ----------
+    image_loc
+        Location of image file.
+    width
+        Required width in pixels of image when loaded.
+
+    Returns
+    -------
+    pg.Surface
+        Image loaded for use in `pygame`.
+    """
     try:
         image = pg.image.load(image_loc)
 
@@ -24,6 +39,21 @@ def load_raster_image(image_loc: str, width: int) -> pg.Surface:
 
 
 def load_svg_image(image_loc: str, width: int) -> pg.Surface:
+    """
+    Loads SVG images for use in `pygame`.
+
+    Parameters
+    ----------
+    image_loc
+        Location of image file.
+    width
+        Required width in pixels of image when loaded.
+
+    Returns
+    -------
+    pg.Surface
+        Image loaded for use in `pygame`.
+    """
     try:
         image = sg.fromfile(str(image_loc))
         view_box = image.root.attrib["viewBox"]
@@ -42,14 +72,34 @@ def load_svg_image(image_loc: str, width: int) -> pg.Surface:
 
 
 class ImageLoader:
+    """
+    Loads images for use in `pygame`.
+
+    Methods
+    -------
+    register_loader
+        Add reference to class dictionary to image loading function.
+    load_image
+        Return a loaded image as a `pygame` Surface.
+    """
     _loaders = {}
 
     @classmethod
-    def register_loader(cls, image_format, loader):
+    def register_loader(cls, image_format, loader) -> None:
+        """Add image loader to class dictionary."""
         cls._loaders[image_format] = loader
 
     def load_image(self, image_loc: str, width: int) -> pg.Surface:
+        """
+        Load the image from location at specified width, dependent on file type.
+
+        Returns
+        -------
+        pg.Surface
+            Image loaded as `pygame` Surface.
+        """
         loader = self._loaders.get(Path(image_loc).suffix, load_raster_image)
+
         return loader(image_loc, width)
 
 
