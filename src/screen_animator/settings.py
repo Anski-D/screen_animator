@@ -1,7 +1,10 @@
 from pathlib import Path
 import random
 import logging
+
 import pygame as pg
+
+from .image_loading import ImageLoader
 
 try:
     import tomlib
@@ -84,7 +87,7 @@ class SettingsImporter:
 
     def _convert_colors_to_tuples(self, input_item):
         match input_item:
-            case [int(), int(), int()]:
+            case [int(), int(), int()] | [str(), int()]:
                 return tuple(input_item)
             case list():
                 return [self._convert_colors_to_tuples(item) for item in input_item]
@@ -182,8 +185,8 @@ class SettingsManager:
         images_dict = self._settings["images"]
         if len(images_dict["sources"]) >= 1:
             images_dict["images"] = []
-            for image in images_dict["sources"]:
-                try:
-                    images_dict["images"].append(pg.image.load(image))
-                except FileNotFoundError:
-                    log.exception("%s not found", image)
+            image_loader = ImageLoader()
+            for image_src, width in images_dict["sources"]:
+                image = image_loader.load_image(image_src, width)
+                if image is not None:
+                    images_dict["images"].append(image)
