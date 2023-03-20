@@ -1,5 +1,9 @@
 from abc import ABC, abstractmethod
+from typing import Literal
 from weakref import WeakKeyDictionary
+import logging
+
+log = logging.getLogger(__name__)
 
 
 class Observer(ABC):
@@ -30,6 +34,7 @@ class Observable(ABC):
     remove_observers
         Remove specified observer.
     """
+    _observers: WeakKeyDictionary[Observer, Literal[1]]
 
     def __init__(self) -> None:
         """Create a dictionary with weak keys for storing observers."""
@@ -44,11 +49,12 @@ class Observable(ABC):
         observer
             Observer to be registered.
         """
+        log.info("Adding observer `%s` to observers", observer)
         self._observers[observer] = 1
 
     def notify_observers(self) -> None:
         """Notify all observers of a change."""
-        for observer in self._observers.keys():
+        for observer in self._observers:
             observer.notify()
 
     def remove_observer(self, observer: Observer) -> None:
@@ -60,5 +66,6 @@ class Observable(ABC):
         observer
             Observer to be removed.
         """
-        if observer in self._observers.keys():
+        log.info("Removing observer `%s` from observers", observer)
+        if observer in self._observers:
             del self._observers[observer]
