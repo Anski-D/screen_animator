@@ -1,7 +1,11 @@
+import logging
+
 import pygame as pg
 from .observers import Observable
 from .settings import SettingsManager
 from .item_groups import ItemGroup
+
+log = logging.getLogger(__name__)
 
 
 class Model(Observable):
@@ -61,6 +65,7 @@ class Model(Observable):
         perimeter
             The outer limits in which the model can operate.
         """
+        log.info("Finishing initialization of %s", type(self).__name__)
         self._perimeter = perimeter
         self.item_groups = [
             group(self._settings_manager, self._perimeter)
@@ -70,6 +75,7 @@ class Model(Observable):
             item_group.create()
 
         self._initialized = True
+        log.info("%s initialization complete", type(self).__name__)
 
     def update(self) -> None:
         """Update all aspects of the model."""
@@ -80,4 +86,5 @@ class Model(Observable):
 
     def quit(self) -> None:
         """Set the model as ready to quit."""
+        log.info("%s told to quit", type(self).__name__)
         self._initialized = False

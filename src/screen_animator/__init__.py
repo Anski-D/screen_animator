@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 import importlib.resources
 import shutil
@@ -12,6 +13,8 @@ from .settings import SettingsManager, SettingsImporter
 from .model import Model
 from .controller import Controller
 import example
+
+log = logging.getLogger(__name__)
 
 item_groups = [ColorChangeGroup, TimedRandomImagesGroup, LeftScrollingTextGroup]
 example_files = ["inputs.toml", "script.py"]
@@ -55,7 +58,9 @@ class ScreenAnimator:
         """
         self._settings_file = input_file
         self._display_size = display_size
+        log.info("Display size set to: %s", 'fullscreen' if self._display_size is None else self._display_size)
         self._flipped = flipped
+        log.info("Output will be flipped vertically: %s", self._flipped)
         if fps_on:
             self._fps_on()
         if debug:
@@ -63,6 +68,7 @@ class ScreenAnimator:
 
     def run(self) -> None:
         """Run `screen_animator`."""
+        log.info("Creating key components of %s", type(self).__name__)
         pg.init()
         settings_manager = SettingsManager(SettingsImporter(), self._settings_file)
         model = Model(settings_manager, self._item_groups)
@@ -70,13 +76,18 @@ class ScreenAnimator:
             settings_manager, model, self._display_size, self._flipped
         )
         controller.init()
+        log.info("Setting %s to run", type(self).__name__)
         controller.run()
+        log.info("Run method complete, %s stopping", type(self).__name__)
 
     def _debug_setup(self) -> None:
+        log.info("Debug mode enabled")
         self._display_size = (800, 480)
+        log.info("Display size changed to: %s", self._display_size)
         self._fps_on()
 
     def _fps_on(self) -> None:
+        log.info("FPS will be displayed")
         if FpsCounterGroup not in self._item_groups:
             self._item_groups.append(FpsCounterGroup)
 

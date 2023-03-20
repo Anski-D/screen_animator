@@ -1,6 +1,10 @@
+import logging
+
 import pygame as pg
 from .observers import Observer
 from .model import Model
+
+log = logging.getLogger(__name__)
 
 
 class View(Observer):
@@ -65,6 +69,7 @@ class View(Observer):
 
     def init(self) -> None:
         """Manually finish initializing the display."""
+        log.info("Finishing initialization of %s", type(self).__name__)
         if self._display_size is None:
             self._screen = pg.display.set_mode((0, 0), pg.FULLSCREEN)
         else:
@@ -73,6 +78,7 @@ class View(Observer):
         self.perimeter = self._screen.get_rect()
         self._set_bg()
         self._initialized = True
+        log.info("%s initialization complete", type(self).__name__)
 
     def update(self) -> None:
         """Update the display."""
@@ -92,6 +98,7 @@ class View(Observer):
 
     def quit(self) -> None:
         """Tell view to quit."""
+        log.info("%s told to quit", type(self).__name__)
         self._initialized = False
 
     def _set_bg(self) -> None:

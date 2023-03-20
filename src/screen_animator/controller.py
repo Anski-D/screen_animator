@@ -1,7 +1,11 @@
+import logging
+
 import pygame as pg
 from .model import Model
 from .view import View
 from .settings import SettingsManager
+
+log = logging.getLogger(__name__)
 
 
 class Controller:
@@ -50,12 +54,15 @@ class Controller:
 
     def init(self) -> None:
         """Manually finish initializing the controller."""
+        log.info("Finishing initialization of %s", type(self).__name__)
         self._view.init()
         self._model.init(self._view.perimeter)
         self._model.add_observer(self._view)
+        log.info("%s initialization complete", type(self).__name__)
 
     def run(self) -> None:
         """Run `screen_animator` if view and model are ready."""
+        log.info("!!! %s%s !!!", type(self).__name__, " now running, entering main loop".upper())
         timings_dict = self._settings["timings"]
         while self.initialized:
             self._clock.tick(timings_dict["fps"])
@@ -63,9 +70,12 @@ class Controller:
             self._check_events()
             timings_dict["fps_actual"] = self._clock.get_fps()
 
+        log.info("Run method complete, %s stopping", type(self).__name__)
+
     def _check_events(self) -> None:
         for event in pg.event.get():
             if is_quit(event):
+                log.info("Telling %s components to quit", type(self).__name__)
                 for component in [self._view, self._model]:
                     component.quit()
 
@@ -83,6 +93,7 @@ def is_quit(event: pg.event.Event) -> bool:
         True if a quit event, False otherwise.
     """
     if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_q):
+        log.info("Quit command received")
         return True
 
     return False
