@@ -76,6 +76,8 @@ class Movement(ABC):
     move
         Move a `Movable`, to be implemented by sublasses.
     """
+    def __init__(self):
+        log.info("Creating %s", type(self).__name__)
 
     @abstractmethod
     def move(self, item: Item) -> None:
@@ -110,8 +112,11 @@ class ScrollingMovement(Movement):
         direction : optional
             The direction of movement (default is 'left').
         """
+        super().__init__()
+
         self._speed = speed
         self.direction = direction
+        log.info("Speed %s pixels per frame in %s direction", self._speed, self._direction)
 
     @property
     def speed(self) -> int:

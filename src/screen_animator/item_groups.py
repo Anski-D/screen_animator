@@ -1,7 +1,10 @@
+import logging
 from abc import ABC, abstractmethod
 import pygame as pg
 from .items import ScrollingMovement, RandomMovement, Item
 from .settings import SettingsManager
+
+log = logging.getLogger(__name__)
 
 
 class ItemGroup(ABC):
@@ -27,6 +30,7 @@ class ItemGroup(ABC):
         perimeter
             Outer limit of 'canvas' in `pygame`.
         """
+        log.info("Creating %s", type(self).__name__)
         self._settings_manager = settings_manager
         self._settings = self._settings_manager.settings
         self._perimeter = perimeter
@@ -75,7 +79,7 @@ class LeftScrollingTextGroup(ItemGroup):
 
         speed = (
             self._settings["messages"]["scroll_speed"]
-            / self._settings["timings"]["fps"]
+            // self._settings["timings"]["fps"]
         )
         self._scrolling_movement = self._movement(speed, "left")
 
@@ -87,6 +91,7 @@ class LeftScrollingTextGroup(ItemGroup):
         perimeter, i.e. off-screen to the right.
         """
         message_text = self._settings_manager.generate_message_text()
+        log.debug("Creating %s with text: %s", type(Item).__name__, message_text)
         self._set_outline(message_text)
         message = Item(
             self._group,
@@ -111,6 +116,7 @@ class LeftScrollingTextGroup(ItemGroup):
 
         for message in self.items:
             if message.rect.right < self._perimeter.left:
+                log.debug("%s has scrolled off screen, destroying", message)
                 message.kill()
             else:
                 try:
@@ -134,6 +140,7 @@ class LeftScrollingTextGroup(ItemGroup):
 
     def _set_outline(self, message_text: str) -> None:
         messages_dict = self._settings["messages"]
+        log.debug("Setting text outline with width %s", messages_dict["outline_width"])
         outline_width = messages_dict["outline_width"]
         if outline_width > 0:
             outline_text = messages_dict["font"].render(
@@ -220,6 +227,7 @@ class RandomImagesGroup(ItemGroup):
         movement = self._movement()
         for _ in range(image_settings["number"]):
             for image in image_settings["images"]:
+                log.debug("Creating `pygame` image: %s", image)
                 Item(self._group, image, self._perimeter, movement)
 
     def update(self) -> None:
@@ -229,6 +237,7 @@ class RandomImagesGroup(ItemGroup):
         Image position is updated sequentially, and each is compared to the position
         of newly positioned images to ensure no collisions.
         """
+        log.debug("Repositioning all images")
         group = pg.sprite.Group()
         for image in self.items:
             self._group.remove(image)
@@ -238,6 +247,7 @@ class RandomImagesGroup(ItemGroup):
                 attempts -= 1
                 image.update()
             group.add(image)
+        log.debug("All images repositioned")
         self._group = group
 
 
@@ -262,7 +272,9 @@ class ColorChangeGroup(ItemGroup):
     def update(self) -> None:
         """Check elapsed time, update colors if sufficient time has passed."""
         time = pg.time.get_ticks()
-        if time - self._time >= self._settings["timings"]["color_change_time"] * 1000:
+        time_diff = time - self._time
+        if time_diff >= self._settings["timings"]["color_change_time"] * 1000:
+            log.debug("%s milliseconds passed, updating colors", time_diff)
             self._settings_manager.set_colors()
             self._time = time
 
@@ -310,7 +322,9 @@ class TimedRandomImagesGroup(ItemGroup):
     def update(self) -> None:
         """Update item positions if time threshold met."""
         time = pg.time.get_ticks()
-        if time - self._time >= self._settings["timings"]["image_change_time"] * 1000:
+        time_diff = time - self._time
+        if time_diff >= self._settings["timings"]["image_change_time"] * 1000:
+            log.debug("%s milliseconds passed, updating image positions", time_diff)
             self._wrapped_group.update()
             self._time = time
 
