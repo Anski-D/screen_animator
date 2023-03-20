@@ -25,7 +25,7 @@ def example_settings_dict() -> dict:
             "bold": True,
             "italic": False,
             "anti-aliasing": False,
-            "scroll_speed": 240.0,
+            "scroll_speed": 240,
             "outline_width": 3,
             "outline_colors": [
                 [0, 0, 0],
