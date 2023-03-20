@@ -46,15 +46,18 @@ class SettingsImporter:
         settings_path = Path(settings_file)
         self._read_settings(settings_path)
         self._validate_settings()
+        log.info("Converting certain lists to tuples")
         self._settings = self._convert_colors_to_tuples(self._settings)
 
         return self._settings
 
     def _read_settings(self, settings_path: Path) -> None:
+        log.info("Reading settings from %s...", settings_path)
         with settings_path.open("rb") as file:
             self._settings = tomlib.load(file)
 
     def _validate_settings(self) -> None:
+        log.info("Validating input file matches expected format")
         match self._settings:
             case {
                 "colors": list(),
@@ -66,7 +69,7 @@ class SettingsImporter:
                     "bold": bool(),
                     "italic": bool(),
                     "anti-aliasing": bool(),
-                    "scroll_speed": float() | int(),
+                    "scroll_speed": int(),
                     "outline_width": int(),
                     "outline_colors": list(),
                 },
@@ -81,6 +84,7 @@ class SettingsImporter:
                     "color_change_time": int() | float(),
                 },
             }:
+                log.info("Validation successful")
                 pass
             case _:
                 raise ValueError(f"Invalid configuration {self._settings}")
@@ -137,11 +141,13 @@ class SettingsManager:
         if self._settings.get("bg") is None:
             self._settings["bg"] = {}
         self._settings["bg"]["color"] = random.choice(self._settings["colors"])
+        log.debug("Set background color as: %s", self._settings["bg"]["color"])
 
         messages_dict = self._settings["messages"]
         messages_dict["color"] = random.choice(self._settings["colors"])
         while messages_dict["color"] == self._settings["bg"]["color"]:
             messages_dict["color"] = random.choice(self._settings["colors"])
+        log.debug("Set text color as: %s", messages_dict["color"])
 
         match messages_dict["outline_colors"]:
             case (int(), int(), int()) as outline_color:
@@ -149,6 +155,7 @@ class SettingsManager:
             case outline_colors:
                 outline_color = random.choice(outline_colors)
         messages_dict["outline_color"] = outline_color
+        log.debug("Set outline color as: %s", messages_dict["outline_color"])
 
     def generate_message_text(self) -> str:
         """
@@ -173,6 +180,7 @@ class SettingsManager:
         self._settings["timings"]["fps_actual"] = self._settings["timings"]["fps"]
 
     def _set_font(self) -> None:
+        log.info("Setting `pygame` font for text rendering")
         messages_dict = self._settings["messages"]
         messages_dict["font"] = pg.font.SysFont(
             messages_dict["typeface"],
@@ -184,6 +192,7 @@ class SettingsManager:
     def _load_images(self):
         images_dict = self._settings["images"]
         if len(images_dict["sources"]) >= 1:
+            log.info("Loading and scaling images for rendering")
             images_dict["images"] = []
             image_loader = ImageLoader()
             for image_src, width in images_dict["sources"]:
