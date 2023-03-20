@@ -26,13 +26,17 @@ def load_raster_image(image_loc: str, width: int) -> pg.Surface:
         Image loaded for use in `pygame`.
     """
     try:
+        log.info("Loading %s...", image_loc)
         image = pg.image.load(image_loc)
 
         if width > 0:
             width_old, height_old = image.get_size()
-            return pg.transform.scale(image, (width, width / (width_old / height_old)))
-        else:
-            return image
+            height = width / (width_old / height_old)
+            log.info("Scaling image from (%s,%s) to (%s,%s)", width_old, height_old, width, height)
+            return pg.transform.scale(image, (width, height))
+
+        log.info("No scaling required")
+        return image
 
     except FileNotFoundError:
         log.exception("%s not found", image_loc)
@@ -55,10 +59,13 @@ def load_svg_image(image_loc: str, width: int) -> pg.Surface:
         Image loaded for use in `pygame`.
     """
     try:
+        log.info("Loading %s...", image_loc)
         image = sg.fromfile(str(image_loc))
         view_box = image.root.attrib["viewBox"]
         width_old, height_old = tuple(int(float(number)) for number in view_box.split(" ")[2:])
-        image.set_size((str(width), str(int(width / (width_old / height_old)))))
+        height = int(width / (width_old / height_old))
+        log.info("Scaling image from (%s,%s) to (%s,%s)", width_old, height_old, width, height)
+        image.set_size((str(width), str(height)))
         image_str = image.to_str()
 
         return pg.image.load(BytesIO(cairosvg.svg2png(image_str)))
@@ -79,7 +86,7 @@ class ImageLoader:
         Return a loaded image as a `pygame` Surface.
     """
 
-    _loaders = {}
+    _loaders: dict = {}
 
     @classmethod
     def register_loader(cls, image_format, loader) -> None:
