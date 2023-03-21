@@ -34,9 +34,9 @@ def example_settings_dict() -> dict:
         },
         "images": {
             "sources": [
-                "pic1.bmp",
-                "pic2.bmp",
-                "pic3.bmp",
+                ["pic1.svg", 64],
+                ["pic2.bmp", -1],
+                ["pic3.bmp", 64],
             ],
             "number": 10,
             "reposition_attempts": -1,
@@ -61,8 +61,14 @@ def example_settings_dict_with_tuples(example_settings_dict: dict) -> dict:
         (0, 0, 0),
         (255, 255, 255),
     ]
+    sources = [
+        ("pic1.svg", 64),
+        ("pic2.bmp", -1),
+        ("pic3.bmp", 64),
+    ]
     example_settings_dict["colors"] = colors
     example_settings_dict["messages"]["outline_colors"] = outline_colors
+    example_settings_dict["images"]["sources"] = sources
 
     return example_settings_dict
 
