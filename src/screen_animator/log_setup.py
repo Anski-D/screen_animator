@@ -1,7 +1,7 @@
 import logging
 import logging.handlers
 
-LOG_FILE = "screen_animator.log"
+LOG_FILE = f"{__package__}.log"
 
 
 def setup_logging(logging_level="WARNING", size_mb: int = 20, bkp_count: int = 5):
