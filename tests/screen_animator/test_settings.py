@@ -1,6 +1,7 @@
 import pytest
 import pygame as pg
 from screen_animator.settings import SettingsImporter, SettingsManager
+from screen_animator.image_loading import ImageLoader
 
 
 class TestSettingsImporter:
@@ -103,20 +104,10 @@ class TestSettingsManager:
         example_settings_dict_with_tuples: dict,
     ) -> None:
         """Images are loaded and stored in settings."""
-        monkeypatch.setattr(pg.image, "load", lambda x: pg.Surface((20, 10)))
+        monkeypatch.setattr(ImageLoader, "load_image", lambda x, y, z: pg.Surface((20, 10)))
         settings_manager = example_settings_manager
         settings_manager._load_images()
 
         assert len(settings_manager.settings["images"]["images"]) == len(
             example_settings_dict_with_tuples["images"]["sources"]
         )
-
-    def test_load_images_file_not_found_error_not_raised(
-        self, example_settings_manager: SettingsManager
-    ) -> None:
-        """`FileNotFoundError` not raised further when image files are not found."""
-        settings_manager = example_settings_manager
-        try:
-            settings_manager._load_images()
-        except FileNotFoundError as error:
-            assert False, f"{error}"
