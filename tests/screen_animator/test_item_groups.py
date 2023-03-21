@@ -1,7 +1,9 @@
 import math
 import time
+
 import pytest
 import pygame as pg
+
 from screen_animator.settings import SettingsManager
 from screen_animator.item_groups import (
     LeftScrollingTextGroup,
@@ -90,7 +92,7 @@ class TestLeftScrollingTextGroup:
         item = item_group.items[0]
         width = item.rect.width
         speed = 100
-        item._movement._speed = speed
+        item._movement.speed = speed
         for _ in range(math.ceil(width / speed)):
             item_group.update()
 
@@ -106,7 +108,7 @@ class TestLeftScrollingTextGroup:
         item = item_group.items[0]
         width = item.rect.width + item_group._perimeter.width
         speed = 100
-        item._movement._speed = speed
+        item._movement.speed = speed
         monkeypatch.setattr(LeftScrollingTextGroup, "create", lambda x: None)
         for _ in range(math.ceil(width / speed)):
             item_group.update()

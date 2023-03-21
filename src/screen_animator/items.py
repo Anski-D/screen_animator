@@ -1,5 +1,4 @@
 import random
-from abc import ABC, abstractmethod
 import logging
 import pygame as pg
 
@@ -55,19 +54,18 @@ class Item(pg.sprite.Sprite):
         self.content = content
         self.rect = self.content.get_rect()
         self.perimeter = perimeter
-        self._movement = movement
+        self._movement = movement or Movement()
 
     def move(self) -> None:
-        """Move the instance using a `Movement` object, if defined."""
-        if self._movement is not None:
-            self._movement.move(self)
+        """Move the instance using a `Movement` object."""
+        self._movement.move(self)
 
     def update(self, *_args, **_kwargs) -> None:
         """Update the instance (move it)."""
         self.move()
 
 
-class Movement(ABC):
+class Movement:
     """
     A way of moving a `Movable` object.
 
@@ -79,7 +77,6 @@ class Movement(ABC):
     def __init__(self):
         log.info("Creating %s", type(self).__name__)
 
-    @abstractmethod
     def move(self, item: Item) -> None:
         """Sublasses should implement a means of moving `Movable`."""
 
@@ -114,18 +111,9 @@ class ScrollingMovement(Movement):
         """
         super().__init__()
 
-        self._speed = speed
+        self.speed = speed
         self.direction = direction
-        log.info("Speed %s pixels per frame in %s direction", self._speed, self._direction)
-
-    @property
-    def speed(self) -> int:
-        """The speed in pixels per frame."""
-        return self._speed
-
-    @speed.setter
-    def speed(self, speed: int) -> None:
-        self._speed = speed
+        log.info("Speed %s pixels per frame in %s direction", self.speed, self._direction)
 
     @property
     def direction(self) -> str:
@@ -149,7 +137,7 @@ class ScrollingMovement(Movement):
             Object to move.
         """
         rect = item.rect
-        new_position = getattr(rect, self._axis) + self._sign * self._speed
+        new_position = getattr(rect, self._axis) + self._sign * self.speed
         setattr(rect, self._axis, new_position)
 
 

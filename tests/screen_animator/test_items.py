@@ -1,13 +1,12 @@
 import pygame as pg
 import pytest
+
 from screen_animator.items import Item, ScrollingMovement, RandomMovement
 
 
 @pytest.fixture
 def example_item(example_content: pg.Surface, example_perimeter: pg.Rect) -> Item:
     """Provide example `Item` by removing abstract methods."""
-    Item.__abstractmethods__ = set()
-
     return Item(pg.sprite.Group(), example_content, example_perimeter)
 
 
