@@ -91,7 +91,7 @@ class LeftScrollingTextGroup(ItemGroup):
         perimeter, i.e. off-screen to the right.
         """
         message_text = self._settings_manager.generate_message_text()
-        log.debug("Creating %s with text: %s", type(Item).__name__, message_text)
+        log.debug("Creating %s with text: %s", Item.__name__, message_text)
         self._set_outline(message_text)
         message = Item(
             self._group,
