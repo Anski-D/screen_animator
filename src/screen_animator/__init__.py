@@ -2,7 +2,9 @@ import logging
 from pathlib import Path
 import importlib.resources
 import shutil
+
 import pygame as pg
+
 from .item_groups import (
     LeftScrollingTextGroup,
     ColorChangeGroup,
@@ -58,7 +60,10 @@ class ScreenAnimator:
         """
         self._settings_file = input_file
         self._display_size = display_size
-        log.info("Display size set to: %s", 'fullscreen' if self._display_size is None else self._display_size)
+        log.info(
+            "Display size set to: %s",
+            "fullscreen" if self._display_size is None else self._display_size,
+        )
         self._flipped = flipped
         log.info("Output will be flipped vertically: %s", self._flipped)
         if fps_on:

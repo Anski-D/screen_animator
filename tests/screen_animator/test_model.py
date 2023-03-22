@@ -1,5 +1,6 @@
 import pytest
 import pygame as pg
+
 from screen_animator.model import Model
 from screen_animator.item_groups import ItemGroup
 from screen_animator.settings import SettingsManager

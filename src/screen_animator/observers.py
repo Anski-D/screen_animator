@@ -34,6 +34,7 @@ class Observable(ABC):
     remove_observers
         Remove specified observer.
     """
+
     _observers: WeakKeyDictionary[Observer, Literal[1]]
 
     def __init__(self) -> None:

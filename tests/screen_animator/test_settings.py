@@ -1,5 +1,6 @@
 import pytest
 import pygame as pg
+
 from screen_animator.settings import SettingsImporter, SettingsManager
 from screen_animator.image_loading import ImageLoader
 
@@ -104,7 +105,9 @@ class TestSettingsManager:
         example_settings_dict_with_tuples: dict,
     ) -> None:
         """Images are loaded and stored in settings."""
-        monkeypatch.setattr(ImageLoader, "load_image", lambda x, y, z: pg.Surface((20, 10)))
+        monkeypatch.setattr(
+            ImageLoader, "load_image", lambda x, y, z: pg.Surface((20, 10))
+        )
         settings_manager = example_settings_manager
         settings_manager._load_images()
 

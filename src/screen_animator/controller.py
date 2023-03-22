@@ -1,6 +1,7 @@
 import logging
 
 import pygame as pg
+
 from .model import Model
 from .view import View
 from .settings import SettingsManager
@@ -62,7 +63,11 @@ class Controller:
 
     def run(self) -> None:
         """Run `screen_animator` if view and model are ready."""
-        log.info("!!! %s%s !!!", type(self).__name__, " now running, entering main loop".upper())
+        log.info(
+            "!!! %s%s !!!",
+            type(self).__name__,
+            " now running, entering main loop".upper(),
+        )
         timings_dict = self._settings["timings"]
         while self.initialized:
             self._clock.tick(timings_dict["fps"])

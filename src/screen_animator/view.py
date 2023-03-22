@@ -1,6 +1,7 @@
 import logging
 
 import pygame as pg
+
 from .observers import Observer
 from .model import Model
 

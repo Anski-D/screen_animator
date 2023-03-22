@@ -32,7 +32,13 @@ def load_raster_image(image_loc: str, width: int) -> pg.Surface:
         if width > 0:
             width_old, height_old = image.get_size()
             height = width / (width_old / height_old)
-            log.info("Scaling image from (%s,%s) to (%s,%s)", width_old, height_old, width, height)
+            log.info(
+                "Scaling image from (%s,%s) to (%s,%s)",
+                width_old,
+                height_old,
+                width,
+                height,
+            )
             return pg.transform.scale(image, (width, height))
 
         log.info("No scaling required")
@@ -62,9 +68,17 @@ def load_svg_image(image_loc: str, width: int) -> pg.Surface:
         log.info("Loading %s...", image_loc)
         image = sg.fromfile(str(image_loc))
         view_box = image.root.attrib["viewBox"]
-        width_old, height_old = tuple(int(float(number)) for number in view_box.split(" ")[2:])
+        width_old, height_old = tuple(
+            int(float(number)) for number in view_box.split(" ")[2:]
+        )
         height = int(width / (width_old / height_old))
-        log.info("Scaling image from (%s,%s) to (%s,%s)", width_old, height_old, width, height)
+        log.info(
+            "Scaling image from (%s,%s) to (%s,%s)",
+            width_old,
+            height_old,
+            width,
+            height,
+        )
         image.set_size((str(width), str(height)))
         image_str = image.to_str()
 

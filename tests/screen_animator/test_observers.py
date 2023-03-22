@@ -1,5 +1,7 @@
-import pytest
 import copy
+
+import pytest
+
 from screen_animator.observers import Observer, Observable
 
 

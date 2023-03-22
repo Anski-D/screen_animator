@@ -1,6 +1,8 @@
 import logging
 from abc import ABC, abstractmethod
+
 import pygame as pg
+
 from .items import ScrollingMovement, RandomMovement, Item
 from .settings import SettingsManager
 
@@ -117,7 +119,9 @@ class LeftScrollingTextGroup(ItemGroup):
                 except AttributeError:
                     pass
 
-        if all(message.rect.right <= self._perimeter.right for message in self.sprites()):
+        if all(
+            message.rect.right <= self._perimeter.right for message in self.sprites()
+        ):
             self.create()
 
     def _generate_message(self, message_text: str) -> pg.Surface:

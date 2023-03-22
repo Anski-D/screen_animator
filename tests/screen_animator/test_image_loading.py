@@ -1,5 +1,3 @@
-import pytest
-
 from screen_animator.image_loading import load_raster_image, load_svg_image
 
 

@@ -1,6 +1,7 @@
 import logging
 
 import pygame as pg
+
 from .observers import Observable
 from .settings import SettingsManager
 from .item_groups import ItemGroup
