@@ -54,7 +54,7 @@ class TestLeftScrollingTextGroup:
         for _ in range(num_of_items):
             item_group.create()
 
-        assert len(item_group.items) == num_of_items
+        assert len(item_group.sprites()) == num_of_items
 
     @pytest.mark.parametrize("num_of_items", [1, 2, 3, 5, 8])
     def test_create_with_outline(
@@ -68,7 +68,7 @@ class TestLeftScrollingTextGroup:
         for _ in range(num_of_items):
             item_group.create()
 
-        assert len(item_group.items) == num_of_items + 8 * num_of_items
+        assert len(item_group.sprites()) == num_of_items + 8 * num_of_items
 
     def test_create_position(
         self,
@@ -79,7 +79,7 @@ class TestLeftScrollingTextGroup:
         item_group = example_left_scrolling_text_group
         item_group.create()
 
-        assert item_group.items[7].rect.left == example_perimeter.right
+        assert item_group.sprites()[7].rect.left == example_perimeter.right
 
     def test_update_create(
         self, monkeypatch, example_left_scrolling_text_group: LeftScrollingTextGroup
@@ -89,14 +89,14 @@ class TestLeftScrollingTextGroup:
         item_group = example_left_scrolling_text_group
         item_group._settings["messages"]["outline_width"] = 0
         item_group.create()
-        item = item_group.items[0]
+        item = item_group.sprites()[0]
         width = item.rect.width
         speed = 100
         item._movement.speed = speed
         for _ in range(math.ceil(width / speed)):
             item_group.update()
 
-        assert len(item_group.items) == 2
+        assert len(item_group.sprites()) == 2
 
     def test_update_delete(
         self, monkeypatch, example_left_scrolling_text_group: LeftScrollingTextGroup
@@ -105,7 +105,7 @@ class TestLeftScrollingTextGroup:
         monkeypatch.setattr(LeftScrollingTextGroup, "_set_speed", lambda x: None)
         item_group = example_left_scrolling_text_group
         item_group.create()
-        item = item_group.items[0]
+        item = item_group.sprites()[0]
         width = item.rect.width + item_group._perimeter.width
         speed = 100
         item._movement.speed = speed
@@ -113,7 +113,7 @@ class TestLeftScrollingTextGroup:
         for _ in range(math.ceil(width / speed)):
             item_group.update()
 
-        assert len(item_group.items) == 0
+        assert len(item_group.sprites()) == 0
 
     def test_generate_message(
         self, example_left_scrolling_text_group: LeftScrollingTextGroup
@@ -130,7 +130,7 @@ class TestLeftScrollingTextGroup:
         item_group = example_left_scrolling_text_group
         item_group._set_outline("Test")
 
-        assert len(item_group.items) == 8
+        assert len(item_group.sprites()) == 8
 
 
 class TestRandomImagesGroup:
@@ -152,7 +152,7 @@ class TestRandomImagesGroup:
         image_settings = example_settings_dict_with_tuples["images"]
 
         assert (
-            len(item_group.items)
+            len(item_group.sprites())
             == len(image_settings["sources"]) * image_settings["number"]
         )
 
@@ -167,7 +167,7 @@ class TestRandomImagesGroup:
             item_group.update()
 
         assert all(
-            [item_group._perimeter.contains(image) for image in item_group.items]
+            [item_group._perimeter.contains(image) for image in item_group.sprites()]
         )
 
 
