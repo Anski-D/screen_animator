@@ -84,7 +84,7 @@ class View(Observer):
         """Update the display."""
         self._set_bg()
         for group in self._model.item_groups:
-            for item in group.items:
+            for item in group.sprites():
                 self._screen.blit(item.content, item.rect)
 
         if self._flipped:
