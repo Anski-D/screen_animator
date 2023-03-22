@@ -1,5 +1,7 @@
 import random
+from abc import ABC, abstractmethod
 import logging
+
 import pygame as pg
 
 log = logging.getLogger(__name__)
@@ -54,18 +56,19 @@ class Item(pg.sprite.Sprite):
         self.content = content
         self.rect = self.content.get_rect()
         self.perimeter = perimeter
-        self._movement = movement or Movement()
+        self._movement = movement
 
     def move(self) -> None:
-        """Move the instance using a `Movement` object."""
-        self._movement.move(self)
+        """Move the instance using a `Movement` object, if defined."""
+        if self._movement is not None:
+            self._movement.move(self)
 
     def update(self, *_args, **_kwargs) -> None:
         """Update the instance (move it)."""
         self.move()
 
 
-class Movement:
+class Movement(ABC):
     """
     A way of moving a `Movable` object.
 
@@ -77,6 +80,7 @@ class Movement:
     def __init__(self):
         log.info("Creating %s", type(self).__name__)
 
+    @abstractmethod
     def move(self, item: Item) -> None:
         """Sublasses should implement a means of moving `Movable`."""
 
