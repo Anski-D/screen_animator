@@ -50,6 +50,40 @@ class ItemGroup(ABC):
         """Update item(s) in group, to be implemented by sublasses."""
 
 
+class ItemGroupNew(ABC, pg.sprite.Group):
+    """
+    Interface for `Item` groups.
+
+    Methods
+    -------
+    create
+        Create items in group (sublasses to implement).
+    update
+        Update items in group (sublasses to implement).
+    """
+
+    def __init__(self, settings_manager: SettingsManager, perimeter: pg.Rect) -> None:
+        """
+        Initialise group with settings and context perimeter.
+
+        Parameters
+        ----------
+        settings_manager
+            Dictionary of settings.
+        perimeter
+            Outer limit of 'canvas' in `pygame`.
+        """
+        log.info("Creating %s", type(self).__name__)
+        super().__init__()
+        self._settings_manager = settings_manager
+        self._settings = self._settings_manager.settings
+        self._perimeter = perimeter
+
+    @abstractmethod
+    def create(self) -> None:
+        """Create item(s) in group, to be implemented by sublasses."""
+
+
 class LeftScrollingTextGroup(ItemGroup):
     """
     Group of items that will scroll messages to the left.
