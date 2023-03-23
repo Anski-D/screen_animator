@@ -119,6 +119,3 @@ class ImageLoader:
         loader = self._loaders.get(Path(image_loc).suffix, load_raster_image)
 
         return loader(image_loc, width)
-
-
-ImageLoader.register_loader(".svg", load_svg_image)
