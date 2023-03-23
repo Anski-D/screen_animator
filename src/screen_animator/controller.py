@@ -45,8 +45,21 @@ class Controller:
         self._settings_manager = settings_manager
         self._settings = self._settings_manager.settings
         self._model = model
-        self._view = View(model, self, settings_manager.settings, display_size, flipped)
+        self._display_size = display_size
+        self._flipped = flipped
+        log.info("Creating %s", self)
+        self._view = View(
+            model, self, settings_manager.settings, self._display_size, self._flipped
+        )
         self._clock = pg.time.Clock()
+
+    def __repr__(self) -> str:
+        return (
+            f"{type(self).__name__}({self._settings_manager},"
+            f" {self._model},"
+            f" {self._display_size},"
+            f" {self._flipped})"
+        )
 
     @property
     def initialized(self) -> bool:
