@@ -69,10 +69,16 @@ class ScreenAnimator:
         )
         self._flipped = flipped
         log.info("Output will be flipped vertically: %s", self._flipped)
-        if fps_on:
+        self._is_fps_on = fps_on
+        if self._is_fps_on:
             self._fps_on()
-        if debug:
+        self._debug = debug
+        if self._debug:
             self._debug_setup()
+        log.info("%s created", self)
+
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}({self._settings_file}, {self._display_size}, {self._flipped}, {self._is_fps_on}, {self._debug})"
 
     def run(self) -> None:
         """Run `screen_animator`."""
