@@ -28,6 +28,9 @@ class SettingsImporter:
         """Initialise the importer. Nothing much is done at this stage."""
         self._settings = None
 
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}()"
+
     def import_settings(self, settings_file: str | Path) -> dict:
         """
         Imports the settings from the specified file, validates, and stores and
@@ -127,8 +130,12 @@ class SettingsManager:
             Path to settings file.
         """
         self._importer = importer
-        self._settings = self._import_settings(settings_file)
+        self._settings_file = settings_file
+        self._settings = self._import_settings(self._settings_file)
         self._setup_settings()
+
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}({self._importer}, {self._settings_file})"
 
     @property
     def settings(self) -> dict:

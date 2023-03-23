@@ -59,9 +59,17 @@ class View(Observer):
         self._model = model
         self._controller = controller
         self._settings = settings
-        self.display_size = display_size
-        self.flipped = flipped
+        self._display_size = display_size
+        self._flipped = flipped
         self._initialized = False
+        log.info("Creating %s", self)
+
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}({self._model}," \
+               f" {self._controller}," \
+               f" {self._settings}," \
+               f" {self._display_size}," \
+               f" {self._flipped})"
 
     @property
     def initialized(self) -> bool:
@@ -71,10 +79,10 @@ class View(Observer):
     def init(self) -> None:
         """Manually finish initializing the display."""
         log.info("Finishing initialization of %s", type(self).__name__)
-        if self.display_size is None:
+        if self._display_size is None:
             self._screen = pg.display.set_mode((0, 0), pg.FULLSCREEN)
         else:
-            self._screen = pg.display.set_mode(self.display_size)
+            self._screen = pg.display.set_mode(self._display_size)
         pg.display.set_caption("Screen_Animator")
         self.perimeter = self._screen.get_rect()
         self._set_bg()
@@ -88,7 +96,7 @@ class View(Observer):
             for item in group.sprites():
                 self._screen.blit(item.content, item.rect)
 
-        if self.flipped:
+        if self._flipped:
             self._screen.blit(pg.transform.rotate(self._screen, 180), (0, 0))
 
         pg.display.flip()
