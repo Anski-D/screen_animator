@@ -32,11 +32,14 @@ class ItemGroup(ABC, pg.sprite.Group):
         perimeter
             Outer limit of 'canvas' in `pygame`.
         """
-        log.info("Creating %s", type(self).__name__)
         super().__init__()
         self._settings_manager = settings_manager
         self._settings = self._settings_manager.settings
         self._perimeter = perimeter
+        log.info("Creating %s", self)
+
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}({self._settings_manager}, {self._perimeter})"
 
     @abstractmethod
     def create(self) -> None:

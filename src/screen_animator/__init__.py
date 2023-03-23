@@ -75,7 +75,7 @@ class ScreenAnimator:
         self._debug = debug
         if self._debug:
             self._debug_setup()
-        log.info("%s created", self)
+        log.info("Creating %s", self)
 
     def __repr__(self) -> str:
         return f"{type(self).__name__}({self._settings_file}, {self._display_size}, {self._flipped}, {self._is_fps_on}, {self._debug})"
