@@ -238,7 +238,7 @@ class RandomImagesGroup(ItemGroup):
             self.remove(image)
             image.update()
             attempts = self._settings["images"]["reposition_attempts"]
-            while pg.sprite.spritecollideany(image, self) and abs(attempts) > 0:
+            while pg.sprite.spritecollideany(image, group) and abs(attempts) > 0:
                 attempts -= 1
                 image.update()
             group.append(image)
@@ -303,6 +303,9 @@ class TimedRandomImagesGroup(ItemGroup):
         super().__init__(settings_manager, perimeter)
 
         self._wrapped_group = self._wrapped_group_type(settings_manager, perimeter)
+
+    def sprites(self):
+        return self._wrapped_group.sprites()
 
     def create(self) -> None:
         """Create the wrapped group of random moving images."""
