@@ -102,6 +102,9 @@ class ImageLoader:
 
     _loaders: dict = {}
 
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}()"
+
     @classmethod
     def register_loader(cls, image_format, loader) -> None:
         """Add image loader to class dictionary."""
