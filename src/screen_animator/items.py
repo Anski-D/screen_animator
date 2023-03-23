@@ -84,9 +84,6 @@ class Movement(ABC):
         Move a `Movable`, to be implemented by sublasses.
     """
 
-    def __init__(self) -> None:
-        log.info("Creating %s", self)
-
     def __repr__(self) -> str:
         return f"{type(self).__name__}()"
 

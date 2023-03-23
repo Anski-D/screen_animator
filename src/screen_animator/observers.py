@@ -16,6 +16,9 @@ class Observer(ABC):
         Do something when notified, to be implemented by subclasses.
     """
 
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}()"
+
     @abstractmethod
     def notify(self) -> None:
         """Subclasses should implement behavior for when notified."""
@@ -40,6 +43,9 @@ class Observable(ABC):
     def __init__(self) -> None:
         """Create a dictionary with weak keys for storing observers."""
         self._observers = WeakKeyDictionary()
+
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}()"
 
     def add_observer(self, observer: Observer) -> None:
         """
