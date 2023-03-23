@@ -6,6 +6,7 @@ import shutil
 import pygame as pg
 
 from .item_groups import (
+    ItemGroup,
     LeftScrollingTextGroup,
     ColorChangeGroup,
     TimedRandomImagesGroup,
@@ -34,7 +35,7 @@ class ScreenAnimator:
         Run `screen_animator`.
     """
 
-    _item_groups = item_groups
+    _item_groups: list[type[ItemGroup]] = item_groups
 
     def __init__(
         self,
