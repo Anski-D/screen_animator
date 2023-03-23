@@ -51,6 +51,10 @@ class Model(Observable):
         self._settings_manager = settings_manager
         self._item_group_types = item_group_types
         self._initialized = False
+        log.info("Creating %s", self)
+
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}({self._settings_manager}, {self._item_group_types})"
 
     @property
     def initialized(self) -> bool:
