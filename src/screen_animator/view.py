@@ -65,11 +65,13 @@ class View(Observer):
         log.info("Creating %s", self)
 
     def __repr__(self) -> str:
-        return f"{type(self).__name__}({self._model}," \
-               f" {self._controller}," \
-               f" {self._settings}," \
-               f" {self._display_size}," \
-               f" {self._flipped})"
+        return (
+            f"{type(self).__name__}({self._model},"
+            f" {self._controller},"
+            f" {self._settings},"
+            f" {self._display_size},"
+            f" {self._flipped})"
+        )
 
     @property
     def initialized(self) -> bool:

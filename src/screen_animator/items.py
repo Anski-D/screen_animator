@@ -59,10 +59,12 @@ class Item(pg.sprite.Sprite):
         self._movement = movement
 
     def __repr__(self) -> str:
-        return f"{type(self).__name__}({super().groups()}," \
-               f" {self.content}," \
-               f" {self.perimeter}," \
-               f" {self._movement})"
+        return (
+            f"{type(self).__name__}({super().groups()},"
+            f" {self.content},"
+            f" {self.perimeter},"
+            f" {self._movement})"
+        )
 
     def move(self) -> None:
         """Move the instance using a `Movement` object, if defined."""

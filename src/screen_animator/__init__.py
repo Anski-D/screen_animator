@@ -78,12 +78,14 @@ class ScreenAnimator:
         log.info("Creating %s", self)
 
     def __repr__(self) -> str:
-        return f"{type(self).__name__}(" \
-               f"{self._settings_file}," \
-               f" {self._display_size}," \
-               f" {self._flipped}," \
-               f" {self._is_fps_on}," \
-               f" {self._debug})"
+        return (
+            f"{type(self).__name__}("
+            f"{self._settings_file},"
+            f" {self._display_size},"
+            f" {self._flipped},"
+            f" {self._is_fps_on},"
+            f" {self._debug})"
+        )
 
     def run(self) -> None:
         """Run `screen_animator`."""
