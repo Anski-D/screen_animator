@@ -16,11 +16,11 @@ from .settings import SettingsManager, SettingsImporter
 from .model import Model
 from .controller import Controller
 import example
-from .image_loading import ImageLoader, load_svg_image
+from .image_loading import ImageLoader, SvgTypeImageLoader
 
 log = logging.getLogger(__name__)
 
-ImageLoader.register_loader(".svg", load_svg_image)
+ImageLoader.register_loader(".svg", SvgTypeImageLoader)
 item_groups = [ColorChangeGroup, TimedRandomImagesGroup, LeftScrollingTextGroup]
 example_files = ["inputs.toml", "script.py"]
 
