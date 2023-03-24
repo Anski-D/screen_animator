@@ -60,7 +60,7 @@ class Model(Observable):
 
     @property
     def initialized(self) -> bool:
-        """Is model ready to use."""
+        """bool: Model is ready to use."""
         return self._initialized
 
     def init(self, perimeter: pg.Rect) -> None:

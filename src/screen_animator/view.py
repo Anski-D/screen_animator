@@ -37,7 +37,6 @@ class View(Observer):
         model: Model,
         controller: "Controller",
         settings: dict,
-        display_size: tuple[int, int] = None,
         flipped: bool = False,
     ) -> None:
         """
@@ -51,15 +50,12 @@ class View(Observer):
             Used to manipulate model.
         settings
             User-defined settings.
-        display_size : optional
-            Set a custom display size (default is None, full-screen).
         flipped : optional
             Flips the display across the horizontal axis (default is False, not flipped).
         """
         self._model = model
         self._controller = controller
         self._settings = settings
-        self._display_size = display_size
         self._flipped = flipped
         self._initialized = False
         log.info("Creating %s", self)
@@ -69,22 +65,28 @@ class View(Observer):
             f"{type(self).__name__}({self._model},"
             f" {self._controller},"
             f" {self._settings},"
-            f" {self._display_size},"
             f" {self._flipped})"
         )
 
     @property
     def initialized(self) -> bool:
-        """Is view ready to use."""
+        """bool: View is ready to use."""
         return self._initialized
 
-    def init(self) -> None:
-        """Manually finish initializing the display."""
+    def init(self, display_size: tuple[int, int] = None) -> None:
+        """
+        Manually finish initializing the display.
+
+        Parameters
+        ----------
+        display_size : optional
+            Width and height of window to display on screen, default is fullscreen.
+        """
         log.info("Finishing initialization of %s", type(self).__name__)
-        if self._display_size is None:
+        if display_size is None:
             self._screen = pg.display.set_mode((0, 0), pg.FULLSCREEN)
         else:
-            self._screen = pg.display.set_mode(self._display_size)
+            self._screen = pg.display.set_mode(display_size)
         pg.display.set_caption("Screen_Animator")
         self.perimeter = self._screen.get_rect()
         self._set_bg()

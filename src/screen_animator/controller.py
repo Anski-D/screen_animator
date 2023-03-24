@@ -25,7 +25,6 @@ class Controller:
         self,
         settings_manager: SettingsManager,
         model: Model,
-        display_size: tuple[int, int] = None,
         flipped: bool = False,
     ) -> None:
         """
@@ -37,19 +36,14 @@ class Controller:
             Manages settings.
         model
             The model to manipulate.
-        display_size: optional
-            Set a custom display size (default is None, full-screen).
         flipped : optional
             Flips the display across the horizontal axis (default is False, not flipped).
         """
         self._settings_manager = settings_manager
         self._settings = self._settings_manager.settings
         self._model = model
-        self._display_size = display_size
         self._flipped = flipped
-        self._view = View(
-            model, self, settings_manager.settings, self._display_size, self._flipped
-        )
+        self._view = View(model, self, settings_manager.settings, self._flipped)
         log.info("Creating %s", self)
         self._clock = pg.time.Clock()
 
@@ -57,19 +51,25 @@ class Controller:
         return (
             f"{type(self).__name__}({self._settings_manager},"
             f" {self._model},"
-            f" {self._display_size},"
             f" {self._flipped})"
         )
 
     @property
     def initialized(self) -> bool:
-        """Are view and model ready to use."""
+        """bool: Controller is ready to run."""
         return self._view.initialized and self._model.initialized
 
-    def init(self) -> None:
-        """Manually finish initializing the controller."""
+    def init(self, display_size: tuple[int, int] = None) -> None:
+        """
+        Manually finish initializing the controller.
+
+        Parameters
+        ----------
+        display_size : optional
+            Width and height of window to display on screen, default is fullscreen.
+        """
         log.info("Finishing initialization of %s", type(self).__name__)
-        self._view.init()
+        self._view.init(display_size)
         self._model.init(self._view.perimeter)
         self._model.add_observer(self._view)
         log.info("%s initialization complete", type(self).__name__)
@@ -106,6 +106,7 @@ def is_quit(event: pg.event.Event) -> bool:
     ----------
     event
         `pygame` event to be checked.
+
     Returns
     -------
         True if a quit event, False otherwise.

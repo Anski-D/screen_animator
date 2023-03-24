@@ -55,7 +55,7 @@ class RasterTypeImageLoader(TypeImageLoader):
         Load a raster image to `pygame` Surface.
     """
 
-    def load_image(self, image_loc: str, width: int = 0) -> pg.Surface:
+    def load_image(self, image_loc: str, width: int = 0) -> pg.Surface | None:
         """
         Loads raster images (e.g., BMP, JPG, PNG) for use in `pygame`.
 
@@ -92,6 +92,7 @@ class RasterTypeImageLoader(TypeImageLoader):
 
         except FileNotFoundError:
             log.exception("%s not found", image_loc)
+            return None
 
 
 class SvgTypeImageLoader(TypeImageLoader):
@@ -104,7 +105,7 @@ class SvgTypeImageLoader(TypeImageLoader):
         Load a raster image to `pygame` Surface.
     """
 
-    def load_image(self, image_loc: str, width: int = 0) -> pg.Surface:
+    def load_image(self, image_loc: str, width: int = 0) -> pg.Surface | None:
         """
         Loads SVG images for use in `pygame`.
 
@@ -142,6 +143,7 @@ class SvgTypeImageLoader(TypeImageLoader):
 
         except FileNotFoundError:
             log.exception("%s not found", image_loc)
+            return None
 
 
 class ImageLoader:
@@ -166,9 +168,16 @@ class ImageLoader:
         """Add image loader to class dictionary."""
         cls._loaders[image_format] = loader
 
-    def load_image(self, image_loc: str, width: int) -> pg.Surface:
+    def load_image(self, image_loc: str, width: int) -> pg.Surface | None:
         """
         Load the image from location at specified width, dependent on file type.
+
+        Parameters
+        ----------
+        image_loc
+            Location of image file.
+        width : Optional
+            Desired width in pixels of image when loaded, 0 or lower results in no scaling.
 
         Returns
         -------

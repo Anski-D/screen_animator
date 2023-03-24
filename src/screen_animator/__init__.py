@@ -93,10 +93,8 @@ class ScreenAnimator:
         pg.init()
         settings_manager = SettingsManager(SettingsImporter(), self._settings_file)
         model = Model(settings_manager, self._item_groups)
-        controller = Controller(
-            settings_manager, model, self._display_size, self._flipped
-        )
-        controller.init()
+        controller = Controller(settings_manager, model, self._flipped)
+        controller.init(self._display_size)
         log.info("Setting %s to run", type(self).__name__)
         controller.run()
         log.info("Run method complete, %s stopping", type(self).__name__)
