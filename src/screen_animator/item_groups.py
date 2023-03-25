@@ -147,7 +147,9 @@ class LeftScrollingTextGroup(ItemGroup):
                 messages_dict["anti-aliasing"],
                 messages_dict["outline_color"],
             )
-            angles = np.linspace(0, 360, messages_dict["outline_copies"], endpoint=False)
+            angles = np.linspace(
+                0, 360, messages_dict["outline_copies"], endpoint=False
+            )
             x_shift = outline_width * np.cos(np.radians(angles - 90)) + outline_width
             y_shift = outline_width * np.sin(np.radians(angles - 90))
             xy_shifts = np.transpose(np.vstack((x_shift, y_shift)))

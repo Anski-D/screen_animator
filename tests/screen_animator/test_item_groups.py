@@ -69,7 +69,12 @@ class TestLeftScrollingTextGroup:
         for _ in range(num_of_items):
             item_group.create()
 
-        assert len(item_group.sprites()) == num_of_items + example_settings_dict_with_tuples["messages"]["outline_copies"] * num_of_items
+        assert (
+            len(item_group.sprites())
+            == num_of_items
+            + example_settings_dict_with_tuples["messages"]["outline_copies"]
+            * num_of_items
+        )
 
     @pytest.mark.xfail
     def test_create_position(
@@ -126,13 +131,18 @@ class TestLeftScrollingTextGroup:
         )
 
     def test_set_outline(
-        self, example_left_scrolling_text_group: LeftScrollingTextGroup, example_settings_dict_with_tuples: dict
+        self,
+        example_left_scrolling_text_group: LeftScrollingTextGroup,
+        example_settings_dict_with_tuples: dict,
     ) -> None:
         """Outlines are created for `Item`."""
         item_group = example_left_scrolling_text_group
         item_group._set_outline("Test")
 
-        assert len(item_group.sprites()) == example_settings_dict_with_tuples["messages"]["outline_copies"]
+        assert (
+            len(item_group.sprites())
+            == example_settings_dict_with_tuples["messages"]["outline_copies"]
+        )
 
 
 class TestRandomImagesGroup:
