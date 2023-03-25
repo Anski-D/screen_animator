@@ -2,6 +2,7 @@ import logging
 from abc import ABC, abstractmethod
 
 import pygame as pg
+import numpy as np
 
 from .items import ScrollingMovement, RandomMovement, Item
 from .settings import SettingsManager
@@ -146,57 +147,29 @@ class LeftScrollingTextGroup(ItemGroup):
                 messages_dict["anti-aliasing"],
                 messages_dict["outline_color"],
             )
-
-            outline1 = Item(
-                self, outline_text, self._perimeter, self._scrolling_movement
+            xy_shifts = (
+                np.array(
+                    [
+                        (1, -1),
+                        (2, -1),
+                        (2, 0),
+                        (2, 1),
+                        (1, 1),
+                        (0, 1),
+                        (0, 0),
+                        (0, -1),
+                    ]
+                )
+                * outline_width
             )
-            outline1.rect.midleft = self._perimeter.midright
-            outline1.rect.x += outline_width
-            outline1.rect.y -= outline_width
 
-            outline2 = Item(
-                self, outline_text, self._perimeter, self._scrolling_movement
-            )
-            outline2.rect.midleft = self._perimeter.midright
-            outline2.rect.x += 2 * outline_width
-            outline2.rect.y -= outline_width
-
-            outline3 = Item(
-                self, outline_text, self._perimeter, self._scrolling_movement
-            )
-            outline3.rect.midleft = self._perimeter.midright
-            outline3.rect.x += 2 * outline_width
-
-            outline4 = Item(
-                self, outline_text, self._perimeter, self._scrolling_movement
-            )
-            outline4.rect.midleft = self._perimeter.midright
-            outline4.rect.x += 2 * outline_width
-            outline4.rect.y += outline_width
-
-            outline5 = Item(
-                self, outline_text, self._perimeter, self._scrolling_movement
-            )
-            outline5.rect.midleft = self._perimeter.midright
-            outline5.rect.x += outline_width
-            outline5.rect.y += outline_width
-
-            outline6 = Item(
-                self, outline_text, self._perimeter, self._scrolling_movement
-            )
-            outline6.rect.midleft = self._perimeter.midright
-            outline6.rect.y += outline_width
-
-            outline7 = Item(
-                self, outline_text, self._perimeter, self._scrolling_movement
-            )
-            outline7.rect.midleft = self._perimeter.midright
-
-            outline8 = Item(
-                self, outline_text, self._perimeter, self._scrolling_movement
-            )
-            outline8.rect.midleft = self._perimeter.midright
-            outline8.rect.y -= outline_width
+            for xy_shift in xy_shifts:
+                outline = Item(
+                    self, outline_text, self._perimeter, self._scrolling_movement
+                )
+                outline.rect.midleft = self._perimeter.midright
+                outline.rect.x += xy_shift[0]
+                outline.rect.y += xy_shift[1]
 
     def _set_speed(self) -> None:
         fps_actual = self._settings["timings"]["fps_actual"]
