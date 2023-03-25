@@ -88,7 +88,6 @@ class SettingsImporter:
                 },
             }:
                 log.info("Validation successful")
-                pass
             case _:
                 raise ValueError(f"Invalid configuration {self._settings}")
 

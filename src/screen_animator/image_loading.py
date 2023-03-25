@@ -27,7 +27,7 @@ class TypeImageLoader(ABC):
         return f"{type(self).__name__}()"
 
     @abstractmethod
-    def load_image(self, image_loc: str, width: int = 0) -> pg.Surface:
+    def load_image(self, image_loc: str, width: int = 0) -> pg.Surface | None:
         """
         Loads images for use in `pygame`.
 

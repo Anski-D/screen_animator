@@ -5,6 +5,7 @@ import shutil
 
 import pygame as pg
 
+import example
 from .item_groups import (
     ItemGroup,
     LeftScrollingTextGroup,
@@ -15,7 +16,6 @@ from .item_groups import (
 from .settings import SettingsManager, SettingsImporter
 from .model import Model
 from .controller import Controller
-import example
 from .image_loading import ImageLoader, SvgTypeImageLoader
 
 log = logging.getLogger(__name__)

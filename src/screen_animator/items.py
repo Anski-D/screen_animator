@@ -28,12 +28,12 @@ class Item(pg.sprite.Sprite):
         Hook used to execute `move` through a group.
     """
 
-    rect: pg.Rect | pg.rect.Rect
+    rect: pg.Rect
 
     def __init__(
         self,
         group: pg.sprite.Group,
-        content: pg.Surface | pg.surface.Surface,
+        content: pg.Surface,
         perimeter: pg.Rect,
         movement: "Movement" = None,
     ) -> None:
