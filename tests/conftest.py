@@ -27,6 +27,7 @@ def example_settings_dict() -> dict:
             "anti-aliasing": False,
             "scroll_speed": 240,
             "outline_width": 3,
+            "outline_copies": 12,
             "outline_colors": [
                 [0, 0, 0],
                 [255, 255, 255],
