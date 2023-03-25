@@ -237,15 +237,31 @@ class RandomImagesGroup(ItemGroup):
         """
         log.debug("Repositioning all images")
         group = []
-        for image in self.sprites():
+        reattempts_taken_total = 0
+        num_items = len(self.sprites())
+        for image_idx, image in enumerate(self.sprites(), 1):
             self.remove(image)
             image.update()
-            attempts = self._settings["images"]["reposition_attempts"]
-            while pg.sprite.spritecollideany(image, group) and abs(attempts) > 0:
-                attempts -= 1
+            reattempts_allowed = self._settings["images"]["reposition_attempts"]
+            while (
+                pg.sprite.spritecollideany(image, group) and abs(reattempts_allowed) > 0
+            ):
                 image.update()
+                reattempts_allowed -= 1
+                reattempts_taken_total += 1
+                if reattempts_taken_total % 100000 == 0:
+                    log.debug(
+                        "%s reattempts so far, currently on image %s of %s",
+                        reattempts_taken_total,
+                        image_idx,
+                        num_items,
+                    )
             group.append(image)
-        log.debug("All images repositioned")
+        log.debug(
+            "All images (%s total) repositioned with %s total reattempts",
+            num_items,
+            reattempts_taken_total,
+        )
         self.add(group)
 
 
