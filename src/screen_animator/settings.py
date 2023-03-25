@@ -74,6 +74,7 @@ class SettingsImporter:
                     "anti-aliasing": bool(),
                     "scroll_speed": int(),
                     "outline_width": int(),
+                    "outline_copies": int(),
                     "outline_colors": list(),
                 },
                 "images": {

@@ -19,6 +19,7 @@ italic = false
 anti-aliasing = false
 scroll_speed = 240
 outline_width = 3
+outline_copies = 360
 outline_colors = [
     [0, 0, 0],
     [255, 255, 255],
