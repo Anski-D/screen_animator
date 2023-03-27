@@ -83,7 +83,7 @@ class SettingsImporter:
                     "reposition_attempts": int(),
                 },
                 "timings": {
-                    "fps": int(),
+                    "fps": int() | float(),
                     "image_change_time": int() | float(),
                     "color_change_time": int() | float(),
                 },
