@@ -1,9 +1,12 @@
 import logging
+from typing import TYPE_CHECKING
 
 import pygame as pg
 
 from .observers import Observer
 from .model import Model
+if TYPE_CHECKING:
+    from .controller import Controller
 
 log = logging.getLogger(__name__)
 
