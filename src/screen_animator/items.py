@@ -60,7 +60,7 @@ class Item(pg.sprite.Sprite):
 
     def __repr__(self) -> str:
         return (
-            f"{type(self).__name__}({super().groups()},"
+            f"{type(self).__name__}({self.groups()},"
             f" {self.content},"
             f" {self.perimeter},"
             f" {self._movement})"
