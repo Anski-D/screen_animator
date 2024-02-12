@@ -7,9 +7,9 @@ import pygame as pg
 from .image_loading import ImageLoader
 
 try:
-    import tomlib
+    import tomllib
 except ModuleNotFoundError:
-    import tomli as tomlib
+    import tomli as tomllib
 
 log = logging.getLogger(__name__)
 
@@ -57,7 +57,7 @@ class SettingsImporter:
     def _read_settings(self, settings_path: Path) -> None:
         log.info("Reading settings from %s...", settings_path)
         with settings_path.open("rb") as file:
-            self._settings = tomlib.load(file)
+            self._settings = tomllib.load(file)
 
     def _validate_settings(self) -> None:
         log.info("Validating input file matches expected format")
