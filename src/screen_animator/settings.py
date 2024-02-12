@@ -6,10 +6,7 @@ import pygame as pg
 
 from .image_loading import ImageLoader
 
-try:
-    import tomllib
-except ModuleNotFoundError:
-    import tomli as tomllib
+import tomli as tomllib
 
 log = logging.getLogger(__name__)
 
