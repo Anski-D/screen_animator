@@ -189,11 +189,13 @@ class SettingsManager:
     def _set_font(self) -> None:
         log.info("Setting `pygame` font for text rendering")
         messages_dict = self._settings["messages"]
-        messages_dict["font"] = pg.font.SysFont(
-            messages_dict["typeface"],
+        messages_dict["font"] = pg.font.Font(
+            pg.font.match_font(
+                messages_dict["typeface"],
+                bold=messages_dict["bold"],
+                italic=messages_dict["italic"],
+            ),
             messages_dict["size"],
-            bold=messages_dict["bold"],
-            italic=messages_dict["italic"],
         )
 
     def _load_images(self):
