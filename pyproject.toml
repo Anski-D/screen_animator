@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "screen-animator"
-version = "0.8.0a4"
+version = "0.8.0a5"
 description = ""
 license = "MIT"
 authors = ["David Anscombe <dave.anski@gmail.com>"]
@@ -22,7 +22,7 @@ pygame-ce = "^2.4.0"
 numpy = "^1.26.4"
 cairosvg = "^2.7.1"
 svgutils = "^0.3.4"
-tomli = "^2.0.1"
+tomli = { version = "^2.0.1", python = "<3.11" }
 
 [tool.poetry.group.test]
 optional = true
