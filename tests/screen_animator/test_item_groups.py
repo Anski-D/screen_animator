@@ -76,17 +76,21 @@ class TestLeftScrollingTextGroup:
             * num_of_items
         )
 
-    @pytest.mark.xfail
     def test_create_position(
         self,
         example_left_scrolling_text_group: LeftScrollingTextGroup,
         example_perimeter: pg.Rect,
+        example_settings_dict_with_tuples: dict,
     ) -> None:
         """`Item` placed in correct starting position, dependent on outline settings."""
         item_group = example_left_scrolling_text_group
         item_group.create()
 
-        assert item_group.sprites()[7].rect.left == example_perimeter.right
+        assert (
+            item_group.sprites()[-1].rect.left
+            == example_perimeter.right
+            + example_settings_dict_with_tuples["messages"]["outline_width"]
+        )
 
     def test_update_create(
         self, monkeypatch, example_left_scrolling_text_group: LeftScrollingTextGroup
