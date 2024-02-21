@@ -1,15 +1,16 @@
 import logging
-import logging.handlers
+from datetime import datetime
+from pathlib import Path
 
-LOG_FILE = f"{__package__}.log"
+LOG_DIR = "logs"
+LOG_FILE = f"{__package__}_{datetime.now().strftime('%Y%m%d%H%M')}.log"
 
 
-def setup_logging(logging_level="WARNING", size_mb: int = 20, bkp_count: int = 5):
+def setup_logging(logging_level="WARNING"):
     log = logging.getLogger(__package__)
     log.setLevel(getattr(logging, logging_level.upper()))
-    file_handler = logging.handlers.RotatingFileHandler(
-        LOG_FILE, maxBytes=size_mb * 10**6, backupCount=bkp_count
-    )
+    Path(LOG_DIR).mkdir(exist_ok=True)
+    file_handler = logging.FileHandler(Path(LOG_DIR, LOG_FILE))
     formatter = logging.Formatter(
         "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
     )
