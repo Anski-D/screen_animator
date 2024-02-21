@@ -241,9 +241,7 @@ class TestColorChangeItemGroup:
             example_settings_manager, example_perimeter, ColorChangeItemGroup
         )
 
-    def test_create(
-        self, example_color_change_item_group: TimedItemGroup
-    ) -> None:
+    def test_create(self, example_color_change_item_group: TimedItemGroup) -> None:
         """Time is saved."""
         item_group = example_color_change_item_group
         item_group.create()
@@ -262,7 +260,7 @@ class TestColorChangeItemGroup:
     ) -> None:
         """Time value updated after sufficient time elapsed."""
         item_group = example_color_change_item_group
-        item_group._settings["timings"]["color_change_time"] = 4
+        item_group._wrapped_group._time_diff = 4
         item_group.create()
         time1 = item_group._time
         time.sleep(sleep)

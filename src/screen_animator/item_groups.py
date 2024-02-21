@@ -36,12 +36,26 @@ class ItemGroup(ABC, pg.sprite.Group):
         """
         super().__init__()
         self._settings_manager = settings_manager
-        self._settings = self._settings_manager.settings
         self._perimeter = perimeter
+
+        self._settings = self._settings_manager.settings
 
     @abstractmethod
     def create(self) -> None:
         """Create item(s) in group, to be implemented by sublasses."""
+
+
+class TimeableItemGroup(ItemGroup):
+    """
+    Interface for allowing ItemGroups to be controlled by time.
+    """
+
+    _time_diff: int | float
+
+    @property
+    def time_diff(self) -> int | float:
+        """int or float: time difference"""
+        return self._time_diff
 
 
 class TimedItemGroup(ItemGroup):
@@ -62,7 +76,7 @@ class TimedItemGroup(ItemGroup):
         self,
         settings_manager: SettingsManager,
         perimeter: pg.Rect,
-        wrapped_group: type[ItemGroup],
+        wrapped_group: type[TimeableItemGroup],
     ) -> None:
         """
         Initialise group with settings and context perimeter.
@@ -95,7 +109,7 @@ class TimedItemGroup(ItemGroup):
         """Check elapsed time, run wrapped instance update if ready."""
         time = pg.time.get_ticks()
         time_diff = time - self._time
-        if time_diff >= self._settings["timings"]["color_change_time"] * 1000:
+        if time_diff >= self._wrapped_group.time_diff * 1000:
             log.debug(
                 "%s milliseconds passed, updating %s", time_diff, type(self).__name__
             )
@@ -244,7 +258,7 @@ class LeftScrollingTextItemGroup(ItemGroup):
         return self._perimeter.midright
 
 
-class RandomImagesItemGroup(ItemGroup):
+class RandomImagesItemGroup(TimeableItemGroup):
     """
     Group of items that will remove randomly within the specified perimeter.
 
@@ -273,6 +287,7 @@ class RandomImagesItemGroup(ItemGroup):
         log.info("Creating %s", self)
 
         self._random_movement = self._movement()
+        self._time_diff = self._settings["timings"]["image_change_time"]
 
     def __repr__(self) -> str:
         return f"{type(self).__name__}({self._settings_manager}, {self._perimeter})"
@@ -322,7 +337,7 @@ class RandomImagesItemGroup(ItemGroup):
         self.add(group)
 
 
-class ColorChangeItemGroup(ItemGroup):
+class ColorChangeItemGroup(TimeableItemGroup):
     """
     Manages when colors are changed.
 
@@ -346,11 +361,13 @@ class ColorChangeItemGroup(ItemGroup):
         super().__init__(settings_manager, perimeter)
         log.info("Creating %s", self)
 
+        self._time_diff = self._settings["timings"]["color_change_time"]
+
     def __repr__(self) -> str:
         return f"{type(self).__name__}({self._settings_manager}, {self._perimeter})"
 
     def create(self) -> None:
-        """Do nothing."""
+        pass
 
     def update(self):
         """Update colors."""
