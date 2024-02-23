@@ -74,25 +74,25 @@ class RasterTypeImageLoader(TypeImageLoader):
         try:
             log.info("Loading %s...", image_loc)
             image = pg.image.load(image_loc)
-
-            if width > 0:
-                width_old, height_old = image.get_size()
-                height = width / (width_old / height_old)
-                log.info(
-                    "Scaling image from (%s,%s) to (%s,%s)",
-                    width_old,
-                    height_old,
-                    width,
-                    height,
-                )
-                return pg.transform.scale(image, (width, height))
-
-            log.info("No scaling required")
-            return image
-
         except FileNotFoundError:
             log.exception("%s not found", image_loc)
             return None
+
+        if width > 0:
+            width_old, height_old = image.get_size()
+            height = width / (width_old / height_old)
+            log.info(
+                "Scaling image from (%s,%s) to (%s,%s)",
+                width_old,
+                height_old,
+                width,
+                height,
+            )
+
+            return pg.transform.scale(image, (width, height))
+
+        log.info("No scaling required")
+        return image
 
 
 class SvgTypeImageLoader(TypeImageLoader):
@@ -124,26 +124,26 @@ class SvgTypeImageLoader(TypeImageLoader):
         try:
             log.info("Loading %s...", image_loc)
             image = sg.fromfile(str(image_loc))
-            view_box = image.root.attrib["viewBox"]
-            width_old, height_old = tuple(
-                int(float(number)) for number in view_box.split(" ")[2:]
-            )
-            height = int(width / (width_old / height_old))
-            log.info(
-                "Scaling image from (%s,%s) to (%s,%s)",
-                width_old,
-                height_old,
-                width,
-                height,
-            )
-            image.set_size((str(width), str(height)))
-            image_str = image.to_str()
-
-            return pg.image.load(BytesIO(cairosvg.svg2png(image_str)))
-
         except FileNotFoundError:
             log.exception("%s not found", image_loc)
             return None
+
+        view_box = image.root.attrib["viewBox"]
+        width_old, height_old = tuple(
+            int(float(number)) for number in view_box.split(" ")[2:]
+        )
+        height = int(width / (width_old / height_old))
+        log.info(
+            "Scaling image from (%s,%s) to (%s,%s)",
+            width_old,
+            height_old,
+            width,
+            height,
+        )
+        image.set_size((str(width), str(height)))
+        image_str = image.to_str()
+
+        return pg.image.load(BytesIO(cairosvg.svg2png(image_str)))
 
 
 class ImageLoader:
