@@ -171,7 +171,10 @@ class TestLeftScrollingTextGroup:
     ) -> None:
         """Message is generated as `Surface`."""
         assert isinstance(
-            example_left_scrolling_text_group._generate_message("Test"), pg.Surface
+            example_left_scrolling_text_group._generate_message(
+                "Test", example_left_scrolling_text_group._settings["messages"]["font"]
+            ),
+            pg.Surface,
         )
 
     def test_set_outline(

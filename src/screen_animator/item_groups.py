@@ -88,6 +88,7 @@ class LeftScrollingTextGroup(ItemGroup):
         Message is initially placed with middle-left set at the middle-right of the
         perimeter, i.e. off-screen to the right.
         """
+        messages_dict = self._settings["messages"]
         self._settings_manager.set_font()
         message_text = self._settings_manager.generate_message_text()
         log.debug("Creating %s with text: %s", Item.__name__, message_text)
@@ -95,13 +96,14 @@ class LeftScrollingTextGroup(ItemGroup):
         self._set_outline(message_text, start_position)
         message = Item(
             self,
-            self._generate_message(message_text),
+            self._generate_message(message_text, messages_dict["font"]),
             self._perimeter,
             self._scrolling_movement,
         )
         setattr(message, "message_text", message_text)
+        setattr(message, "font", messages_dict["font"])
         message.rect.midleft = start_position
-        message.rect.x += self._settings["messages"]["outline_width"]
+        message.rect.x += messages_dict["outline_width"]
 
     def update(self):
         """
@@ -121,7 +123,8 @@ class LeftScrollingTextGroup(ItemGroup):
             else:
                 try:
                     message.content = self._generate_message(
-                        getattr(message, "message_text")
+                        getattr(message, "message_text"),
+                        getattr(message, "font"),
                     )
                 except AttributeError:
                     pass
@@ -131,10 +134,10 @@ class LeftScrollingTextGroup(ItemGroup):
         ):
             self.create()
 
-    def _generate_message(self, message_text: str) -> pg.Surface:
+    def _generate_message(self, message_text: str, font: pg.Font) -> pg.Surface:
         messages_dict = self._settings["messages"]
 
-        return messages_dict["font"].render(
+        return font.render(
             message_text,
             messages_dict["anti-aliasing"],
             messages_dict["color"],
