@@ -21,7 +21,7 @@ def example_settings_dict() -> dict:
             ],
             "separator": "    ",
             "typeface": "freeserif",
-            "size": 350,
+            "sizes": [350, 350],
             "bold": True,
             "italic": False,
             "anti-aliasing": False,
@@ -59,6 +59,7 @@ def example_settings_dict_with_tuples(example_settings_dict: dict) -> dict:
         (0, 255, 0),
         (0, 0, 255),
     ]
+    sizes = (350, 350)
     outline_colors = [
         (0, 0, 0),
         (255, 255, 255),
@@ -69,6 +70,7 @@ def example_settings_dict_with_tuples(example_settings_dict: dict) -> dict:
         ("pic3.bmp", 64),
     ]
     example_settings_dict["colors"] = colors
+    example_settings_dict["messages"]["sizes"] = sizes
     example_settings_dict["messages"]["outline_colors"] = outline_colors
     example_settings_dict["images"]["sources"] = sources
 
