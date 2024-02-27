@@ -1,4 +1,5 @@
 import logging
+import random
 from abc import ABC, abstractmethod
 
 import pygame as pg
@@ -89,7 +90,8 @@ class LeftScrollingTextGroup(ItemGroup):
         """
         message_text = self._settings_manager.generate_message_text()
         log.debug("Creating %s with text: %s", Item.__name__, message_text)
-        self._set_outline(message_text)
+        start_position = self._calculate_start_position()
+        self._set_outline(message_text, start_position)
         message = Item(
             self,
             self._generate_message(message_text),
@@ -97,7 +99,7 @@ class LeftScrollingTextGroup(ItemGroup):
             self._scrolling_movement,
         )
         setattr(message, "message_text", message_text)
-        message.rect.midleft = self._perimeter.midright
+        message.rect.midleft = start_position
         message.rect.x += self._settings["messages"]["outline_width"]
 
     def update(self):
@@ -137,7 +139,7 @@ class LeftScrollingTextGroup(ItemGroup):
             messages_dict["color"],
         )
 
-    def _set_outline(self, message_text: str) -> None:
+    def _set_outline(self, message_text: str, start_position: tuple[int, int]) -> None:
         messages_dict = self._settings["messages"]
         log.debug("Setting text outline with width %s", messages_dict["outline_width"])
         outline_width = messages_dict["outline_width"]
@@ -157,7 +159,7 @@ class LeftScrollingTextGroup(ItemGroup):
                 outline = Item(
                     self, outline_text, self._perimeter, self._scrolling_movement
                 )
-                outline.rect.midleft = self._perimeter.midright
+                outline.rect.midleft = start_position
                 outline.rect.x += xy_shift[0]
                 outline.rect.y += xy_shift[1]
 
@@ -166,6 +168,19 @@ class LeftScrollingTextGroup(ItemGroup):
         if fps_actual > 0:
             speed = self._settings["messages"]["scroll_speed"] / fps_actual
             self._scrolling_movement.speed = speed
+
+    def _calculate_start_position(self) -> tuple[int, int]:
+        messages_dict = self._settings["messages"]
+        if not messages_dict["start_middle"]:
+            return (
+                self._perimeter.right,
+                random.randint(
+                    messages_dict["size"] // 2,
+                    self._perimeter.bottom - messages_dict["size"] // 2,
+                ),
+            )
+
+        return self._perimeter.midright
 
 
 class RandomImagesGroup(ItemGroup):
