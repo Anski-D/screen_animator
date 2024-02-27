@@ -76,6 +76,7 @@ class SettingsImporter:
                     "outline_width": int(),
                     "outline_copies": int(),
                     "outline_colors": list(),
+                    "start_middle": bool(),
                 },
                 "images": {
                     "sources": list() | str(),
