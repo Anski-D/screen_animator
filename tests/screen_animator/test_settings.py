@@ -74,6 +74,17 @@ class TestSettingsManager:
 
         assert isinstance(settings_manager.settings["messages"]["font"], pg.font.Font)
 
+    @pytest.mark.parametrize("sizes", [(10, 10), (20, 30), (50, 50), (80, 130)])
+    def test_set_font_size(self, sizes: tuple[int, int], example_settings_manager: SettingsManager) -> None:
+        """Font size is between limits specified."""
+        settings_manager = example_settings_manager
+        messages_dict = settings_manager.settings["messages"]
+        messages_dict["size"] = sizes
+        settings_manager._set_font()
+        item = messages_dict["font"].render("Test", messages_dict["anti-aliasing"], settings_manager.settings["colors"][1])
+
+        assert min(sizes) <= item.get_rect().height <= max(sizes)
+
     @pytest.mark.parametrize("repeat", range(5))
     def test_generate_text(
         self,
