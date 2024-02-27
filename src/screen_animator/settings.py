@@ -116,6 +116,8 @@ class SettingsManager:
     -------
     set_colors
         Randomly set the background, text, and text outline color.
+    generate_message_text
+        Create string with combined random message and separator
     """
 
     def __init__(self, importer: SettingsImporter, settings_file: str | Path) -> None:
@@ -176,16 +178,7 @@ class SettingsManager:
         """
         messages_dict = self._settings["messages"]
 
-        return f"{random.choice(messages_dict['messages'])}{messages_dict['separator']}"
-
-    def _import_settings(self, settings_file: str | Path) -> dict:
-        return self._importer.import_settings(settings_file)
-
-    def _setup_settings(self):
-        self.set_colors()
-        self._set_font()
-        self._load_images()
-        self._settings["timings"]["fps_actual"] = self._settings["timings"]["fps"]
+        return f"{random.choice(messages_dict["messages"])}{messages_dict["separator"]}"
 
     def _set_font(self) -> None:
         log.info("Setting `pygame` font for text rendering")
@@ -198,6 +191,15 @@ class SettingsManager:
             ),
             messages_dict["size"],
         )
+
+    def _import_settings(self, settings_file: str | Path) -> dict:
+        return self._importer.import_settings(settings_file)
+
+    def _setup_settings(self):
+        self.set_colors()
+        self._set_font()
+        self._load_images()
+        self._settings["timings"]["fps_actual"] = self._settings["timings"]["fps"]
 
     def _load_images(self):
         images_dict = self._settings["images"]
