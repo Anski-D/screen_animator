@@ -83,7 +83,6 @@ class TestLeftScrollingTextGroup:
         example_settings_dict_with_tuples: dict,
     ) -> None:
         """`Item` placed in correct starting x-position, dependent on outline settings."""
-        example_settings_dict_with_tuples
         item_group = example_left_scrolling_text_group
         item_group.create()
 
