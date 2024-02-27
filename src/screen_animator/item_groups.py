@@ -92,7 +92,7 @@ class LeftScrollingTextGroup(ItemGroup):
         self._settings_manager.set_font()
         message_text = self._settings_manager.generate_message_text()
         log.debug("Creating %s with text: %s", Item.__name__, message_text)
-        start_position = self._calculate_start_position()
+        start_position = self._calculate_start_position(message_text)
         self._set_outline(message_text, start_position)
         message = Item(
             self,
@@ -173,14 +173,17 @@ class LeftScrollingTextGroup(ItemGroup):
             speed = self._settings["messages"]["scroll_speed"] / fps_actual
             self._scrolling_movement.speed = speed
 
-    def _calculate_start_position(self) -> tuple[int, int]:
+    def _calculate_start_position(self, message_text: str) -> tuple[int, int]:
         messages_dict = self._settings["messages"]
         if not messages_dict["start_middle"]:
+            dummy_message = self._generate_message(message_text, messages_dict["font"])
+            height = dummy_message.get_height()
+
             return (
                 self._perimeter.right,
                 random.randint(
-                    messages_dict["size"] // 2,
-                    self._perimeter.bottom - messages_dict["size"] // 2,
+                    height // 2,
+                    self._perimeter.bottom - height // 2,
                 ),
             )
 
