@@ -88,6 +88,7 @@ class LeftScrollingTextGroup(ItemGroup):
         Message is initially placed with middle-left set at the middle-right of the
         perimeter, i.e. off-screen to the right.
         """
+        self._settings_manager.set_font()
         message_text = self._settings_manager.generate_message_text()
         log.debug("Creating %s with text: %s", Item.__name__, message_text)
         start_position = self._calculate_start_position()

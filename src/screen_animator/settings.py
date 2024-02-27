@@ -68,7 +68,7 @@ class SettingsImporter:
                     "messages": list() | str(),
                     "separator": str(),
                     "typeface": str(),
-                    "size": int(),
+                    "sizes": list(),
                     "bold": bool(),
                     "italic": bool(),
                     "anti-aliasing": bool(),
@@ -95,7 +95,7 @@ class SettingsImporter:
 
     def _convert_colors_to_tuples(self, input_item):
         match input_item:
-            case [int(), int(), int()] | [str(), int()]:
+            case [int(), int(), int()] | [int(), int()] | [str(), int()]:
                 return tuple(input_item)
             case list():
                 return [self._convert_colors_to_tuples(item) for item in input_item]
@@ -118,6 +118,8 @@ class SettingsManager:
         Randomly set the background, text, and text outline color.
     generate_message_text
         Create string with combined random message and separator
+    set_font
+        Create the `pygame` font instance for rendering text.
     """
 
     def __init__(self, importer: SettingsImporter, settings_file: str | Path) -> None:
@@ -178,11 +180,15 @@ class SettingsManager:
         """
         messages_dict = self._settings["messages"]
 
-        return f"{random.choice(messages_dict["messages"])}{messages_dict["separator"]}"
+        return f'{random.choice(messages_dict["messages"])}{messages_dict["separator"]}'
 
-    def _set_font(self) -> None:
+    def set_font(self) -> None:
+        """Create the `pygame` font instance for rendering messages."""
         log.info("Setting `pygame` font for text rendering")
         messages_dict = self._settings["messages"]
+        messages_dict["size"] = random.randint(
+            min(messages_dict["sizes"]), max(messages_dict["sizes"])
+        )
         messages_dict["font"] = pg.font.Font(
             pg.font.match_font(
                 messages_dict["typeface"],
@@ -197,7 +203,7 @@ class SettingsManager:
 
     def _setup_settings(self):
         self.set_colors()
-        self._set_font()
+        self.set_font()
         self._load_images()
         self._settings["timings"]["fps_actual"] = self._settings["timings"]["fps"]
 

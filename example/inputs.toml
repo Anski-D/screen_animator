@@ -13,7 +13,7 @@ messages = [
 ]
 separator = "    "
 typeface = "freeserif"
-size = 350
+sizes = [350, 350]
 bold = true
 italic = false
 anti-aliasing = false
