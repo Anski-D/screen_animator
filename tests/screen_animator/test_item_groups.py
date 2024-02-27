@@ -76,13 +76,14 @@ class TestLeftScrollingTextGroup:
             * num_of_items
         )
 
-    def test_create_position(
+    def test_create_position_x(
         self,
         example_left_scrolling_text_group: LeftScrollingTextGroup,
         example_perimeter: pg.Rect,
         example_settings_dict_with_tuples: dict,
     ) -> None:
-        """`Item` placed in correct starting position, dependent on outline settings."""
+        """`Item` placed in correct starting x-position, dependent on outline settings."""
+        example_settings_dict_with_tuples
         item_group = example_left_scrolling_text_group
         item_group.create()
 
@@ -90,6 +91,46 @@ class TestLeftScrollingTextGroup:
             item_group.sprites()[-1].rect.left
             == example_perimeter.right
             + example_settings_dict_with_tuples["messages"]["outline_width"]
+        )
+
+    def test_create_position_y_start_middle(
+        self,
+        example_left_scrolling_text_group: LeftScrollingTextGroup,
+        example_perimeter: pg.Rect,
+        example_settings_dict_with_tuples: dict,
+    ) -> None:
+        """`Item` placed in correct starting y-position, dependent on settings."""
+        example_settings_dict_with_tuples["messages"]["start_middle"] = True
+        item_group = example_left_scrolling_text_group
+        item_group.create()
+
+        assert item_group.sprites()[-1].rect.centery == example_perimeter.centery
+
+    def test_create_position_y_not_start_middle(
+        self,
+        example_left_scrolling_text_group: LeftScrollingTextGroup,
+        example_perimeter: pg.Rect,
+        example_settings_dict_with_tuples: dict,
+    ) -> None:
+        """`Item` placed in correct starting y-position, dependent on settings."""
+        example_settings_dict_with_tuples["messages"]["start_middle"] = False
+        item_group = example_left_scrolling_text_group
+        item_group.create()
+        item1 = item_group.sprites()[-1]
+
+        item_group.create()
+        item2 = item_group.sprites()[-1]
+
+        assert all(
+            [
+                *[
+                    item.rect.height / 2
+                    <= item.rect.centery
+                    <= (example_perimeter.bottom - item.rect.height / 2)
+                    for item in [item1, item2]
+                ],
+                item1.rect.centery != item2.rect.centery,
+            ]
         )
 
     def test_update_create(
@@ -137,11 +178,12 @@ class TestLeftScrollingTextGroup:
     def test_set_outline(
         self,
         example_left_scrolling_text_group: LeftScrollingTextGroup,
+        example_perimeter: pg.Rect,
         example_settings_dict_with_tuples: dict,
     ) -> None:
         """Outlines are created for `Item`."""
         item_group = example_left_scrolling_text_group
-        item_group._set_outline("Test")
+        item_group._set_outline("Test", example_perimeter.midright)
 
         assert (
             len(item_group.sprites())

@@ -32,6 +32,7 @@ def example_settings_dict() -> dict:
                 [0, 0, 0],
                 [255, 255, 255],
             ],
+            "start_middle": True,
         },
         "images": {
             "sources": [
