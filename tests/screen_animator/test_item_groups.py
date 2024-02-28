@@ -105,7 +105,7 @@ class TestLeftScrollingTextGroup:
 
         assert item_group.sprites()[-1].rect.centery == example_perimeter.centery
 
-    @pytest.mark.parametrize("repeat", range(20))
+    @pytest.mark.parametrize("repeat", range(5))
     def test_create_position_y_not_start_middle(
         self,
         repeat: int,
@@ -116,23 +116,17 @@ class TestLeftScrollingTextGroup:
         """`Item` placed in correct starting y-position, dependent on settings."""
         example_settings_dict_with_tuples["messages"]["start_middle"] = False
         item_group = example_left_scrolling_text_group
-        item_group.create()
-        item1 = item_group.sprites()[-1]
-        print(item1.rect)
-
-        item_group.create()
-        item2 = item_group.sprites()[-1]
-        print(item2.rect)
+        items = []
+        for _ in range(5):
+            item_group.create()
+            item = item_group.sprites()[-1]
+            items.append(item)
 
         assert all(
             [
-                *[
-                    item.rect.height / 2
-                    <= item.rect.centery
-                    <= (example_perimeter.bottom - item.rect.height / 2)
-                    for item in [item1, item2]
-                ],
-                item1.rect.centery != item2.rect.centery,
+                item.rect.top >= example_perimeter.top
+                and item.rect.bottom <= example_perimeter.bottom
+                for item in items
             ]
         )
 

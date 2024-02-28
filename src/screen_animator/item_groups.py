@@ -177,13 +177,15 @@ class LeftScrollingTextGroup(ItemGroup):
         messages_dict = self._settings["messages"]
         if not messages_dict["start_middle"]:
             dummy_message = self._generate_message(message_text, messages_dict["font"])
-            height = dummy_message.get_height()
+            height = dummy_message.get_rect().height
 
             return (
                 self._perimeter.right,
                 random.randint(
-                    height // 2,
-                    self._perimeter.bottom - height // 2,
+                    height // 2 + messages_dict["outline_width"],
+                    self._perimeter.bottom
+                    - height // 2
+                    - messages_dict["outline_width"],
                 ),
             )
 
