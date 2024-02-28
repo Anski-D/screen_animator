@@ -184,7 +184,7 @@ class SettingsManager:
 
     def set_font(self) -> None:
         """Create the `pygame` font instance for rendering messages."""
-        log.info("Setting `pygame` font for text rendering")
+        log.debug("Setting `pygame` font for text rendering")
         messages_dict = self._settings["messages"]
         messages_dict["size"] = random.randint(
             min(messages_dict["sizes"]), max(messages_dict["sizes"])

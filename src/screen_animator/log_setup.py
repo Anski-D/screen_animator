@@ -10,7 +10,8 @@ def setup_logging(logging_level="WARNING"):
     log = logging.getLogger(__package__)
     log.setLevel(getattr(logging, logging_level.upper()))
     Path(LOG_DIR).mkdir(exist_ok=True)
-    file_handler = logging.FileHandler(Path(LOG_DIR, LOG_FILE))
+    log_path = Path(LOG_DIR, LOG_FILE)
+    file_handler = logging.FileHandler(log_path)
     formatter = logging.Formatter(
         "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
     )
@@ -23,6 +24,6 @@ def setup_logging(logging_level="WARNING"):
     log.info(50 * "=")
     log.info(
         "Logging to %s at %s level",
-        LOG_FILE,
+        log_path,
         logging.getLevelName(log.getEffectiveLevel()),
     )
