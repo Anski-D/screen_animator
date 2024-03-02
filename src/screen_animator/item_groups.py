@@ -113,7 +113,6 @@ class LeftScrollingTextGroup(ItemGroup):
         deleted. If all messages are within the right-hand perimeter, a new message
         will be generated.
         """
-        self._set_speed()
         super().update()
 
         for message in self.sprites():
@@ -166,12 +165,6 @@ class LeftScrollingTextGroup(ItemGroup):
                 outline.rect.midleft = start_position
                 outline.rect.x += xy_shift[0]
                 outline.rect.y += xy_shift[1]
-
-    def _set_speed(self) -> None:
-        fps_actual = self._settings["timings"]["fps_actual"]
-        if fps_actual > 0:
-            speed = self._settings["messages"]["scroll_speed"] / fps_actual
-            self._scrolling_movement.speed = speed
 
     def _calculate_start_position(self, message_text: str) -> tuple[int, int]:
         messages_dict = self._settings["messages"]

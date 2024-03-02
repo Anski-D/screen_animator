@@ -131,10 +131,9 @@ class TestLeftScrollingTextGroup:
         )
 
     def test_update_create(
-        self, monkeypatch, example_left_scrolling_text_group: LeftScrollingTextGroup
+        self, example_left_scrolling_text_group: LeftScrollingTextGroup
     ) -> None:
         """New `Item` is created once previous has fully emerged."""
-        monkeypatch.setattr(LeftScrollingTextGroup, "_set_speed", lambda x: None)
         item_group = example_left_scrolling_text_group
         item_group._settings["messages"]["outline_width"] = 0
         item_group.create()
@@ -151,7 +150,6 @@ class TestLeftScrollingTextGroup:
         self, monkeypatch, example_left_scrolling_text_group: LeftScrollingTextGroup
     ) -> None:
         """`Item` is deleted once fully off screen."""
-        monkeypatch.setattr(LeftScrollingTextGroup, "_set_speed", lambda x: None)
         item_group = example_left_scrolling_text_group
         item_group.create()
         item = item_group.sprites()[0]
