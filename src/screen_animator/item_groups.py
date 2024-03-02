@@ -206,14 +206,28 @@ class RandomImagesGroup(ItemGroup):
 
     _movement = RandomMovement
 
+    def __init__(self, settings_manager: SettingsManager, perimeter: pg.Rect) -> None:
+        """
+        Initialize group with a settings manager and defined perimeter.
+
+        Parameters
+        ----------
+        settings_manager
+            Manages settings.
+        perimeter
+            Defines outer perimeter.
+        """
+        super().__init__(settings_manager, perimeter)
+
+        self._random_movement = self._movement()
+
     def create(self) -> None:
         """Create all the image items, set to move randomly within the perimeter."""
         image_settings = self._settings["images"]
-        movement = self._movement()
         for _ in range(image_settings["number"]):
             for image in image_settings["images"]:
                 log.debug("Creating `pygame` image: %s", image)
-                Item(self, image, self._perimeter, movement)
+                Item(self, image, self._perimeter, self._random_movement)
 
     def update(self):
         """
