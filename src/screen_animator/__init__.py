@@ -28,7 +28,11 @@ def copy_examples() -> None:
 
 ImageLoader.register_loader(".svg", SvgTypeImageLoader)
 
-item_groups = [partial(TimedItemGroup, wrapped_group=ColorChangeGroup), partial(TimedItemGroup, wrapped_group=RandomImagesGroup), LeftScrollingTextGroup]
+item_groups = [
+    partial(TimedItemGroup, wrapped_group=ColorChangeGroup),
+    partial(TimedItemGroup, wrapped_group=RandomImagesGroup),
+    LeftScrollingTextGroup,
+]
 for item_group in item_groups:
     ScreenAnimator.register_item_group(item_group)
 

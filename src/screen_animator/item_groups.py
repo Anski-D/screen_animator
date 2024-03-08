@@ -46,8 +46,8 @@ class ItemGroup(ABC, pg.sprite.Group):
     @abstractmethod
     def create(self) -> None:
         """Create item(s) in group, to be implemented by sublasses."""
-        
-        
+
+
 class TimedItemGroup(ItemGroup):
     """
     Manages when wrapped groups are updated.
@@ -62,7 +62,12 @@ class TimedItemGroup(ItemGroup):
 
     _time: int
 
-    def __init__(self, settings_manager: SettingsManager, perimeter: pg.Rect, wrapped_group: type[ItemGroup]) -> None:
+    def __init__(
+        self,
+        settings_manager: SettingsManager,
+        perimeter: pg.Rect,
+        wrapped_group: type[ItemGroup],
+    ) -> None:
         """
         Initialise group with settings and context perimeter.
 
@@ -92,7 +97,9 @@ class TimedItemGroup(ItemGroup):
         time = pg.time.get_ticks()
         time_diff = time - self._time
         if time_diff >= self._settings["timings"]["color_change_time"] * 1000:
-            log.debug("%s milliseconds passed, updating %s", time_diff, type(self).__name__)
+            log.debug(
+                "%s milliseconds passed, updating %s", time_diff, type(self).__name__
+            )
             self._wrapped_group.update()
             self._time = time
 
