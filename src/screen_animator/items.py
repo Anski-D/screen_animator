@@ -1,10 +1,26 @@
 import random
 import logging
-from typing import Optional
 
 import pygame as pg
 
 log = logging.getLogger(__name__)
+
+
+class Movement:
+    """
+    A way of moving a `Movable` object.
+
+    Methods
+    -------
+    move
+        Move a `Movable`, to be implemented by sublasses.
+    """
+
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}()"
+
+    def move(self, item: "Item") -> None:
+        """Sublasses should implement a means of moving `Movable`."""
 
 
 class Item(pg.sprite.Sprite):
@@ -35,7 +51,7 @@ class Item(pg.sprite.Sprite):
         group: pg.sprite.Group,
         content: pg.Surface,
         perimeter: pg.Rect,
-        movement: Optional["Movement"] = None,
+        movement: Movement | None = None,
     ) -> None:
         """Initialise a wrapped `Sprite` that has a group, render-capable content, a defined
         perimeter and a `Movement` type.
@@ -73,23 +89,6 @@ class Item(pg.sprite.Sprite):
     def update(self, *_args, **_kwargs) -> None:
         """Update the instance (move it)."""
         self.move()
-
-
-class Movement:
-    """
-    A way of moving a `Movable` object.
-
-    Methods
-    -------
-    move
-        Move a `Movable`, to be implemented by sublasses.
-    """
-
-    def __repr__(self) -> str:
-        return f"{type(self).__name__}()"
-
-    def move(self, item: Item) -> None:
-        """Sublasses should implement a means of moving `Movable`."""
 
 
 class ScrollingMovement(Movement):
