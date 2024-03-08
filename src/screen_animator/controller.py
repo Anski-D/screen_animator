@@ -1,4 +1,5 @@
 import logging
+from typing import Optional
 
 import pygame as pg
 
@@ -59,7 +60,7 @@ class Controller:
         """bool: Controller is ready to run."""
         return self._view.initialized and self._model.initialized
 
-    def init(self, display_size: tuple[int, int] = None) -> None:
+    def init(self, display_size: Optional[tuple[int, int]] = None) -> None:
         """
         Manually finish initializing the controller.
 

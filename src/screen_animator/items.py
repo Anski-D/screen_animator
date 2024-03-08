@@ -1,5 +1,6 @@
 import random
 import logging
+from typing import Optional
 
 import pygame as pg
 
@@ -34,7 +35,7 @@ class Item(pg.sprite.Sprite):
         group: pg.sprite.Group,
         content: pg.Surface,
         perimeter: pg.Rect,
-        movement: "Movement" = None,
+        movement: Optional["Movement"] = None,
     ) -> None:
         """Initialise a wrapped `Sprite` that has a group, render-capable content, a defined
         perimeter and a `Movement` type.

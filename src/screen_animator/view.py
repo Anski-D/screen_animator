@@ -1,5 +1,5 @@
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 import pygame as pg
 
@@ -77,7 +77,7 @@ class View(Observer):
         """bool: View is ready to use."""
         return self._initialized
 
-    def init(self, display_size: tuple[int, int] = None) -> None:
+    def init(self, display_size: Optional[tuple[int, int]] = None) -> None:
         """
         Manually finish initializing the display.
 

@@ -1,5 +1,6 @@
 from pathlib import Path
 import logging
+from typing import Optional
 
 import pygame as pg
 
@@ -28,7 +29,7 @@ class ScreenAnimator:
     def __init__(
         self,
         input_file: str | Path = "inputs.toml",
-        display_size: tuple[int, int] = None,
+        display_size: Optional[tuple[int, int]] = None,
         flipped: bool = False,
         fps_on: bool = False,
         debug: bool = False,
