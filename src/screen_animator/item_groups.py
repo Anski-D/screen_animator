@@ -46,6 +46,55 @@ class ItemGroup(ABC, pg.sprite.Group):
     @abstractmethod
     def create(self) -> None:
         """Create item(s) in group, to be implemented by sublasses."""
+        
+        
+class TimedItemGroup(ItemGroup):
+    """
+    Manages when wrapped groups are updated.
+
+    Methods
+    -------
+    create
+        Create items in wrapped `ItemGroup`, set the initial time tracked by `pygame`.
+    update
+        Change wrapped `ItemGroup`.
+    """
+
+    _time: int
+
+    def __init__(self, settings_manager: SettingsManager, perimeter: pg.Rect, wrapped_group: type[ItemGroup]) -> None:
+        """
+        Initialise group with settings and context perimeter.
+
+        Parameters
+        ----------
+        settings_manager
+            Dictionary of settings.
+        perimeter
+            Outer limit of 'canvas' in `pygame`.
+        """
+        super().__init__(settings_manager, perimeter)
+        self._wrapped_group_type = wrapped_group
+        log.info("Creating %s", self)
+
+        self._wrapped_group = wrapped_group(settings_manager, perimeter)
+
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}({self._settings_manager}, {self._perimeter}, {self._wrapped_group_type})"
+
+    def create(self) -> None:
+        """Run wrapped instance method, set the elapsed time according to `pygame`."""
+        self._wrapped_group.create()
+        self._time = pg.time.get_ticks()
+
+    def update(self):
+        """Check elapsed time, run wrapped instance update if ready."""
+        time = pg.time.get_ticks()
+        time_diff = time - self._time
+        if time_diff >= self._settings["timings"]["color_change_time"] * 1000:
+            log.debug("%s milliseconds passed, updating %s", time_diff, type(self).__name__)
+            self._wrapped_group.update()
+            self._time = time
 
 
 class LeftScrollingTextGroup(ItemGroup):
@@ -265,74 +314,17 @@ class ColorChangeGroup(ItemGroup):
 
     Methods
     -------
-    create
-        Set the initial time tracked by `pygame`.
     update
         Change colors if time threshold reached.
     """
 
-    _time: int
-
     def create(self) -> None:
-        """Set the elapsed time according to `pygame`."""
-        self._time = pg.time.get_ticks()
+        "Do nothing."
+        pass
 
     def update(self):
-        """Check elapsed time, update colors if sufficient time has passed."""
-        time = pg.time.get_ticks()
-        time_diff = time - self._time
-        if time_diff >= self._settings["timings"]["color_change_time"] * 1000:
-            log.debug("%s milliseconds passed, updating colors", time_diff)
-            self._settings_manager.set_colors()
-            self._time = time
-
-
-class TimedRandomImagesGroup(ItemGroup):
-    """
-    Wraps a RandomImagesGroup and restricts updates to defined elapsed time threshold.
-
-    Methods
-    -------
-    create
-        Initialize a group with randomly moving images, set initial time.
-    update
-        Update wrapped group if time threshold reached.
-    """
-
-    _wrapped_group_type = RandomImagesGroup
-    _time: int
-
-    def __init__(self, settings_manager: SettingsManager, perimeter: pg.Rect) -> None:
-        """
-        Initialize the group with a settings manager and outer perimeter.
-
-        Parameters
-        ----------
-        settings_manager
-            Manages settings.
-        perimeter
-            Defines outer perimeter.
-        """
-        super().__init__(settings_manager, perimeter)
-
-        self._wrapped_group = self._wrapped_group_type(settings_manager, perimeter)
-
-    def sprites(self):
-        return self._wrapped_group.sprites()
-
-    def create(self) -> None:
-        """Create the wrapped group of random moving images."""
-        self._wrapped_group.create()
-        self._time = pg.time.get_ticks()
-
-    def update(self):
-        """Update item positions if time threshold met."""
-        time = pg.time.get_ticks()
-        time_diff = time - self._time
-        if time_diff >= self._settings["timings"]["image_change_time"] * 1000:
-            log.debug("%s milliseconds passed, updating image positions", time_diff)
-            self._wrapped_group.update()
-            self._time = time
+        """Update colors."""
+        self._settings_manager.set_colors()
 
 
 class FpsCounterGroup(ItemGroup):
