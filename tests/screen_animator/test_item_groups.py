@@ -6,9 +6,9 @@ import pygame as pg
 
 from screen_animator.settings import SettingsManager
 from screen_animator.item_groups import (
-    LeftScrollingTextGroup,
-    RandomImagesGroup,
-    ColorChangeGroup,
+    LeftScrollingTextItemGroup,
+    RandomImagesItemGroup,
+    ColorChangeItemGroup,
 )
 
 
@@ -37,15 +37,15 @@ class TestLeftScrollingTextGroup:
     @pytest.fixture
     def example_left_scrolling_text_group(
         self, example_settings_manager: SettingsManager, example_perimeter: pg.Rect
-    ) -> LeftScrollingTextGroup:
+    ) -> LeftScrollingTextItemGroup:
         """Provide example `LeftScrollingTextGroup`."""
-        return LeftScrollingTextGroup(example_settings_manager, example_perimeter)
+        return LeftScrollingTextItemGroup(example_settings_manager, example_perimeter)
 
     @pytest.mark.parametrize("num_of_items", [1, 2, 3, 5, 8])
     def test_create_no_outline(
         self,
         num_of_items: int,
-        example_left_scrolling_text_group: LeftScrollingTextGroup,
+        example_left_scrolling_text_group: LeftScrollingTextItemGroup,
     ) -> None:
         """No outlines are created."""
         item_group = example_left_scrolling_text_group
@@ -60,7 +60,7 @@ class TestLeftScrollingTextGroup:
     def test_create_with_outline(
         self,
         num_of_items: int,
-        example_left_scrolling_text_group: LeftScrollingTextGroup,
+        example_left_scrolling_text_group: LeftScrollingTextItemGroup,
         example_settings_dict_with_tuples: dict,
     ) -> None:
         """Outlines are created for each `Item`."""
@@ -78,7 +78,7 @@ class TestLeftScrollingTextGroup:
 
     def test_create_position_x(
         self,
-        example_left_scrolling_text_group: LeftScrollingTextGroup,
+        example_left_scrolling_text_group: LeftScrollingTextItemGroup,
         example_perimeter: pg.Rect,
         example_settings_dict_with_tuples: dict,
     ) -> None:
@@ -94,7 +94,7 @@ class TestLeftScrollingTextGroup:
 
     def test_create_position_y_start_middle(
         self,
-        example_left_scrolling_text_group: LeftScrollingTextGroup,
+        example_left_scrolling_text_group: LeftScrollingTextItemGroup,
         example_perimeter: pg.Rect,
         example_settings_dict_with_tuples: dict,
     ) -> None:
@@ -109,7 +109,7 @@ class TestLeftScrollingTextGroup:
     def test_create_position_y_not_start_middle(
         self,
         repeat: int,
-        example_left_scrolling_text_group: LeftScrollingTextGroup,
+        example_left_scrolling_text_group: LeftScrollingTextItemGroup,
         example_perimeter: pg.Rect,
         example_settings_dict_with_tuples: dict,
     ) -> None:
@@ -131,7 +131,7 @@ class TestLeftScrollingTextGroup:
         )
 
     def test_update_create(
-        self, example_left_scrolling_text_group: LeftScrollingTextGroup
+        self, example_left_scrolling_text_group: LeftScrollingTextItemGroup
     ) -> None:
         """New `Item` is created once previous has fully emerged."""
         item_group = example_left_scrolling_text_group
@@ -147,7 +147,7 @@ class TestLeftScrollingTextGroup:
         assert len(item_group.sprites()) == 2
 
     def test_update_delete(
-        self, monkeypatch, example_left_scrolling_text_group: LeftScrollingTextGroup
+        self, monkeypatch, example_left_scrolling_text_group: LeftScrollingTextItemGroup
     ) -> None:
         """`Item` is deleted once fully off screen."""
         item_group = example_left_scrolling_text_group
@@ -156,14 +156,14 @@ class TestLeftScrollingTextGroup:
         width = item.rect.width + item_group._perimeter.width
         speed = 100
         item._movement.speed = speed
-        monkeypatch.setattr(LeftScrollingTextGroup, "create", lambda x: None)
+        monkeypatch.setattr(LeftScrollingTextItemGroup, "create", lambda x: None)
         for _ in range(math.ceil(width / speed)):
             item_group.update()
 
         assert len(item_group.sprites()) == 0
 
     def test_generate_message(
-        self, example_left_scrolling_text_group: LeftScrollingTextGroup
+        self, example_left_scrolling_text_group: LeftScrollingTextItemGroup
     ) -> None:
         """Message is generated as `Surface`."""
         assert isinstance(
@@ -175,7 +175,7 @@ class TestLeftScrollingTextGroup:
 
     def test_set_outline(
         self,
-        example_left_scrolling_text_group: LeftScrollingTextGroup,
+        example_left_scrolling_text_group: LeftScrollingTextItemGroup,
         example_perimeter: pg.Rect,
         example_settings_dict_with_tuples: dict,
     ) -> None:
@@ -193,13 +193,13 @@ class TestRandomImagesGroup:
     @pytest.fixture
     def example_random_images_group(
         self, example_settings_manager: SettingsManager, example_perimeter: pg.Rect
-    ) -> RandomImagesGroup:
+    ) -> RandomImagesItemGroup:
         """Provide example `RandomImagesGroup`."""
-        return RandomImagesGroup(example_settings_manager, example_perimeter)
+        return RandomImagesItemGroup(example_settings_manager, example_perimeter)
 
     def test_create(
         self,
-        example_random_images_group: RandomImagesGroup,
+        example_random_images_group: RandomImagesItemGroup,
         example_settings_dict_with_tuples: dict,
     ) -> None:
         """Create correct number of images."""
@@ -214,7 +214,7 @@ class TestRandomImagesGroup:
 
     @pytest.mark.parametrize("repeats", [1, 2, 3, 5, 8])
     def test_update(
-        self, repeats: int, example_random_images_group: RandomImagesGroup
+        self, repeats: int, example_random_images_group: RandomImagesItemGroup
     ) -> None:
         """Images are confined to perimeter when positions update."""
         item_group = example_random_images_group
@@ -231,11 +231,11 @@ class TestColorChangeGroup:
     @pytest.fixture
     def example_color_change_group(
         self, example_settings_manager: SettingsManager, example_perimeter: pg.Rect
-    ) -> ColorChangeGroup:
+    ) -> ColorChangeItemGroup:
         """Provide example `ColorChangeGroup`."""
-        return ColorChangeGroup(example_settings_manager, example_perimeter)
+        return ColorChangeItemGroup(example_settings_manager, example_perimeter)
 
-    def test_create(self, example_color_change_group: ColorChangeGroup) -> None:
+    def test_create(self, example_color_change_group: ColorChangeItemGroup) -> None:
         """Time is saved."""
         item_group = example_color_change_group
         item_group.create()
@@ -247,7 +247,7 @@ class TestColorChangeGroup:
         "sleep, output", [(1, True), (2, True), (3, True), (5, False), (8, False)]
     )
     def test_update(
-        self, sleep: int, output: bool, example_color_change_group: ColorChangeGroup
+        self, sleep: int, output: bool, example_color_change_group: ColorChangeItemGroup
     ) -> None:
         """Time value updated after sufficient time elapsed."""
         item_group = example_color_change_group

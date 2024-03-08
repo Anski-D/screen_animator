@@ -6,7 +6,7 @@ import pygame as pg
 from .settings import SettingsManager, SettingsImporter
 from .model import Model
 from .controller import Controller
-from .item_groups import ItemGroup, FpsCounterGroup
+from .item_groups import ItemGroup, FpsCounterItemGroup
 
 log = logging.getLogger(__name__)
 
@@ -100,5 +100,5 @@ class ScreenAnimator:
 
     def _fps_on(self) -> None:
         log.info("FPS will be displayed")
-        if FpsCounterGroup not in self._item_groups:
-            self._item_groups.append(FpsCounterGroup)
+        if FpsCounterItemGroup not in self._item_groups:
+            self._item_groups.append(FpsCounterItemGroup)

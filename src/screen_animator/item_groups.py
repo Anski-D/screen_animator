@@ -104,7 +104,7 @@ class TimedItemGroup(ItemGroup):
             self._time = time
 
 
-class LeftScrollingTextGroup(ItemGroup):
+class LeftScrollingTextItemGroup(ItemGroup):
     """
     Group of items that will scroll messages to the left.
 
@@ -241,7 +241,7 @@ class LeftScrollingTextGroup(ItemGroup):
         return self._perimeter.midright
 
 
-class RandomImagesGroup(ItemGroup):
+class RandomImagesItemGroup(ItemGroup):
     """
     Group of items that will remove randomly within the specified perimeter.
 
@@ -315,7 +315,7 @@ class RandomImagesGroup(ItemGroup):
         self.add(group)
 
 
-class ColorChangeGroup(ItemGroup):
+class ColorChangeItemGroup(ItemGroup):
     """
     Manages when colors are changed.
 
@@ -326,15 +326,14 @@ class ColorChangeGroup(ItemGroup):
     """
 
     def create(self) -> None:
-        "Do nothing."
-        pass
+        """Do nothing."""
 
     def update(self):
         """Update colors."""
         self._settings_manager.set_colors()
 
 
-class FpsCounterGroup(ItemGroup):
+class FpsCounterItemGroup(ItemGroup):
     """
     Counter for fps.
 
