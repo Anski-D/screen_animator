@@ -242,7 +242,7 @@ class TestColorChangeItemGroup:
         )
 
     def test_create(
-        self, example_color_change_item_group: ColorChangeItemGroup
+        self, example_color_change_item_group: TimedItemGroup
     ) -> None:
         """Time is saved."""
         item_group = example_color_change_item_group
@@ -258,7 +258,7 @@ class TestColorChangeItemGroup:
         self,
         sleep: int,
         output: bool,
-        example_color_change_item_group: ColorChangeItemGroup,
+        example_color_change_item_group: TimedItemGroup,
     ) -> None:
         """Time value updated after sufficient time elapsed."""
         item_group = example_color_change_item_group
