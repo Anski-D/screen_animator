@@ -87,6 +87,9 @@ class TimedItemGroup(ItemGroup):
     def __repr__(self) -> str:
         return f"{type(self).__name__}({self._settings_manager}, {self._perimeter}, {self._wrapped_group_type})"
 
+    def sprites(self):
+        return self._wrapped_group.sprites()
+
     def create(self) -> None:
         """Run wrapped instance method, set the elapsed time according to `pygame`."""
         self._wrapped_group.create()
