@@ -38,10 +38,6 @@ class ItemGroup(ABC, pg.sprite.Group):
         self._settings_manager = settings_manager
         self._settings = self._settings_manager.settings
         self._perimeter = perimeter
-        log.info("Creating %s", self)
-
-    def __repr__(self) -> str:
-        return f"{type(self).__name__}({self._settings_manager}, {self._perimeter})"
 
     @abstractmethod
     def create(self) -> None:
@@ -133,12 +129,16 @@ class LeftScrollingTextItemGroup(ItemGroup):
             Defines outer perimeter.
         """
         super().__init__(settings_manager, perimeter)
+        log.info("Creating %s", self)
 
         speed = (
             self._settings["messages"]["scroll_speed"]
             // self._settings["timings"]["fps"]
         )
         self._scrolling_movement = self._movement(speed, "left")
+
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}({self._settings_manager}, {self._perimeter})"
 
     def create(self) -> None:
         """
@@ -270,8 +270,12 @@ class RandomImagesItemGroup(ItemGroup):
             Defines outer perimeter.
         """
         super().__init__(settings_manager, perimeter)
+        log.info("Creating %s", self)
 
         self._random_movement = self._movement()
+
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}({self._settings_manager}, {self._perimeter})"
 
     def create(self) -> None:
         """Create all the image items, set to move randomly within the perimeter."""
@@ -328,6 +332,23 @@ class ColorChangeItemGroup(ItemGroup):
         Change colors if time threshold reached.
     """
 
+    def __init__(self, settings_manager: SettingsManager, perimeter: pg.Rect) -> None:
+        """
+        Initialize group with a settings manager and defined perimeter.
+
+        Parameters
+        ----------
+        settings_manager
+            Manages settings.
+        perimeter
+            Defines outer perimeter.
+        """
+        super().__init__(settings_manager, perimeter)
+        log.info("Creating %s", self)
+
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}({self._settings_manager}, {self._perimeter})"
+
     def create(self) -> None:
         """Do nothing."""
 
@@ -347,6 +368,23 @@ class FpsCounterItemGroup(ItemGroup):
     update
         Update the fps counter.
     """
+
+    def __init__(self, settings_manager: SettingsManager, perimeter: pg.Rect) -> None:
+        """
+        Initialize group with a settings manager and defined perimeter.
+
+        Parameters
+        ----------
+        settings_manager
+            Manages settings.
+        perimeter
+            Defines outer perimeter.
+        """
+        super().__init__(settings_manager, perimeter)
+        log.info("Creating %s", self)
+
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}({self._settings_manager}, {self._perimeter})"
 
     def create(self) -> None:
         """Create the fps counter."""
