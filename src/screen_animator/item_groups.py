@@ -405,11 +405,9 @@ class FpsCounterItemGroup(ItemGroup):
 
     def create(self) -> None:
         """Create the fps counter."""
-        messages_dict = self._settings["messages"]
-        fps_font = pg.font.SysFont(messages_dict["typeface"], 36)
+        fps_font = pg.font.SysFont(None, 36)
         fps_actual = self._settings["timings"]["fps_actual"]
-        text = f"{fps_actual:.2f}"
-        content = fps_font.render(text, messages_dict["anti-aliasing"], (0, 0, 0))
+        content = fps_font.render(f"{fps_actual:.2f}", False, (0, 0, 0))
         fps = Item(self, content, self._perimeter)
         fps.rect.x = 10
         fps.rect.y = 10
