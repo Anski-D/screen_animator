@@ -84,7 +84,8 @@ class ScreenAnimator:
         """Run `screen_animator`."""
         log.info("Creating key components of %s", type(self).__name__)
         pg.init()
-        settings_manager = SettingsManager(SettingsImporter(), self._settings_file)
+        settings_manager = SettingsManager(self._settings_file)
+        settings_manager.setup_settings()
         model = Model(settings_manager, self._item_groups)
         controller = Controller(settings_manager, model, self._flipped)
         controller.init(self._display_size)

@@ -114,6 +114,8 @@ class SettingsManager:
 
     Methods
     -------
+    setup_settings
+        Import settings from defined file and set initial settings.
     set_colors
         Randomly set the background, text, and text outline color.
     generate_message_text
@@ -122,22 +124,20 @@ class SettingsManager:
         Create the `pygame` font instance for rendering text.
     """
 
-    def __init__(self, importer: SettingsImporter, settings_file: str | Path) -> None:
+    _importer = SettingsImporter
+    _settings: dict
+
+    def __init__(self, settings_file: str | Path) -> None:
         """
         Initialise by using a settings importer to import a specified file,
         then setting up some initial settings.
 
         Parameters
         ----------
-        importer
-            Low-level importer for reading and validating settings file.
         settings_file
             Path to settings file.
         """
-        self._importer = importer
         self._settings_file = settings_file
-        self._settings = self._import_settings(self._settings_file)
-        self._setup_settings()
 
     def __repr__(self) -> str:
         return f"{type(self).__name__}({self._importer}, {self._settings_file})"
@@ -146,6 +146,14 @@ class SettingsManager:
     def settings(self) -> dict:
         """Dictionary of all settings."""
         return self._settings
+
+    def setup_settings(self):
+        """Import settings and set initial values as required."""
+        self._import_settings()
+        self.set_colors()
+        self.set_font()
+        self._load_images()
+        self._settings["timings"]["fps_actual"] = self._settings["timings"]["fps"]
 
     def set_colors(self) -> None:
         """Set background, text, and text outline colors from the available options
@@ -198,14 +206,9 @@ class SettingsManager:
             messages_dict["size"],
         )
 
-    def _import_settings(self, settings_file: str | Path) -> dict:
-        return self._importer.import_settings(settings_file)
-
-    def _setup_settings(self):
-        self.set_colors()
-        self.set_font()
-        self._load_images()
-        self._settings["timings"]["fps_actual"] = self._settings["timings"]["fps"]
+    def _import_settings(self) -> None:
+        importer = self._importer()
+        self._settings = importer.import_settings(self._settings_file)
 
     def _load_images(self):
         images_dict = self._settings["images"]
