@@ -19,18 +19,20 @@ def example_settings_manager(
 ) -> SettingsManager:
     """Provide example `SettingsManager`."""
     pg.init()
-    settings_dict = example_settings_dict_with_tuples
     monkeypatch.setattr(
         SettingsManager,
         "_import_settings",
-        lambda x, y: settings_dict,
+        lambda x: None,
     )
     monkeypatch.setattr(SettingsManager, "_load_images", lambda x: None)
-    settings_manager = SettingsManager(None, None)
+    settings_manager = SettingsManager(None)
+    settings_manager._settings = example_settings_dict_with_tuples
+    settings_manager.setup_settings()
     settings_manager.settings["images"]["images"] = [
         example_content
         for _ in range(len(example_settings_dict_with_tuples["images"]["sources"]))
     ]
+
     return settings_manager
 
 
