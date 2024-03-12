@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "screen-animator"
-version = "0.9.0"
+version = "0.9.1a0"
 description = ""
 license = "MIT"
 authors = ["David Anscombe <dave.anski@gmail.com>"]
@@ -42,8 +42,3 @@ black = "^24.1.1"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-
-[tool.pytest.ini_options]
-markers = [
-    "slow: tests that are slow",
-]
