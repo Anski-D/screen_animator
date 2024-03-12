@@ -18,7 +18,6 @@ def example_settings_manager(
     monkeypatch, example_settings_dict_with_tuples: dict, example_content: pg.Surface
 ) -> SettingsManager:
     """Provide example `SettingsManager`."""
-    pg.init()
     monkeypatch.setattr(
         SettingsManager,
         "_import_settings",

@@ -2,6 +2,8 @@ import pygame as pg
 import pytest
 from screen_animator.settings import SettingsManager
 
+pg.init()
+
 
 @pytest.fixture
 def example_settings_dict() -> dict:
