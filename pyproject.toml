@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "screen-animator"
-version = "0.9.0a6"
+version = "0.9.0"
 description = ""
 license = "MIT"
 authors = ["David Anscombe <dave.anski@gmail.com>"]
