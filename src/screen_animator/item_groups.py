@@ -98,6 +98,7 @@ class TimedItemGroup(ItemGroup):
         return f"{type(self).__name__}({self._settings_manager}, {self._perimeter}, {self._wrapped_group_type})"
 
     def sprites(self):
+        """Sprites in wrapped group."""
         return self._wrapped_group.sprites()
 
     def create(self) -> None:
