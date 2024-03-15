@@ -34,6 +34,6 @@ item_groups = [
     LeftScrollingTextItemGroup,
 ]
 for item_group in item_groups:
-    ScreenAnimator.register_item_group(item_group)
+    ScreenAnimator.register_item_group(item_group)  # type: ignore
 
 example_files = ["inputs.toml", "script.py"]

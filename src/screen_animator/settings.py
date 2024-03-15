@@ -9,7 +9,7 @@ from .image_loading import ImageLoader
 try:
     import tomllib
 except ModuleNotFoundError:
-    import tomli as tomllib
+    import tomli as tomllib  # type: ignore
 
 log = logging.getLogger(__name__)
 

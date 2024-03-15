@@ -95,7 +95,7 @@ class Controller:
             if is_quit(event):
                 log.info("Telling %s components to quit", type(self).__name__)
                 for component in [self._view, self._model]:
-                    component.quit()
+                    component.quit()  # type: ignore
 
 
 def is_quit(event: pg.event.Event) -> bool:
