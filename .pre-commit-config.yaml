@@ -25,11 +25,13 @@ repos:
 -   repo: local
     hooks:
     -   id: tox check not slow
-        name: tox-check-not-slow
+        name: tox-check-pre-commit
         entry: tox -p -- -m "not slow"
         language: system
         types: [python]
         pass_filenames: false
+        stages:
+            - pre-commit
     -   id: tox check
         name: tox-pre-push
         entry: tox -p
