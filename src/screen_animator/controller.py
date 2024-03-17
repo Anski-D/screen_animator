@@ -111,6 +111,7 @@ def is_quit(event: pg.event.Event) -> bool:
     -------
         True if a quit event, False otherwise.
     """
+    # pylint: disable=no-member
     if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_q):
         log.info("Quit command received")
         return True

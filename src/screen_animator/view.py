@@ -88,7 +88,9 @@ class View(Observer):
         """
         log.info("Finishing initialization of %s", type(self).__name__)
         if display_size is None:
-            self._screen = pg.display.set_mode((0, 0), pg.FULLSCREEN)
+            self._screen = pg.display.set_mode(
+                (0, 0), pg.FULLSCREEN  # pylint: disable=no-member
+            )
         else:
             self._screen = pg.display.set_mode(display_size)
         pg.display.set_caption("Screen_Animator")
