@@ -18,7 +18,7 @@ copy_examples = "screen_animator:copy_examples"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-pygame-ce = "^2.4.0"
+pygame-ce = "^2.3.0"
 numpy = "^1.26.4"
 cairosvg = "^2.7.1"
 svgutils = "^0.3.4"
