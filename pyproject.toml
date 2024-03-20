@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "screen_animator"
-version = "0.9.1"
+version = "0.9.2a0"
 description = "`Screen_Animator` is a Python package to generate animated messages and images on a screen, with a focus on the Raspberry Pi."
 license = "MIT"
 authors = ["David Anscombe <dave.anski@gmail.com>"]
