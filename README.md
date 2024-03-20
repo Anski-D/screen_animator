@@ -52,7 +52,7 @@ The following parameters can then be provided to the `ScreenAnimator` class:
 : Optional boolean, default is `False`. Sets whether the entire rendered animation should be flipped vertically (more accurately, rotated 180&deg;).
 
 > [!NOTE]
-> Some Raspberry Pi displays might need to be rotated 180&deg;. This can be done within Raspberry Pi OS configuration files, but by setting this parameter in Python results tend to be much smoother.
+> Some Raspberry Pi displays might need to be rotated 180&deg;. This can be done within Raspberry Pi OS configuration files, but setting this parameter in Python tends to give a much smoother animation.
 
 `fps_on`
 : Optional boolean, default is `False`. When turned on, a small frames-per-second (FPS) counter is displayed. Useful for finding how high the FPS can be raised.
@@ -119,12 +119,12 @@ This `TOML` file is used as an input to the main `ScreenAnimator` class. All set
 : Number of each image to render on the screen.
 
 * `reposition_attempts`
-: Integer value determines how many times the package should try to position all the images randomly to prevent overlaps. When there are a lot of images and/or images are large, this can be difficult. This value limits how many times the package will try to avoid overlaps for each image before moving on to the next. Negative values place no limit and could cause the animation to become stuck. Large values could cause the animations to periodically stall or essentially become stuck. Low values might result in some image overlap. A value of `0` allows uncontolled overlap.
+: Integer value determines how many times the package should try to position all the images randomly to prevent overlaps. When there are a lot of images and/or images are large, this can be difficult. This value limits how many times the package will try to avoid overlaps for each image before moving on to the next. Negative values place no limit and could cause the animation to become stuck. Large values could cause the animations to periodically stall or essentially become stuck. Low values might result in some image overlap. A value of `0` allows uncontrolled overlap.
 
 `timings`
 
 * `fps`
-: Sets the frames-per-second target for the animation to run out. The target keeps the animations running smoothly, but too high a value might not be achievable and could cause scroll-speed inconsistencies. Low values could cause a stuttering effect.
+: Sets the FPS target for the animation to run out. The target keeps the animations running smoothly, but too high a value might not be achievable and could cause scroll-speed inconsistencies. Low values could cause a stuttering effect.
 
 * `image_change_time`
 : Time in seconds between changes in image positioning.
