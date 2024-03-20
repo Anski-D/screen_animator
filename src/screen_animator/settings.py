@@ -79,7 +79,7 @@ class SettingsImporter:
                     "start_middle": bool(),
                 },
                 "images": {
-                    "sources": list() | str(),
+                    "sources": list(),
                     "number": int(),
                     "reposition_attempts": int(),
                 },
