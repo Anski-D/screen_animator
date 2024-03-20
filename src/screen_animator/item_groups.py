@@ -316,8 +316,8 @@ class RandomImagesItemGroup(TimeableItemGroup):
             self.remove(image)
             image.update()
             reattempts_allowed = self._settings["images"]["reposition_attempts"]
-            while (
-                pg.sprite.spritecollideany(image, group) and abs(reattempts_allowed) > 0
+            while abs(reattempts_allowed) > 0 and pg.sprite.spritecollideany(
+                image, group
             ):
                 image.update()
                 reattempts_allowed -= 1
@@ -335,6 +335,7 @@ class RandomImagesItemGroup(TimeableItemGroup):
             num_items,
             reattempts_taken_total,
         )
+        random.shuffle(group)
         self.add(group)
 
 
