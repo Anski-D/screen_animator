@@ -24,6 +24,13 @@ pip install git+https://github.com/Anski-D/screen_animator.git
 
 Alternatively, you can clone the package and deal with it as you wish.
 
+### Additional dependencies on Raspberry Pi
+
+You might find additional dependencies are required on Raspberry Pi OS (as well as other Linux distributions). Install the additional dependencies by [following the `pygame-ce` compilation docs on GitHub](https://github.com/pygame-community/pygame-ce/wiki/Compiling-on-Linux).
+
+> [!NOTE]
+> Installing the dependencies should be enough, cloning and building `pygame-ce` should not be necessary.
+
 ## Usage
 If the package is installed as recommended above, a command line script will be available that will copy an example `script.py` and `inputs.toml` file into your current directory.
 
@@ -36,8 +43,25 @@ copy_examples
 ### `script.py`
 This Python script is a basic example of how to use the package, and is really all you need to get going.
 
+The following parameters can then be provided to the `ScreenAnimator` class:
+
+`input_file`
+: Required. The location of the `TOML` file that contains the settings for the package.
+
+`flipped`
+: Optional boolean, default is `False`. Sets whether the entire rendered animation should be flipped vertically (more accurately, rotated 180&deg;).
+
 > [!NOTE]
-> The reference `log_setup` function enables basic logging handling, but other logging handlers can be set-up by the user instead or omitted entirely.
+> Some Raspberry Pi displays might need to be rotated 180&deg;. This can be done within Raspberry Pi OS configuration files, but by setting this parameter in Python results tend to be much smoother.
+
+`fps_on`
+: Optional boolean, default is `False`. When turned on, a small frames-per-second (FPS) counter is displayed. Useful for finding how high the FPS can be raised.
+
+`debug`
+: Optional boolean, default is `False`. When turned on, animation is put in a 800x480 window, and the FPS counter is turned on (regardless of the setting above). Does not alter any logging levels.
+
+> [!NOTE]
+> The provided `log_setup` function enables basic logging handling, but other logging handlers can be set-up by the user instead or omitted entirely.
 
 ### `inputs.toml`
 This `TOML` file is used as an input to the main `ScreenAnimator` class. All settings are required or the input validation will fail, and are explained below.
@@ -107,3 +131,11 @@ This `TOML` file is used as an input to the main `ScreenAnimator` class. All set
 
 * `color_change_time`
 : Time in seconds between changes in color. This will only change background and text color, not outline. Color changes might not always be apparent due to the way random selections work.
+
+## Contact
+
+Contact me at <dave.anski@gmail.com>.
+
+## License
+
+This project uses the following license: [MIT](https://github.com/Anski-D/screen_animator/blob/main/LICENSE)
