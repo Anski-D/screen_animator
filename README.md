@@ -105,7 +105,7 @@ This `TOML` file is used as an input to the main `ScreenAnimator` class. All set
 : Text outlines are copies of the message, rendered behind the main text. More copies looks better, but too many can cause lag/stuttering. Can also be set to `0` to turn off outline.
 
 * `outline_colors`
-: A list of colors to use as the outline. Each color should be provided as a list of RGB. At least one color should be provided, even if the `outline_width` or `outline_copies` is set to `0`,
+: A list of colors to use as the outline. Each color should be provided as a list of RGB. At least one color should be provided, even if the `outline_width` or `outline_copies` is set to `0`.
 
 * `start_middle`
 : A boolean to set whether the scrolling message should always be centered vertically on the screen or can be positioned anywhere vertically.
