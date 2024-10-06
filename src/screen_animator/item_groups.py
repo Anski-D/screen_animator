@@ -5,8 +5,8 @@ from abc import ABC, abstractmethod
 import pygame as pg
 import numpy as np
 
-from .items import ScrollingMovement, RandomMovement, Item
-from .settings import SettingsManager
+from screen_animator.items import ScrollingMovement, RandomMovement, Item
+from screen_animator.settings import SettingsManager
 
 log = logging.getLogger(__name__)
 

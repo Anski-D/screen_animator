@@ -7,8 +7,8 @@ from pathlib import Path
 import pygame as pg
 
 import example
-from .controller import Controller
-from .item_groups import (
+from screen_animator.controller import Controller
+from screen_animator.item_groups import (
     ItemGroup,
     TimedItemGroup,
     LeftScrollingTextItemGroup,
@@ -16,9 +16,9 @@ from .item_groups import (
     RandomImagesItemGroup,
     FpsCounterItemGroup,
 )
-from .image_loading import ImageLoader, SvgTypeImageLoader
-from .model import Model
-from .settings import SettingsManager
+from screen_animator.image_loading import ImageLoader, SvgTypeImageLoader
+from screen_animator.model import Model
+from screen_animator.settings import SettingsManager
 
 log = logging.getLogger(__name__)
 

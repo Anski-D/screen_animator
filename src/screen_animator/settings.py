@@ -4,7 +4,7 @@ import logging
 
 import pygame as pg
 
-from .image_loading import ImageLoader
+from screen_animator.image_loading import ImageLoader
 
 try:
     import tomllib

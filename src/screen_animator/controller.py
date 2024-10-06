@@ -2,9 +2,9 @@ import logging
 
 import pygame as pg
 
-from .model import Model
-from .view import View
-from .settings import SettingsManager
+from screen_animator.model import Model
+from screen_animator.view import View
+from screen_animator.settings import SettingsManager
 
 log = logging.getLogger(__name__)
 

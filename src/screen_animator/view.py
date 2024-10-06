@@ -3,8 +3,8 @@ from typing import TYPE_CHECKING
 
 import pygame as pg
 
-from .observers import Observer
-from .model import Model
+from screen_animator.observers import Observer
+from screen_animator.model import Model
 
 if TYPE_CHECKING:
     from .controller import Controller
