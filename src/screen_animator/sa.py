@@ -29,7 +29,7 @@ class ScreenAnimator:
         self,
         input_file: str | Path = "inputs.toml",
         display_size: tuple[int, int] | None = None,
-        flipped: bool = False,
+        rotated: bool = False,
         fps_on: bool = False,
         debug: bool = False,
     ) -> None:
@@ -42,8 +42,8 @@ class ScreenAnimator:
             File with user settings, default is `inputs.toml` in working directory.
         display_size : optional
             User-defined screen size (default is None, full-screen).
-        flipped : optional
-            Flip display across the horizontal axis (default is False).
+        rotated : optional
+            Rotate display 180 degrees (default is False).
         fps_on
             FPS counter is on (default is False).
         debug
@@ -55,8 +55,8 @@ class ScreenAnimator:
             "Display size set to: %s",
             "fullscreen" if self._display_size is None else self._display_size,
         )
-        self._flipped = flipped
-        log.info("Output will be flipped vertically: %s", self._flipped)
+        self.rotated = rotated
+        log.info("Output will be rotated 180 degrees: %s", self.rotated)
         self._is_fps_on = fps_on
         if self._is_fps_on:
             self._fps_on()
@@ -70,7 +70,7 @@ class ScreenAnimator:
             f"{type(self).__name__}("
             f"{self._settings_file},"
             f" {self._display_size},"
-            f" {self._flipped},"
+            f" {self.rotated},"
             f" {self._is_fps_on},"
             f" {self._debug})"
         )
@@ -87,7 +87,7 @@ class ScreenAnimator:
         settings_manager = SettingsManager(self._settings_file)
         settings_manager.setup_settings()
         model = Model(settings_manager, self._item_groups)
-        controller = Controller(settings_manager, model, self._flipped)
+        controller = Controller(settings_manager, model, self.rotated)
         controller.init(self._display_size)
         log.info("Setting %s to run", type(self).__name__)
         controller.run()

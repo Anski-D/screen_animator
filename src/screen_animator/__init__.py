@@ -88,7 +88,7 @@ def main() -> None:
 
     screen_animator = ScreenAnimator(
         input_file=args.input,
-        flipped=args.rotate,
+        rotated=args.rotate,
         fps_on=args.fps,
         debug=args.debug,
     )
