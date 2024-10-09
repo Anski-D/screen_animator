@@ -7,11 +7,11 @@ The package uses an input and image files to generate messages that scroll right
 
 ## Prerequisites
 
-Consider the following before using the library:
+Consider the following before using the app:
 * You have a machine which supports graphical output.
-* You have an appropriate operating system. The library is primarily designed for use on a Raspberry Pi, but will work on Linux or Windows PCs.
+* You have an appropriate operating system. The app is primarily designed for use on a Raspberry Pi, but will work on Linux or Windows PCs.
 * You have Python version 3.10 or higher.
-* You have read the guidance for using the library, below.
+* You have read the guidance for using the app, below.
 
 ## Installation
 It is recommended you install `Screen_Animator` into its own virtual environment. Guidance on setting up virtual environments is available online.
@@ -32,36 +32,41 @@ You might find additional dependencies are required on Raspberry Pi OS (as well 
 > Installing the dependencies should be enough, cloning and building `pygame-ce` should not be necessary.
 
 ## Usage
-If the package is installed as recommended above, a command line script will be available that will copy an example `script.py` and `inputs.toml` file into your current directory.
+If the package is installed as recommended above, a command line script will be available that will copy an example `inputs.toml` file into your current directory.
 
 Simply run:
 
-```
+```commandline
 copy_examples
 ```
 
-### `script.py`
-This Python script is a basic example of how to use the package, and is really all you need to get going.
+[Further information for specifying inputs in `inputs.toml` is provided.](#inputstoml)
 
-The following parameters can then be provided to the `ScreenAnimator` class:
+The app can then be used by simply running, in the activated virtual environment:
 
-`input_file`
-: Required. The location of the `TOML` file that contains the settings for the package.
+```commandline
+sa_run
+```
 
-`flipped`
-: Optional boolean, default is `False`. Sets whether the entire rendered animation should be flipped vertically (more accurately, rotated 180&deg;).
+The following options can also be specified:
+
+`-i, --input`
+: Optional, default is `inputs.toml`. The location of the `TOML` file that contains the settings for the package.
+
+`-r, --rotate`
+: Optional flag, off by default. Sets whether the entire rendered animation should be rotated 180&deg;.
 
 > [!NOTE]
 > Some Raspberry Pi displays might need to be rotated 180&deg;. This can be done within Raspberry Pi OS configuration files, but setting this parameter in Python tends to give a much smoother animation.
 
-`fps_on`
-: Optional boolean, default is `False`. When turned on, a small frames-per-second (FPS) counter is displayed. Useful for finding how high the FPS can be raised.
+`-f, --fps`
+: Optional flag, off by default. When turned on, a small frames-per-second (FPS) counter is displayed. Useful for finding how high the FPS can be raised.
 
-`debug`
-: Optional boolean, default is `False`. When turned on, animation is put in a 800x480 window, and the FPS counter is turned on (regardless of the setting above). Does not alter any logging levels.
+`-d, --debug`
+: Optional flag, off by default. When turned on, animation is put in a 800x480 window, and the FPS counter is turned on (regardless of the setting above). Does not alter any logging levels.
 
-> [!NOTE]
-> The provided `log_setup` function enables basic logging handling, but other logging handlers can be set-up by the user instead or omitted entirely.
+`-l, --logging`
+: Optional, off by default. No logging (other than minimal to the console) will occur unless specified. Once specified, logging will occur to a local log file. Examples include `INFO` or `DEBUG`.
 
 ### `inputs.toml`
 This `TOML` file is used as an input to the main `ScreenAnimator` class. All settings are required or the input validation will fail, and are explained below.
@@ -105,7 +110,7 @@ This `TOML` file is used as an input to the main `ScreenAnimator` class. All set
 : Text outlines are copies of the message, rendered behind the main text. More copies looks better, but too many can cause lag/stuttering. Can also be set to `0` to turn off outline.
 
 * `outline_colors`
-: A list of colors to use as the outline. Each color should be provided as a list of RGB. At least one color should be provided, even if the `outline_width` or `outline_copies` is set to `0`.
+: A list of colors to use as the outline. Each color should be provided as a list of RGB. At least one color should be provided, even if the `outline_width` or `outline_copies` is set to `0`,
 
 * `start_middle`
 : A boolean to set whether the scrolling message should always be centered vertically on the screen or can be positioned anywhere vertically.
