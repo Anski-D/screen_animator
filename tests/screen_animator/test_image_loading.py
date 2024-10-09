@@ -25,6 +25,7 @@ class TestImageLoader:
             RasterTypeImageLoader, "load_image", lambda x, y, z: "raster"
         )
         monkeypatch.setattr(SvgTypeImageLoader, "load_image", lambda x, y, z: "svg")
+        ImageLoader.register_loader(".svg", SvgTypeImageLoader)
         image_loader = ImageLoader()
         image = image_loader.load_image(input_file, -1)
 
