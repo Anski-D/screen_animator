@@ -3,10 +3,10 @@ import logging
 
 import pygame as pg
 
-from .settings import SettingsManager
-from .model import Model
-from .controller import Controller
-from .item_groups import ItemGroup, FpsCounterItemGroup
+from screen_animator.settings import SettingsManager
+from screen_animator.model import Model
+from screen_animator.controller import Controller
+from screen_animator.item_groups import ItemGroup, FpsCounterItemGroup
 
 log = logging.getLogger(__name__)
 
