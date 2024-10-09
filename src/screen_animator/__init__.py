@@ -1,10 +1,6 @@
-import logging
 import importlib.resources
 import shutil
 from functools import partial
-from pathlib import Path
-
-import pygame as pg
 
 import example
 from screen_animator.controller import Controller
