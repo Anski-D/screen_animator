@@ -58,7 +58,7 @@ def parse_args() -> argparse.Namespace:
         "-d",
         "--debug",
         action="store_true",
-        help="turns on debug mode which limits output to windowed mode, increases logging, and renders FPS counter (optional, off by default)",
+        help="turns on debug mode which limits output to windowed mode and renders FPS counter (optional, off by default)",
     )
     parser.add_argument(
         "-l",
