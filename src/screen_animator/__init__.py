@@ -25,9 +25,10 @@ EXAMPLE_FILES = ["inputs.toml"]
 def copy_examples() -> None:
     """Copies example files to working directory."""
     for file in EXAMPLE_FILES:
-        example_path = importlib.resources.path(example, file)
-        with example_path as path:
-            shutil.copy2(path, path.name)
+        with importlib.resources.as_file(
+            importlib.resources.files(example).joinpath(file)
+        ) as f:
+            shutil.copy2(f, f.name)
 
 
 def parse_args() -> argparse.Namespace:
