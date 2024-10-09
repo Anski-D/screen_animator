@@ -19,7 +19,7 @@ from screen_animator.settings import SettingsManager
 from screen_animator.log_setup import setup_logging
 from screen_animator.sa import ScreenAnimator
 
-EXAMPLE_FILES = ["inputs.toml", "script.py"]
+EXAMPLE_FILES = ["inputs.toml"]
 
 
 def copy_examples() -> None:
