@@ -22,3 +22,9 @@ screen_animator = "screen_animator:main"
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[tool.uv]
+dev-dependencies = [
+    "pre-commit>=4.0.1",
+    "tox>=4.21.2",
+]
