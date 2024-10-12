@@ -3,14 +3,21 @@ name = "screen_animator"
 version = "0.10.1a0"
 description = "Python package to generate animated messages and images on a screen, with a focus on the Raspberry Pi."
 license = "MIT"
-authors = ["Dave Anscombe <dave.anski@gmail.com>"]
+authors = [
+    {name="Dave Anscombe", email="dave.anski@gmail.com"},
+]
 readme = "README.md"
 repository = "https://github.com/Anski-D/screen_animator"
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+    "cairosvg>=2.7.1",
+    "numpy>=2.1.2",
+    "pygame-ce>=2.5.1",
+    "svgutils>=0.3.4",
+]
 
 [project.scripts]
-screen-animator = "screen_animator:main"
+screen_animator = "screen_animator:main"
 
 [build-system]
 requires = ["hatchling"]
