@@ -3,7 +3,7 @@ import shutil
 from functools import partial
 import argparse
 
-import example
+# import example
 from screen_animator.controller import Controller
 from screen_animator.item_groups import (
     ItemGroup,
@@ -26,7 +26,7 @@ def copy_examples() -> None:
     """Copies example files to working directory."""
     for file in EXAMPLE_FILES:
         with importlib.resources.as_file(
-            importlib.resources.files(example).joinpath(file)
+            importlib.resources.files("example").joinpath(file)
         ) as f:
             shutil.copy2(f, f.name)
 

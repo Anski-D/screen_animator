@@ -4,7 +4,7 @@ version = "0.10.1a0"
 description = "Python package to generate animated messages and images on a screen, with a focus on the Raspberry Pi."
 license = "MIT"
 authors = [
-    {name="Dave Anscombe", email="dave.anski@gmail.com"},
+    { name="Dave Anscombe", email="dave.anski@gmail.com" },
 ]
 readme = "README.md"
 repository = "https://github.com/Anski-D/screen_animator"
