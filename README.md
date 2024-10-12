@@ -45,7 +45,7 @@ copy_examples
 The app can then be used by simply running, in the activated virtual environment:
 
 ```commandline
-sa_run
+screen_animator
 ```
 
 The following options can also be specified:
