@@ -541,6 +541,7 @@ dependencies = [
     { name = "numpy" },
     { name = "pygame-ce" },
     { name = "svgutils" },
+    { name = "tomli", marker = "python_full_version < '3.11'" },
 ]
 
 [package.dev-dependencies]
@@ -555,6 +556,7 @@ requires-dist = [
     { name = "numpy", specifier = ">=2.1.2" },
     { name = "pygame-ce", specifier = ">=2.5.1" },
     { name = "svgutils", specifier = ">=0.3.4" },
+    { name = "tomli", marker = "python_full_version < '3.11'", specifier = ">=2.0.2" },
 ]
 
 [package.metadata.requires-dev]

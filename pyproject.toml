@@ -14,10 +14,12 @@ dependencies = [
     "numpy>=2.1.2",
     "pygame-ce>=2.5.1",
     "svgutils>=0.3.4",
+    "tomli>=2.0.2; python_version<'3.11'"
 ]
 
 [project.scripts]
 screen_animator = "screen_animator:main"
+copy_examples = "screen_animator:copy_examples"
 
 [build-system]
 requires = ["hatchling"]
