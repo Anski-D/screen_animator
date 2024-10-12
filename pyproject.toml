@@ -1,42 +1,17 @@
-[tool.poetry]
+[project]
 name = "screen_animator"
-version = "0.10.0"
-description = "`Screen_Animator` is a Python package to generate animated messages and images on a screen, with a focus on the Raspberry Pi."
+version = "0.10.1a0"
+description = "Python package to generate animated messages and images on a screen, with a focus on the Raspberry Pi."
 license = "MIT"
 authors = ["Dave Anscombe <dave.anski@gmail.com>"]
 readme = "README.md"
 repository = "https://github.com/Anski-D/screen_animator"
-packages = [
-    { include = "screen_animator", from = "src" },
-]
-include = [
-    { path = "example", format = ["sdist", "wheel"] },
-]
+requires-python = ">=3.10"
+dependencies = []
 
-[tool.poetry.scripts]
-sa_run = "screen_animator:main"
-copy_examples = "screen_animator:copy_examples"
-
-[tool.poetry.dependencies]
-python = "^3.10"
-pygame-ce = "^2.3.0"
-numpy = "^1.26.4"
-cairosvg = "^2.7.1"
-svgutils = "^0.3.4"
-tomli = { version = "^2.0.1", python = "<3.11" }
-
-[tool.poetry.group.test]
-optional = true
-
-[tool.poetry.group.test.dependencies]
-tox = "^4.14.1"
-
-[tool.poetry.group.dev]
-optional = true
-
-[tool.poetry.group.dev.dependencies]
-pre-commit = "^3.6.2"
+[project.scripts]
+screen-animator = "screen_animator:main"
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
