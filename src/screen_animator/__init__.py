@@ -19,16 +19,11 @@ from screen_animator.settings import SettingsManager
 from screen_animator.log_setup import setup_logging
 from screen_animator.sa import ScreenAnimator
 
-EXAMPLE_FILES = ["inputs.toml"]
-
 
 def copy_examples() -> None:
-    """Copies example files to working directory."""
-    for file in EXAMPLE_FILES:
-        with importlib.resources.as_file(
-            importlib.resources.files(example).joinpath(file)
-        ) as f:
-            shutil.copy2(f, f.name)
+    """Copies `example` files to working directory."""
+    for file_path in importlib.resources.files(example).iterdir():
+        shutil.copy2(str(file_path), file_path.name)
 
 
 def parse_args() -> argparse.Namespace:
