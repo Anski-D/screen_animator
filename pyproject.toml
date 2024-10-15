@@ -2,7 +2,7 @@
 name = "screen_animator"
 version = "0.10.3a0"
 description = "Python package to generate animated messages and images on a screen, with a focus on the Raspberry Pi."
-license = "MIT"
+license = { file = "LICENSE" }
 authors = [
     { name="Dave Anscombe", email="dave.anski@gmail.com" },
 ]
