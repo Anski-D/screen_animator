@@ -2,7 +2,7 @@
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v5.0.0
     hooks:
     -   id: trailing-whitespace
     -   id: end-of-file-fixer
@@ -12,20 +12,20 @@ repos:
     -   id: check-ast
     -   id: check-docstring-first
 -   repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.4.21
+    rev: 0.4.24
     hooks:
     -   id: uv-lock
 -   repo: https://github.com/psf/black
-    rev: 24.3.0
+    rev: 24.10.0
     hooks:
     -   id: black
 -   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.9.0
+    rev: v1.12.0
     hooks:
     -   id: mypy
         files: ^src/
 -   repo: https://github.com/PyCQA/pylint
-    rev: v3.1.0
+    rev: v3.3.1
     hooks:
     -   id: pylint
         args: [-j 0, --errors-only, --disable=import-error]
