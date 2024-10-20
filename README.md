@@ -1,4 +1,7 @@
-## Screen_Animator
+# Screen_Animator
+
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+
 `Screen_Animator` is a Python package to generate animated messages and images on a screen, with a focus on the Raspberry Pi.
 
 The package uses an input and image files to generate messages that scroll right-to-left, and images that will randomly position themselves in the background, all while the colors continually change.
