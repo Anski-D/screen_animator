@@ -153,7 +153,7 @@ class EventManager:
         Parameters
         ----------
         listener
-            Callable to be called when event type found in queue.
+            Instance to be notified when event type found in queue.
         event_type
             Event type to be associated with listener.
         """
@@ -171,7 +171,7 @@ class EventManager:
         Parameters
         ----------
         event_type
-            Callable listener to be removed.
+            Listener to be removed.
         """
         log.info("Removing listener `%s` from observers", event_type)
         if event_type in self._listeners:
