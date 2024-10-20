@@ -1,4 +1,7 @@
 import logging
+from typing import Any
+from collections.abc import Callable
+from weakref import WeakKeyDictionary
 
 import pygame as pg
 
@@ -117,3 +120,50 @@ def is_quit(event: pg.event.Event) -> bool:
         return True
 
     return False
+
+
+class EventManager:
+    _listeners: WeakKeyDictionary[int, Callable[[], Any]]
+
+    def __init__(self) -> None:
+        """Create a dictionary with weak keys for storing listeners."""
+        self._listeners = WeakKeyDictionary()
+
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}()"
+
+    def register_listener(self, listener: Callable[[], Any], event_type: int) -> None:
+        """
+        Add a listener.
+
+        Parameters
+        ----------
+        listener
+            Callable to be called when event type found in queue.
+        event_type
+            Event type to be associated with listener.
+        """
+        log.info(
+            "Adding listener `%s` to listeners for event type `%s`",
+            listener,
+            event_type,
+        )
+        self._listeners[event_type] = listener
+
+    def remove_listener(self, event_type: int) -> None:
+        """
+        Remove specified listener from being notified of any further changes.
+
+        Parameters
+        ----------
+        event_type
+            Callable listener to be removed.
+        """
+        log.info("Removing listener `%s` from observers", event_type)
+        if event_type in self._listeners:
+            del self._listeners[event_type]
+
+    def manage_events(self) -> None:
+        """Process `pygame` queue of events for events of interest."""
+        for event in pg.event.get():
+            self._listeners.get(event.type, lambda *args: None)()
