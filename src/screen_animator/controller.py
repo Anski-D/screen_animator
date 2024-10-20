@@ -1,7 +1,6 @@
 import logging
-from typing import Any
-from collections.abc import Callable
 from weakref import WeakKeyDictionary
+from abc import ABC, abstractmethod
 
 import pygame as pg
 
@@ -10,6 +9,21 @@ from screen_animator.view import View
 from screen_animator.settings import SettingsManager
 
 log = logging.getLogger(__name__)
+
+
+class Listener(ABC):
+    """
+    Inheriting classes can be notified of changes they are listening for.
+
+    Methods
+    -------
+    notify
+        Do something when notified, to be implemented by subclasses.
+    """
+
+    @abstractmethod
+    def notify(self) -> None:
+        """Subclasses should implement behavior for when notified."""
 
 
 class Controller:
@@ -123,7 +137,7 @@ def is_quit(event: pg.event.Event) -> bool:
 
 
 class EventManager:
-    _listeners: WeakKeyDictionary[int, Callable[[], Any]]
+    _listeners: WeakKeyDictionary[tuple[int, ...], Listener]
 
     def __init__(self) -> None:
         """Create a dictionary with weak keys for storing listeners."""
@@ -132,7 +146,7 @@ class EventManager:
     def __repr__(self) -> str:
         return f"{type(self).__name__}()"
 
-    def register_listener(self, listener: Callable[[], Any], event_type: int) -> None:
+    def register_listener(self, listener: Listener, event_type: tuple[int, ...] | int) -> None:
         """
         Add a listener.
 
@@ -148,9 +162,9 @@ class EventManager:
             listener,
             event_type,
         )
-        self._listeners[event_type] = listener
+        self._listeners[tuple(event_type)] = listener
 
-    def remove_listener(self, event_type: int) -> None:
+    def remove_listener(self, event_type: tuple[int, ...] | int) -> None:
         """
         Remove specified listener from being notified of any further changes.
 
@@ -161,9 +175,13 @@ class EventManager:
         """
         log.info("Removing listener `%s` from observers", event_type)
         if event_type in self._listeners:
-            del self._listeners[event_type]
+            del self._listeners[tuple(event_type)]
 
     def manage_events(self) -> None:
         """Process `pygame` queue of events for events of interest."""
         for event in pg.event.get():
-            self._listeners.get(event.type, lambda *args: None)()
+            keys = tuple(key for key in (event.type, event.dict.get("key")) if key is not None)
+            listener = self._listeners.get(keys)
+
+            if listener is not None:
+                listener.notify()
