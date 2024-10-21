@@ -1,29 +1,13 @@
 import logging
-from weakref import WeakKeyDictionary
-from abc import ABC, abstractmethod
 
 import pygame as pg
 
+from screen_animator.listener import Listener
 from screen_animator.model import Model
 from screen_animator.view import View
 from screen_animator.settings import SettingsManager
 
 log = logging.getLogger(__name__)
-
-
-class Listener(ABC):
-    """
-    Inheriting classes can be notified of changes they are listening for.
-
-    Methods
-    -------
-    notify
-        Do something when notified, to be implemented by subclasses.
-    """
-
-    @abstractmethod
-    def notify(self) -> None:
-        """Subclasses should implement behavior for when notified."""
 
 
 class Controller:
@@ -89,6 +73,7 @@ class Controller:
         self._view.init(display_size)
         self._model.init(self._view.perimeter)
         self._model.add_observer(self._view)
+        self._setup_event_manager()
         log.info("%s initialization complete", type(self).__name__)
 
     def run(self) -> None:
@@ -102,10 +87,22 @@ class Controller:
         while self.initialized:
             self._clock.tick(timings_dict["fps"])
             self._model.update()
-            self._check_events()
+            self._event_manager.manage_events()
             timings_dict["fps_actual"] = self._clock.get_fps()
 
         log.info("Run method complete, %s stopping", type(self).__name__)
+
+    def quit(self) -> None:
+        log.info("Telling %s components to quit", type(self).__name__)
+        for component in [self._view, self._model]:
+            component.quit()  # type: ignore
+
+    def _setup_event_manager(self) -> None:
+        self._event_manager = EventManager()
+        self._event_manager.register_listener(QuitEvent(self), pg.QUIT)
+        self._event_manager.register_listener(QuitEvent(self), (pg.KEYDOWN, pg.K_q))
+        self._event_manager.register_listener(self._view, update_event_type := pg.event.custom_type())
+        self._model.update_event_type = update_event_type
 
     def _check_events(self) -> None:
         for event in pg.event.get():
@@ -137,11 +134,11 @@ def is_quit(event: pg.event.Event) -> bool:
 
 
 class EventManager:
-    _listeners: WeakKeyDictionary[tuple[int, ...], Listener]
+    _listeners: dict[tuple[int, ...], Listener]
 
     def __init__(self) -> None:
         """Create a dictionary with weak keys for storing listeners."""
-        self._listeners = WeakKeyDictionary()
+        self._listeners = {}
 
     def __repr__(self) -> str:
         return f"{type(self).__name__}()"
@@ -157,12 +154,13 @@ class EventManager:
         event_type
             Event type to be associated with listener.
         """
+        event_type = (event_type,) if isinstance(event_type, int) else event_type
         log.info(
             "Adding listener `%s` to listeners for event type `%s`",
             listener,
             event_type,
         )
-        self._listeners[tuple(event_type)] = listener
+        self._listeners[event_type] = listener
 
     def remove_listener(self, event_type: tuple[int, ...] | int) -> None:
         """
@@ -173,9 +171,10 @@ class EventManager:
         event_type
             Listener to be removed.
         """
+        event_type = (event_type,) if isinstance(event_type, int) else event_type
         log.info("Removing listener `%s` from observers", event_type)
         if event_type in self._listeners:
-            del self._listeners[tuple(event_type)]
+            del self._listeners[event_type]
 
     def manage_events(self) -> None:
         """Process `pygame` queue of events for events of interest."""
@@ -185,3 +184,14 @@ class EventManager:
 
             if listener is not None:
                 listener.notify()
+
+
+class QuitEvent(Listener):
+    def __init__(self, controller: Controller) -> None:
+        self._controller = controller
+
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}()"
+
+    def notify(self) -> None:
+        self._controller.quit()

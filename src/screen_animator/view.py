@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 import pygame as pg
 
 from screen_animator.observers import Observer
+from .listener import Listener
 from screen_animator.model import Model
 
 if TYPE_CHECKING:
@@ -12,7 +13,7 @@ if TYPE_CHECKING:
 log = logging.getLogger(__name__)
 
 
-class View(Observer):
+class View(Listener):
     """
     Display for the `screen_animator` model.
 
