@@ -1,4 +1,5 @@
 import logging
+from collections.abc import Iterable
 
 import pygame as pg
 
@@ -98,17 +99,29 @@ class Controller:
 
     def _setup_event_manager(self) -> None:
         self._event_manager = EventManager()
-        self._event_manager.register_listener(QuitEvent(self), pg.QUIT)
-        self._event_manager.register_listener(QuitEvent(self), (pg.KEYDOWN, pg.K_q))
+        self._event_manager.register_listener(QuitEvent([self]), pg.QUIT)
+        self._event_manager.register_listener(QuitEvent([self]), (pg.KEYDOWN, pg.K_q))
         self._event_manager.register_listener(self._view, update_event_type := pg.event.custom_type())
         self._model.update_event_type = update_event_type
 
 
 class EventManager:
+    """
+    Manages events and handles events.
+
+    Methods
+    -------
+    register_listener
+        Register a listener for events.
+    remove_listener
+        Remove a listener for events.
+    manage_events
+        Manage all events.
+    """
     _listeners: dict[tuple[int, ...], Listener]
 
     def __init__(self) -> None:
-        """Create a dictionary with weak keys for storing listeners."""
+        """Create a dictionary for storing listeners."""
         self._listeners = {}
 
     def __repr__(self) -> str:
@@ -158,11 +171,23 @@ class EventManager:
 
 
 class QuitEvent(Listener):
-    def __init__(self, controller: Controller) -> None:
-        self._controller = controller
+    """
+    Custom listener for quit events.
+
+    Methods
+    -------
+    notify
+        Tell associated class instances to quit.
+    """
+
+    def __init__(self, quitters: Iterable) -> None:
+        """Store iterable of instances to quit when required."""
+        self._quitters = quitters
 
     def __repr__(self) -> str:
         return f"{type(self).__name__}()"
 
     def notify(self) -> None:
-        self._controller.quit()
+        """Iterate over instance to tell to quit."""
+        for quitter in self._quitters:
+            quitter.quit()
