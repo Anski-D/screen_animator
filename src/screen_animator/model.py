@@ -53,6 +53,8 @@ class Model(Observable):
         self._initialized = False
         log.info("Creating %s", self)
 
+        self.update_event_type = 0
+
     def __repr__(self) -> str:
         return (
             f"{type(self).__name__}({self._settings_manager}, {self._item_group_types})"
@@ -89,7 +91,7 @@ class Model(Observable):
         for item_group in self.item_groups:
             item_group.update()
 
-        self.notify_observers()
+        pg.event.post(pg.Event(self.update_event_type))
 
     def quit(self) -> None:
         """Set the model as ready to quit."""
