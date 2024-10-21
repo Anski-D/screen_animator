@@ -72,7 +72,6 @@ class Controller:
         log.info("Finishing initialization of %s", type(self).__name__)
         self._view.init(display_size)
         self._model.init(self._view.perimeter)
-        self._model.add_observer(self._view)
         self._setup_event_manager()
         log.info("%s initialization complete", type(self).__name__)
 

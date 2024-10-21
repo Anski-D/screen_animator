@@ -2,14 +2,13 @@ import logging
 
 import pygame as pg
 
-from screen_animator.observers import Observable
 from screen_animator.settings import SettingsManager
 from screen_animator.item_groups import ItemGroup
 
 log = logging.getLogger(__name__)
 
 
-class Model(Observable):
+class Model:
     """
     Main engine for `screen_animator`.
 

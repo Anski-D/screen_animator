@@ -3,7 +3,6 @@ from typing import TYPE_CHECKING
 
 import pygame as pg
 
-from screen_animator.observers import Observer
 from .listener import Listener
 from screen_animator.model import Model
 
