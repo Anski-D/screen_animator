@@ -103,34 +103,6 @@ class Controller:
         self._event_manager.register_listener(self._view, update_event_type := pg.event.custom_type())
         self._model.update_event_type = update_event_type
 
-    def _check_events(self) -> None:
-        for event in pg.event.get():
-            if is_quit(event):
-                log.info("Telling %s components to quit", type(self).__name__)
-                for component in [self._view, self._model]:
-                    component.quit()  # type: ignore
-
-
-def is_quit(event: pg.event.Event) -> bool:
-    """
-    Checks if the `pygame` event is a quit event.
-
-    Parameters
-    ----------
-    event
-        `pygame` event to be checked.
-
-    Returns
-    -------
-        True if a quit event, False otherwise.
-    """
-    # pylint: disable=no-member
-    if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_q):
-        log.info("Quit command received")
-        return True
-
-    return False
-
 
 class EventManager:
     _listeners: dict[tuple[int, ...], Listener]
