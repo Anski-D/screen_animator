@@ -4,11 +4,13 @@ from functools import partial
 import argparse
 from pathlib import Path
 import logging
+from collections.abc import Sequence, Iterable, Iterator
 
 import pygame as pg
 
+from screen_animator.listener import Listener
 from screen_animator.log_setup import setup_logging
-from screen_animator.controller import Controller
+from screen_animator.controller import Controller, EventManager
 from screen_animator.item_groups import (
     ItemGroup,
     TimedItemGroup,
@@ -20,8 +22,16 @@ from screen_animator.item_groups import (
 from screen_animator.image_loading import ImageLoader, SvgTypeImageLoader
 from screen_animator.model import Model
 from screen_animator.settings import SettingsManager
+from screen_animator.view import View
 
 log = logging.getLogger(__name__)
+
+DEBUG_DISPLAY_SIZE = 800, 400
+ITEM_GROUPS = [
+    partial(TimedItemGroup, wrapped_group=ColorChangeItemGroup),
+    partial(TimedItemGroup, wrapped_group=RandomImagesItemGroup),
+    LeftScrollingTextItemGroup,
+]
 
 
 def copy_examples() -> None:
@@ -30,7 +40,7 @@ def copy_examples() -> None:
         shutil.copy2(str(file_path), file_path.name)
 
 
-def parse_args() -> argparse.Namespace:
+def _parse_args() -> argparse.Namespace:
     """Processes the command line arguments provided."""
     parser = argparse.ArgumentParser(
         prog="ScreenAnimator",
@@ -67,7 +77,40 @@ def parse_args() -> argparse.Namespace:
         help="activates logging and sets logging level (off by default, writes to log file when on)",
     )
 
-    return parser.parse_args()
+    args = parser.parse_args()
+    args.fps = args.debug
+
+    return args
+
+
+def _set_display_size(display_size: Sequence[float] | None = None) -> pg.Surface:
+    if display_size is None:
+        return pg.display.set_mode((0, 0), pg.FULLSCREEN)
+
+    return pg.display.set_mode(display_size)
+
+
+def _create_settings_manager(settings_file: str | Path) -> SettingsManager:
+    settings_manager = SettingsManager(settings_file)
+    settings_manager.setup_settings()
+
+    return settings_manager
+
+
+def _create_model(settings_manager: SettingsManager, item_group_types: Iterable[type[ItemGroup]]) -> Model:
+    return Model(settings_manager, item_group_types)
+
+
+def _create_view(model: Model, controller: Controller, settings: dict, rotated: bool) -> View:
+    return View(model, controller, settings, rotated)
+
+
+def _create_event_manager(event_type_listeners: Iterator[tuple[tuple[int, int] | int, Listener]]) -> EventManager:
+    event_manager = EventManager()
+    for event_type, listener in event_type_listeners:
+        event_manager.register_listener(listener, event_type)
+
+    return event_manager
 
 
 class ScreenAnimator:
@@ -166,26 +209,19 @@ class ScreenAnimator:
 
 def main() -> None:
     """Main app function to run."""
-    ImageLoader.register_loader(".svg", SvgTypeImageLoader)
-
-    groups = [
-        partial(TimedItemGroup, wrapped_group=ColorChangeItemGroup),
-        partial(TimedItemGroup, wrapped_group=RandomImagesItemGroup),
-        LeftScrollingTextItemGroup,
-    ]
-
-    for group in groups:
-        ScreenAnimator.register_item_group(group)  # type: ignore
-
-    args = parse_args()
+    args = _parse_args()
     setup_logging(args.logging)
 
-    screen_animator = ScreenAnimator(
-        input_file=args.input,
-        rotated=args.rotate,
-        fps_on=args.fps,
-        debug=args.debug,
-    )
+    ImageLoader.register_loader(".svg", SvgTypeImageLoader)
+
+    item_groups = ITEM_GROUPS + [FpsCounterItemGroup] if args.fps else ITEM_GROUPS
+
+    display = _set_display_size(DEBUG_DISPLAY_SIZE if args.debug else None)
+    settings_manager = _create_settings_manager(args.input)
+    model = _create_model(settings_manager, item_groups)
+    screen_animator = Controller(settings_manager, model, args.rotated)
+    view = _create_view(model, screen_animator, settings_manager.settings, args.rotated)
+
     screen_animator.run()
 
 
