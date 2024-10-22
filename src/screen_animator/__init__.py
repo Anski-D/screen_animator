@@ -27,7 +27,7 @@ from screen_animator.view import View
 log = logging.getLogger(__name__)
 
 DEBUG_DISPLAY_SIZE = 800, 400
-ITEM_GROUPS = [
+ITEM_GROUP_TYPES = [
     partial(TimedItemGroup, wrapped_group=ColorChangeItemGroup),
     partial(TimedItemGroup, wrapped_group=RandomImagesItemGroup),
     LeftScrollingTextItemGroup,
@@ -97,8 +97,8 @@ def _create_settings_manager(settings_file: str | Path) -> SettingsManager:
     return settings_manager
 
 
-def _create_model(settings_manager: SettingsManager, item_group_types: Iterable[type[ItemGroup]]) -> Model:
-    return Model(settings_manager, item_group_types)
+def _create_model(settings_manager: SettingsManager, item_group_types: Iterable[type[ItemGroup]], display: pg.Surface) -> Model:
+    return Model(settings_manager, item_group_types, display.get_rect())
 
 
 def _create_view(model: Model, controller: Controller, settings: dict, rotated: bool) -> View:
@@ -214,11 +214,11 @@ def main() -> None:
 
     ImageLoader.register_loader(".svg", SvgTypeImageLoader)
 
-    item_groups = ITEM_GROUPS + [FpsCounterItemGroup] if args.fps else ITEM_GROUPS
+    item_group_types = ITEM_GROUP_TYPES + [FpsCounterItemGroup] if args.fps else ITEM_GROUP_TYPES
 
     display = _set_display_size(DEBUG_DISPLAY_SIZE if args.debug else None)
     settings_manager = _create_settings_manager(args.input)
-    model = _create_model(settings_manager, item_groups)
+    model = Model(settings_manager, item_group_types, display.get_rect())
     screen_animator = Controller(settings_manager, model, args.rotated)
     view = _create_view(model, screen_animator, settings_manager.settings, args.rotated)
 
