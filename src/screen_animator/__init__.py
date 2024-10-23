@@ -88,6 +88,8 @@ def _set_display_size(display_size: tuple[float, float] | None = None) -> pg.Sur
     if display_size is None:
         return pg.display.set_mode((0, 0), pg.FULLSCREEN)
 
+    pg.display.set_caption("ScreenAnimator")
+
     return pg.display.set_mode(display_size)
 
 
@@ -121,7 +123,9 @@ def main() -> None:
     model = Model(settings_manager, item_group_types, display.get_rect())
     view = View(model, display, settings_manager.settings, args.rotate)
 
-    event_types = EVENT_TYPES + [model.update_event_type]
+    event_types = EVENT_TYPES[:]
+    event_types.append(model.update_event_type)
+
     screen_animator = Controller(settings_manager.settings, model)
     listeners = [quit_event := QuitEvent([screen_animator]), quit_event, view]
     event_manager = _create_event_manager(event_types, listeners)
