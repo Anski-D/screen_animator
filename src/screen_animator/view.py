@@ -26,7 +26,6 @@ class View(Listener):
     """
 
     perimeter: pg.Rect
-    _display: pg.Surface
 
     def __init__(self, model: Model, display: pg.Surface, settings: dict, rotated: bool = False) -> None:
         """
