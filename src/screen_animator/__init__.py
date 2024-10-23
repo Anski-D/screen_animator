@@ -10,7 +10,7 @@ import pygame as pg
 
 from screen_animator.listener import Listener
 from screen_animator.log_setup import setup_logging
-from screen_animator.controller import Controller, EventManager
+from screen_animator.controller import Controller, EventManager, QuitEvent
 from screen_animator.item_groups import (
     ItemGroup,
     TimedItemGroup,
@@ -32,6 +32,7 @@ ITEM_GROUP_TYPES = [
     partial(TimedItemGroup, wrapped_group=RandomImagesItemGroup),
     LeftScrollingTextItemGroup,
 ]
+EVENT_TYPES = [pg.QUIT, (pg.KEYDOWN, pg.K_q)]
 
 
 def copy_examples() -> None:
@@ -97,9 +98,9 @@ def _create_settings_manager(settings_file: str | Path) -> SettingsManager:
     return settings_manager
 
 
-def _create_event_manager(event_type_listeners: Iterator[tuple[tuple[int, int] | int, Listener]]) -> EventManager:
+def _create_event_manager(event_types: Sequence[tuple[int, int] | int], listeners: Sequence[Listener]) -> EventManager:
     event_manager = EventManager()
-    for event_type, listener in event_type_listeners:
+    for event_type, listener in zip(event_types, listeners):
         event_manager.register_listener(listener, event_type)
 
     return event_manager
@@ -213,6 +214,11 @@ def main() -> None:
     settings_manager = _create_settings_manager(args.input)
     model = Model(settings_manager, item_group_types, display.get_rect())
     view = View(model, display, settings_manager.settings, args.rotate)
+
+    event_types = EVENT_TYPES + [model.update_event_type]
+    listeners = [quit_event := QuitEvent(), quit_event, view]
+    event_manager = _create_event_manager(event_types, listeners)
+
     screen_animator = Controller(settings_manager, model, args.rotate)
 
     screen_animator.run()
