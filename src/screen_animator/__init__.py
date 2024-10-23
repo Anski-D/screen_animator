@@ -182,7 +182,7 @@ class ScreenAnimator:
         settings_manager = SettingsManager(self._settings_file)
         settings_manager.setup_settings()
         model = Model(settings_manager, self._item_groups)
-        controller = Controller(settings_manager, model, self.rotated)
+        controller = Controller(settings_manager, model)
         controller.init(self._display_size)
         log.info("Setting %s to run", type(self).__name__)
         controller.run()
@@ -216,12 +216,11 @@ def main() -> None:
     view = View(model, display, settings_manager.settings, args.rotate)
 
     event_types = EVENT_TYPES + [model.update_event_type]
-    listeners = [quit_event := QuitEvent(), quit_event, view]
+    screen_animator = Controller(settings_manager.settings, model)
+    listeners = [quit_event := QuitEvent([screen_animator]), quit_event, view]
     event_manager = _create_event_manager(event_types, listeners)
 
-    screen_animator = Controller(settings_manager, model, args.rotate)
-
-    screen_animator.run()
+    screen_animator.run(event_manager)
 
 
 if __name__ == "__main__":
