@@ -78,7 +78,7 @@ def _parse_args() -> argparse.Namespace:
     )
 
     args = parser.parse_args()
-    args.fps = args.debug
+    args.fps = args.debug if args.debug else args.fps
 
     return args
 
@@ -95,14 +95,6 @@ def _create_settings_manager(settings_file: str | Path) -> SettingsManager:
     settings_manager.setup_settings()
 
     return settings_manager
-
-
-def _create_model(settings_manager: SettingsManager, item_group_types: Iterable[type[ItemGroup]], display: pg.Surface) -> Model:
-    return Model(settings_manager, item_group_types, display.get_rect())
-
-
-def _create_view(model: Model, controller: Controller, settings: dict, rotated: bool) -> View:
-    return View(model, controller, settings, rotated)
 
 
 def _create_event_manager(event_type_listeners: Iterator[tuple[tuple[int, int] | int, Listener]]) -> EventManager:
@@ -209,6 +201,7 @@ class ScreenAnimator:
 
 def main() -> None:
     """Main app function to run."""
+    pg.init()
     args = _parse_args()
     setup_logging(args.logging)
 
@@ -219,8 +212,8 @@ def main() -> None:
     display = _set_display_size(DEBUG_DISPLAY_SIZE if args.debug else None)
     settings_manager = _create_settings_manager(args.input)
     model = Model(settings_manager, item_group_types, display.get_rect())
-    screen_animator = Controller(settings_manager, model, args.rotated)
-    view = _create_view(model, screen_animator, settings_manager.settings, args.rotated)
+    view = View(model, display, settings_manager.settings, args.rotate)
+    screen_animator = Controller(settings_manager, model, args.rotate)
 
     screen_animator.run()
 

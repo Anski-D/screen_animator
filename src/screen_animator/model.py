@@ -59,6 +59,7 @@ class Model:
             item_group.create()
 
         self.update_event_type = pg.event.custom_type()
+        log.info("%s initialization complete", type(self).__name__)
 
     def __repr__(self) -> str:
         return (

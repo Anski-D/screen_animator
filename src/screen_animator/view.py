@@ -1,13 +1,9 @@
 import logging
-from typing import TYPE_CHECKING
 
 import pygame as pg
 
 from .listener import Listener
 from screen_animator.model import Model
-
-if TYPE_CHECKING:
-    from .controller import Controller
 
 log = logging.getLogger(__name__)
 
@@ -23,26 +19,16 @@ class View(Listener):
 
     Methods
     -------
-    init
-        Manually perform some initialization.
     update
         Update the display.
     notify
         Tell the display to update.
-    quit
-        Set the view as ready to quit.
     """
 
     perimeter: pg.Rect
-    _screen: pg.Surface
+    _display: pg.Surface
 
-    def __init__(
-        self,
-        model: Model,
-        controller: "Controller",
-        settings: dict,
-        flipped: bool = False,
-    ) -> None:
+    def __init__(self, model: Model, display: pg.Surface, settings: dict, rotated: bool = False) -> None:
         """
         Set-up some initial parameters for the display.
 
@@ -50,64 +36,36 @@ class View(Listener):
         ----------
         model
             Model to be displayed.
-        controller
-            Used to manipulate model.
+        display
+            `pygame` display.
         settings
             User-defined settings.
-        flipped : optional
+        rotated : optional
             Flips the display across the horizontal axis (default is False, not flipped).
         """
         self._model = model
-        self._controller = controller
+        self._display = display
         self._settings = settings
-        self._flipped = flipped
-        self._initialized = False
+        self._rotated = rotated
         log.info("Creating %s", self)
+
+        self._set_bg()
+        log.info("%s initialization complete", type(self).__name__)
 
     def __repr__(self) -> str:
         return (
-            f"{type(self).__name__}({self._model},"
-            f" {self._controller},"
-            f" {self._settings},"
-            f" {self._flipped})"
+            f"{type(self).__name__}({self._model}, {self._display}, {self._settings}, {self._rotated})"
         )
-
-    @property
-    def initialized(self) -> bool:
-        """bool: View is ready to use."""
-        return self._initialized
-
-    def init(self, display_size: tuple[int, int] | None = None) -> None:
-        """
-        Manually finish initializing the display.
-
-        Parameters
-        ----------
-        display_size : optional
-            Width and height of window to display on screen, default is fullscreen.
-        """
-        log.info("Finishing initialization of %s", type(self).__name__)
-        if display_size is None:
-            self._screen = pg.display.set_mode(
-                (0, 0), pg.FULLSCREEN  # pylint: disable=no-member
-            )
-        else:
-            self._screen = pg.display.set_mode(display_size)
-        pg.display.set_caption("Screen_Animator")
-        self.perimeter = self._screen.get_rect()
-        self._set_bg()
-        self._initialized = True
-        log.info("%s initialization complete", type(self).__name__)
 
     def update(self) -> None:
         """Update the display."""
         self._set_bg()
         for group in self._model.item_groups:
             for item in group.sprites():
-                self._screen.blit(item.content, item.rect)
+                self._display.blit(item.content, item.rect)
 
-        if self._flipped:
-            self._screen.blit(pg.transform.rotate(self._screen, 180), (0, 0))
+        if self._rotated:
+            self._display.blit(pg.transform.rotate(self._display, 180), (0, 0))
 
         pg.display.flip()
 
@@ -115,10 +73,5 @@ class View(Listener):
         """Notify view of change to the model."""
         self.update()
 
-    def quit(self) -> None:
-        """Tell view to quit."""
-        log.info("%s told to quit", type(self).__name__)
-        self._initialized = False
-
     def _set_bg(self) -> None:
-        self._screen.fill(self._settings["bg"]["color"])
+        self._display.fill(self._settings["bg"]["color"])
