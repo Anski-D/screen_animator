@@ -50,10 +50,10 @@ class TimeableItemGroup(ItemGroup):
     Interface for allowing ItemGroups to be controlled by time.
     """
 
-    _time_diff: int | float
+    _time_diff: float
 
     @property
-    def time_diff(self) -> int | float:
+    def time_diff(self) -> float:
         """int or float: time difference"""
         return self._time_diff
 
