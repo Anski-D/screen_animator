@@ -2,12 +2,12 @@ import importlib.resources
 import shutil
 from functools import partial
 import argparse
-from pathlib import Path
 import logging
-from collections.abc import Iterable
+from collections.abc import Callable
 
 import pygame as pg
 
+from screen_animator import example
 from screen_animator.listener import Listener
 from screen_animator.log_setup import setup_logging
 from screen_animator.controller import Controller, EventManager, QuitEvent
@@ -27,18 +27,18 @@ from screen_animator.view import View
 log = logging.getLogger(__name__)
 
 DEBUG_DISPLAY_SIZE = 800, 400
-ITEM_GROUP_TYPES = [
+ITEM_GROUP_TYPES: list[Callable[[SettingsManager, pg.Rect], ItemGroup]] = [
     partial(TimedItemGroup, wrapped_group=ColorChangeItemGroup),
     partial(TimedItemGroup, wrapped_group=RandomImagesItemGroup),
     LeftScrollingTextItemGroup,
 ]
-EVENT_TYPES = [pg.QUIT, (pg.KEYDOWN, pg.K_q)]
+EVENT_TYPES: list[tuple[int, int] | int] = [pg.QUIT, (pg.KEYDOWN, pg.K_q)]
 
 
 def copy_examples() -> None:
     """Copies `example` files to working directory."""
     for file_path in importlib.resources.files(example).iterdir():
-        shutil.copy2(str(file_path), file_path.name)
+        shutil.copy2(str(file_path), file_path.name)  # `str` is used purely for type-checking
 
 
 def _parse_args() -> argparse.Namespace:
@@ -79,7 +79,7 @@ def _parse_args() -> argparse.Namespace:
     )
 
     args = parser.parse_args()
-    args.fps = args.debug if args.debug else args.fps
+    args.fps = args.fps or args.debug
 
     return args
 
@@ -93,21 +93,6 @@ def _set_display_size(display_size: tuple[float, float] | None = None) -> pg.Sur
     return pg.display.set_mode(display_size)
 
 
-def _create_settings_manager(settings_file: str | Path) -> SettingsManager:
-    settings_manager = SettingsManager(settings_file)
-    settings_manager.setup_settings()
-
-    return settings_manager
-
-
-def _create_event_manager(event_types: Iterable[tuple[int, int] | int], listeners: Iterable[Listener]) -> EventManager:
-    event_manager = EventManager()
-    for event_type, listener in zip(event_types, listeners):
-        event_manager.register_listener(listener, event_type)
-
-    return event_manager
-
-
 def main() -> None:
     """Main app function to run."""
     pg.init()
@@ -119,16 +104,15 @@ def main() -> None:
     item_group_types = ITEM_GROUP_TYPES + [FpsCounterItemGroup] if args.fps else ITEM_GROUP_TYPES
 
     display = _set_display_size(DEBUG_DISPLAY_SIZE if args.debug else None)
-    settings_manager = _create_settings_manager(args.input)
+    settings_manager = SettingsManager(args.input)
     model = Model(settings_manager, item_group_types, display.get_rect())
     view = View(model, display, settings_manager.settings, args.rotate)
 
-    event_types = EVENT_TYPES[:]
-    event_types.append(model.update_event_type)
+    event_types = EVENT_TYPES + [model.update_event_type]
 
     screen_animator = Controller(settings_manager.settings, model)
     listeners = [quit_event := QuitEvent([screen_animator]), quit_event, view]
-    event_manager = _create_event_manager(event_types, listeners)
+    event_manager = EventManager(listeners, event_types)
 
     screen_animator.run(event_manager)
 

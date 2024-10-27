@@ -1,5 +1,5 @@
 import logging
-from collections.abc import Iterable
+from collections.abc import Iterable, Callable
 
 import pygame as pg
 
@@ -29,7 +29,7 @@ class Model:
     def __init__(
         self,
         settings_manager: SettingsManager,
-        item_group_types: Iterable[type[ItemGroup]],
+        item_group_types: Iterable[Callable[[SettingsManager, pg.Rect], ItemGroup]],
         perimeter: pg.Rect,
     ) -> None:
         """
