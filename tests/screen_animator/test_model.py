@@ -8,35 +8,28 @@ from screen_animator.settings import SettingsManager
 
 class TestModel:
     @pytest.fixture
-    def patch_item_group(self, monkeypatch) -> None:
+    def patch_item_group_type(self, monkeypatch) -> None:
         """Patch ItemGroup so that its init dunder just returns None."""
-        monkeypatch.setattr(ItemGroup, "__init__", lambda x, y, z: None)
+        monkeypatch.setattr(ItemGroup, "__init__", lambda *args, **kwargs: None)
         ItemGroup.__abstractmethods__ = set()
 
+    @pytest.fixture
+    def example_model(self, example_settings_manager: SettingsManager, example_perimeter: pg.Rect, patch_item_group_type) -> Model:
+        """Create example Model"""
+        return Model(example_settings_manager, [ItemGroup for _ in range(3)], example_perimeter)
+
     def test_init_item_group(
-        self,
-        example_settings_manager: SettingsManager,
-        example_perimeter: pg.Rect,
-        patch_item_group,
+        self, example_model: Model
     ) -> None:
         """init dunder creates ItemGroup instances."""
-        model = Model(example_settings_manager, [ItemGroup])
-        model.init(example_perimeter)
+        model = example_model
 
         assert all(
             isinstance(item_group, ItemGroup) for item_group in model.item_groups
         )
 
-    def test_init_initialized_set(
-        self,
-        monkeypatch,
-        example_settings_manager: SettingsManager,
-        example_perimeter: pg.Rect,
-    ) -> None:
-        """Set initialized attribute to True."""
-        monkeypatch.setattr(ItemGroup, "__init__", lambda x, y, z: None)
-        monkeypatch.setattr(ItemGroup, "create", lambda x: None)
-        model = Model(example_settings_manager, [ItemGroup])
-        model.init(example_perimeter)
+    def test_init_event_type_int(self, example_model: Model) -> None:
+        """Update event type is `int`."""
+        model = example_model
 
-        assert model.initialized
+        assert isinstance(model.update_event_type, int)
