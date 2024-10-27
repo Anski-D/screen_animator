@@ -114,8 +114,6 @@ class SettingsManager:
 
     Methods
     -------
-    setup_settings
-        Import settings from defined file and set initial settings.
     set_colors
         Randomly set the background, text, and text outline color.
     generate_message_text
@@ -129,8 +127,7 @@ class SettingsManager:
 
     def __init__(self, settings_file: str | Path) -> None:
         """
-        Initialise by using a settings importer to import a specified file,
-        then setting up some initial settings.
+        Import settings from specified file and set initial settings.
 
         Parameters
         ----------
@@ -138,22 +135,19 @@ class SettingsManager:
             Path to settings file.
         """
         self._settings_file = settings_file
-
-    def __repr__(self) -> str:
-        return f"{type(self).__name__}({self._importer}, {self._settings_file})"
-
-    @property
-    def settings(self) -> dict:
-        """Dictionary of all settings."""
-        return self._settings
-
-    def setup_settings(self):
-        """Import settings and set initial values as required."""
         self._import_settings()
         self.set_colors()
         self.set_font()
         self._load_images()
         self._settings["timings"]["fps_actual"] = self._settings["timings"]["fps"]
+
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}({self._settings_file})"
+
+    @property
+    def settings(self) -> dict:
+        """Dictionary of all settings."""
+        return self._settings
 
     def set_colors(self) -> None:
         """Set background, text, and text outline colors from the available options
