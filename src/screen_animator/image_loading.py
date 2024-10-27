@@ -75,7 +75,7 @@ class RasterTypeImageLoader(TypeImageLoader):
             log.info("Loading %s...", image_loc)
             image = pg.image.load(image_loc)
         except FileNotFoundError:
-            log.exception("%s not found", image_loc)
+            log.error("%s not found in working directory: %s", image_loc, Path.cwd())
             return None
 
         if width > 0:
@@ -125,7 +125,7 @@ class SvgTypeImageLoader(TypeImageLoader):
             log.info("Loading %s...", image_loc)
             image = sg.fromfile(str(image_loc))
         except FileNotFoundError:
-            log.exception("%s not found", image_loc)
+            log.error("%s not found in working directory: %s", image_loc, Path.cwd())
             return None
 
         view_box = image.root.attrib["viewBox"]
