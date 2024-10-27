@@ -90,8 +90,10 @@ class EventManager:
             for listener, event_type in zip(listeners, event_types):
                 self.register_listener(listener, event_type)
 
+        log.info("Created %s", self)
+
     def __repr__(self) -> str:
-        return f"{type(self).__name__}()"
+        return f"{type(self).__name__}({list(self._listeners.keys())}, {list(self._listeners.values())})"
 
     def register_listener(self, listener: Listener, event_type: tuple[int, ...] | int) -> None:
         """
@@ -151,7 +153,7 @@ class QuitEvent(Listener):
         self._quitters = quitters
 
     def __repr__(self) -> str:
-        return f"{type(self).__name__}()"
+        return f"{type(self).__name__}({self._quitters})"
 
     def notify(self) -> None:
         """Iterate over instance to tell to quit."""
