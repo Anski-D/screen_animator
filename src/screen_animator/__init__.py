@@ -85,10 +85,10 @@ def _parse_args() -> argparse.Namespace:
 
 
 def _set_display_size(display_size: tuple[float, float] | None = None) -> pg.Surface:
+    pg.display.set_caption("ScreenAnimator")
+
     if display_size is None:
         return pg.display.set_mode((0, 0), pg.FULLSCREEN)
-
-    pg.display.set_caption("ScreenAnimator")
 
     return pg.display.set_mode(display_size)
 
