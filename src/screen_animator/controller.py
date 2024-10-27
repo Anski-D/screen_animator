@@ -83,9 +83,12 @@ class EventManager:
     """
     _listeners: dict[tuple[int, ...], Listener]
 
-    def __init__(self) -> None:
-        """Create a dictionary for storing listeners."""
+    def __init__(self, listeners: Iterable[Listener] | None = None, event_types: Iterable[tuple[int, ...] | int] | None = None) -> None:
+        """Store `Listener`s with `event_type` key."""
         self._listeners = {}
+        if not (listeners is None or event_types is None):
+            for listener, event_type in zip(listeners, event_types):
+                self.register_listener(listener, event_type)
 
     def __repr__(self) -> str:
         return f"{type(self).__name__}()"
