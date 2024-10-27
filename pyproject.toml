@@ -25,12 +25,15 @@ copy_examples = "screen_animator:copy_examples"
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
-[tool.uv]
-dev-dependencies = [
-    "mypy>=1.12.1",
+[dependency-groups]
+dev = [
     "pre-commit>=4.0.1",
+    "tox>=4.21.2",
+]
+test = [
+    "mypy>=1.13.0",
     "pylint>=3.3.1",
     "pytest-cov>=5.0.0",
+    "pytest-sugar>=1.0.0",
     "pytest>=8.3.3",
-    "tox>=4.21.2",
 ]
