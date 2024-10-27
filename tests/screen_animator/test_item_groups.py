@@ -15,18 +15,10 @@ from screen_animator.item_groups import (
 
 @pytest.fixture
 def example_settings_manager(
-    monkeypatch, example_settings_dict_with_tuples: dict, example_content: pg.Surface
+    monkeypatch, example_settings_manager: SettingsManager, example_settings_dict_with_tuples: dict, example_content: pg.Surface
 ) -> SettingsManager:
     """Provide example `SettingsManager`."""
-    monkeypatch.setattr(
-        SettingsManager,
-        "_import_settings",
-        lambda x: None,
-    )
-    monkeypatch.setattr(SettingsManager, "_load_images", lambda x: None)
-    settings_manager = SettingsManager(None)
-    settings_manager._settings = example_settings_dict_with_tuples
-    settings_manager.setup_settings()
+    settings_manager = example_settings_manager
     settings_manager.settings["images"]["images"] = [
         example_content
         for _ in range(len(example_settings_dict_with_tuples["images"]["sources"]))
