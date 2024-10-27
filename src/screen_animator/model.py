@@ -62,9 +62,7 @@ class Model:
         log.info("%s initialization complete", type(self).__name__)
 
     def __repr__(self) -> str:
-        return (
-            f"{type(self).__name__}({self._settings_manager}, {self._item_group_types}, {self._perimeter})"
-        )
+        return f"{type(self).__name__}({self._settings_manager}, {self._item_group_types}, {self._perimeter})"
 
     def update(self) -> None:
         """Update all aspects of the model."""

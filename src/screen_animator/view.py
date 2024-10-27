@@ -27,7 +27,9 @@ class View(Listener):
 
     perimeter: pg.Rect
 
-    def __init__(self, model: Model, display: pg.Surface, settings: dict, rotated: bool = False) -> None:
+    def __init__(
+        self, model: Model, display: pg.Surface, settings: dict, rotated: bool = False
+    ) -> None:
         """
         Set-up some initial parameters for the display.
 
@@ -52,9 +54,7 @@ class View(Listener):
         log.info("%s initialization complete", type(self).__name__)
 
     def __repr__(self) -> str:
-        return (
-            f"{type(self).__name__}({self._model}, {self._display}, {self._settings}, {self._rotated})"
-        )
+        return f"{type(self).__name__}({self._model}, {self._display}, {self._settings}, {self._rotated})"
 
     def update(self) -> None:
         """Update the display."""

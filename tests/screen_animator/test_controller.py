@@ -43,7 +43,9 @@ class TestEventManager:
         key = 7
         event_manager.register_listener(example_listener, key)
 
-        assert all([key not in event_manager._listeners, (key,) in event_manager._listeners])
+        assert all(
+            [key not in event_manager._listeners, (key,) in event_manager._listeners]
+        )
 
     def test_register_listener_values(self, example_listener: Listener) -> None:
         """`Listener` values register to EventManager."""
@@ -75,4 +77,9 @@ class TestEventManager:
         key = 2
         event_manager.remove_listener(key)
 
-        assert all([key not in event_manager._listeners, (key,) not in event_manager._listeners])
+        assert all(
+            [
+                key not in event_manager._listeners,
+                (key,) not in event_manager._listeners,
+            ]
+        )

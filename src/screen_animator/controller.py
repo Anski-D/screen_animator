@@ -41,10 +41,7 @@ class Controller:
         self._initialized = True
 
     def __repr__(self) -> str:
-        return (
-            f"{type(self).__name__}({self._settings},"
-            f" {self._model},"
-        )
+        return f"{type(self).__name__}({self._settings}, {self._model})"
 
     def run(self, event_manager: "EventManager") -> None:
         """Run `screen_animator` if view and model are ready."""
@@ -81,9 +78,14 @@ class EventManager:
     manage_events
         Manage all events.
     """
+
     _listeners: dict[tuple[int, ...], Listener]
 
-    def __init__(self, listeners: Iterable[Listener] | None = None, event_types: Iterable[tuple[int, ...] | int] | None = None) -> None:
+    def __init__(
+        self,
+        listeners: Iterable[Listener] | None = None,
+        event_types: Iterable[tuple[int, ...] | int] | None = None,
+    ) -> None:
         """Store `Listener`s with `event_type` key."""
         self._listeners = {}
         if not (listeners is None or event_types is None):
@@ -95,7 +97,9 @@ class EventManager:
     def __repr__(self) -> str:
         return f"{type(self).__name__}({list(self._listeners.keys())}, {list(self._listeners.values())})"
 
-    def register_listener(self, listener: Listener, event_type: tuple[int, ...] | int) -> None:
+    def register_listener(
+        self, listener: Listener, event_type: tuple[int, ...] | int
+    ) -> None:
         """
         Add a listener.
 
@@ -131,7 +135,9 @@ class EventManager:
     def manage_events(self) -> None:
         """Process `pygame` queue of events for events of interest."""
         for event in pg.event.get():
-            keys = tuple(key for key in (event.type, event.dict.get("key")) if key is not None)
+            keys = tuple(
+                key for key in (event.type, event.dict.get("key")) if key is not None
+            )
             listener = self._listeners.get(keys)
 
             if listener is not None:

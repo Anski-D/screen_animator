@@ -38,7 +38,9 @@ EVENT_TYPES: list[tuple[int, int] | int] = [pg.QUIT, (pg.KEYDOWN, pg.K_q)]
 def copy_examples() -> None:
     """Copies `example` files to working directory."""
     for file_path in importlib.resources.files(example).iterdir():
-        shutil.copy2(str(file_path), file_path.name)  # `str` is used purely for type-checking
+        shutil.copy2(
+            str(file_path), file_path.name
+        )  # `str` is used purely for type-checking
 
 
 def _parse_args() -> argparse.Namespace:
@@ -101,7 +103,9 @@ def main() -> None:
 
     ImageLoader.register_loader(".svg", SvgTypeImageLoader)
 
-    item_group_types = ITEM_GROUP_TYPES + [FpsCounterItemGroup] if args.fps else ITEM_GROUP_TYPES
+    item_group_types = (
+        ITEM_GROUP_TYPES + [FpsCounterItemGroup] if args.fps else ITEM_GROUP_TYPES
+    )
 
     display = _set_display_size(DEBUG_DISPLAY_SIZE if args.debug else None)
     settings_manager = SettingsManager(args.input)

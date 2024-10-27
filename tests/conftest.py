@@ -93,10 +93,16 @@ def example_content() -> pg.Surface:
 
 
 @pytest.fixture
-def example_settings_manager(monkeypatch, example_settings_dict_with_tuples: dict) -> SettingsManager:
+def example_settings_manager(
+    monkeypatch, example_settings_dict_with_tuples: dict
+) -> SettingsManager:
     """Provide an initialised `SettingsManager`."""
     SettingsManager._settings = example_settings_dict_with_tuples
-    monkeypatch.setattr(SettingsManager, "_import_settings", lambda *args, **kwargs: example_settings_dict_with_tuples)
+    monkeypatch.setattr(
+        SettingsManager,
+        "_import_settings",
+        lambda *args, **kwargs: example_settings_dict_with_tuples,
+    )
     settings_manager = SettingsManager("")
 
     return settings_manager

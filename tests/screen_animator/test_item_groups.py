@@ -15,7 +15,10 @@ from screen_animator.item_groups import (
 
 @pytest.fixture
 def example_settings_manager(
-    monkeypatch, example_settings_manager: SettingsManager, example_settings_dict_with_tuples: dict, example_content: pg.Surface
+    monkeypatch,
+    example_settings_manager: SettingsManager,
+    example_settings_dict_with_tuples: dict,
+    example_content: pg.Surface,
 ) -> SettingsManager:
     """Provide example `SettingsManager`."""
     settings_manager = example_settings_manager

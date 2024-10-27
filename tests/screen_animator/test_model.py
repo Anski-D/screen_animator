@@ -14,13 +14,18 @@ class TestModel:
         ItemGroup.__abstractmethods__ = set()
 
     @pytest.fixture
-    def example_model(self, example_settings_manager: SettingsManager, example_perimeter: pg.Rect, patch_item_group_type) -> Model:
+    def example_model(
+        self,
+        example_settings_manager: SettingsManager,
+        example_perimeter: pg.Rect,
+        patch_item_group_type,
+    ) -> Model:
         """Create example Model"""
-        return Model(example_settings_manager, [ItemGroup for _ in range(3)], example_perimeter)
+        return Model(
+            example_settings_manager, [ItemGroup for _ in range(3)], example_perimeter
+        )
 
-    def test_init_item_group(
-        self, example_model: Model
-    ) -> None:
+    def test_init_item_group(self, example_model: Model) -> None:
         """init dunder creates ItemGroup instances."""
         model = example_model
 
