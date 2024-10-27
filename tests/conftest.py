@@ -1,5 +1,6 @@
 import pygame as pg
 import pytest
+
 from screen_animator.settings import SettingsManager
 
 pg.init()
@@ -92,11 +93,10 @@ def example_content() -> pg.Surface:
 
 
 @pytest.fixture
-def example_settings_manager(
-    example_settings_dict_with_tuples: dict,
-) -> SettingsManager:
+def example_settings_manager(monkeypatch, example_settings_dict_with_tuples: dict) -> SettingsManager:
     """Provide an initialised `SettingsManager`."""
-    settings_manager = SettingsManager(None)
+    monkeypatch.setattr(SettingsManager, "__init__", lambda *args, **kwargs: None)
+    settings_manager = SettingsManager()
     settings_manager._settings = example_settings_dict_with_tuples
 
     return settings_manager
