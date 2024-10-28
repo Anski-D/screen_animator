@@ -1,6 +1,6 @@
 [project]
 name = "screen_animator"
-version = "0.11.0a1"
+version = "0.11.0"
 description = "Python package to generate animated messages and images on a screen, with a focus on the Raspberry Pi."
 license = { file = "LICENSE" }
 authors = [
