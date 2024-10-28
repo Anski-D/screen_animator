@@ -22,9 +22,11 @@ class TestImageLoader:
     ) -> None:
         """Correct loader function is used for loading images."""
         monkeypatch.setattr(
-            RasterTypeImageLoader, "load_image", lambda x, y, z: "raster"
+            RasterTypeImageLoader, "load_image", lambda *args, **kwargs: "raster"
         )
-        monkeypatch.setattr(SvgTypeImageLoader, "load_image", lambda x, y, z: "svg")
+        monkeypatch.setattr(
+            SvgTypeImageLoader, "load_image", lambda *args, **kwargs: "svg"
+        )
         ImageLoader.register_loader(".svg", SvgTypeImageLoader)
         image_loader = ImageLoader()
         image = image_loader.load_image(input_file, -1)
