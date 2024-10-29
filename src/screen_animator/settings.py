@@ -1,8 +1,11 @@
 from pathlib import Path
 import random
 import logging
+from collections.abc import Iterable
+from os import PathLike
 
 import pygame as pg
+from mergedeep import merge
 
 from screen_animator.image_loading import ImageLoader
 
@@ -16,48 +19,49 @@ log = logging.getLogger(__name__)
 
 class SettingsImporter:
     """
-    Imports settings from a TOML file and validates, ready for further use.
+    Imports settings from TOML files and validates, ready for further use.
 
     Methods
     -------
     import_settings
-        Imports the settings from specified file and validates imported values.
+        Imports the settings from specified files and validates imported values.
     """
 
-    def __init__(self):
-        """Initialise the importer. Nothing much is done at this stage."""
-        self._settings = None
+    _settings: dict
 
     def __repr__(self) -> str:
         return f"{type(self).__name__}()"
 
-    def import_settings(self, settings_file: str | Path) -> dict:
+    def import_settings(self, settings_files: Iterable[str | PathLike]) -> dict:
         """
-        Imports the settings from the specified file, validates, and stores and
+        Imports the settings from specified files, validates, and stores and
         returns a dictionary.
 
         Parameters
         ----------
-        settings_file
-            Path to the TOML file containing settings.
+        settings_files
+            Paths to the TOML files containing settings.
 
         Returns
         -------
         dict
             The imported and validated settings.
         """
-        settings_path = Path(settings_file)
-        self._read_settings(settings_path)
+        self._read_settings(settings_files)
         self._validate_settings()
         log.info("Converting certain lists to tuples")
         self._settings = self._convert_colors_to_tuples(self._settings)
 
         return self._settings
 
-    def _read_settings(self, settings_path: Path) -> None:
-        log.info("Reading settings from %s...", settings_path)
-        with settings_path.open("rb") as file:
-            self._settings = tomllib.load(file)
+    def _read_settings(self, settings_paths: Iterable[str | PathLike]) -> None:
+        settings_dicts = []
+        for settings_path in settings_paths:
+            log.info("Reading settings from %s...", settings_path)
+            with Path(settings_path).open("rb") as file:
+                settings_dicts.append(tomllib.load(file))
+
+        self._settings = dict(merge(*settings_dicts))
 
     def _validate_settings(self) -> None:
         log.info("Validating input file matches expected format")
@@ -122,19 +126,18 @@ class SettingsManager:
         Create the `pygame` font instance for rendering text.
     """
 
-    _importer = SettingsImporter
     _settings: dict
 
-    def __init__(self, settings_file: str | Path) -> None:
+    def __init__(self, settings_files: Iterable[str | PathLike]) -> None:
         """
         Import settings from specified file and set initial settings.
 
         Parameters
         ----------
-        settings_file
-            Path to settings file.
+        settings_files
+            Paths to settings files.
         """
-        self._settings_file = settings_file
+        self._settings_files = settings_files
         self._import_settings()
         self.set_colors()
         self.set_font()
@@ -142,7 +145,7 @@ class SettingsManager:
         self._settings["timings"]["fps_actual"] = self._settings["timings"]["fps"]
 
     def __repr__(self) -> str:
-        return f"{type(self).__name__}({self._settings_file})"
+        return f"{type(self).__name__}({self._settings_files})"
 
     @property
     def settings(self) -> dict:
@@ -201,8 +204,8 @@ class SettingsManager:
         )
 
     def _import_settings(self) -> None:
-        importer = self._importer()
-        self._settings = importer.import_settings(self._settings_file)
+        importer = SettingsImporter()
+        self._settings = importer.import_settings(self._settings_files)
 
     def _load_images(self):
         images_dict = self._settings["images"]

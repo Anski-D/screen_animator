@@ -52,8 +52,9 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument(
         "-i",
         "--input",
-        default="inputs.toml",
-        help="path to TOML file with inputs (optional, falls back to `inputs.toml` by default)",
+        nargs="*",
+        default=["inputs.toml"],
+        help="paths to TOML files with inputs (optional, falls back to `inputs.toml` by default)",
     )
     parser.add_argument(
         "-r",
