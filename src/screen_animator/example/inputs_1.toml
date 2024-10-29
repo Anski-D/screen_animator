@@ -1,0 +1,19 @@
+[messages]
+separator = "    "
+typeface = "freeserif"
+sizes = [350, 350]
+bold = true
+italic = false
+anti-aliasing = false
+scroll_speed = 240
+outline_width = 3
+outline_copies = 360
+start_middle = true
+
+[images]
+reposition_attempts = -1
+
+[timings]
+fps = 30
+image_change_time = 2
+color_change_time = 5

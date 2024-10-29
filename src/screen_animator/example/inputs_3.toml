@@ -1,0 +1,20 @@
+colors = [
+    [255, 0, 0],
+    [0, 255, 0],
+    [0, 0, 255],
+]
+
+[messages]
+outline_colors = [
+    [0, 0, 0],
+    [255, 255, 255],
+]
+
+[images]
+sources = [
+    ["pic1.svg", 64],
+    ["pic2.bmp", -1],
+    ["pic3.bmp", 10],
+]
+number = 10
+reposition_attempts = -1
