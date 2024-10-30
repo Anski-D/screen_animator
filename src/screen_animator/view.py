@@ -60,7 +60,7 @@ class View(Listener):
         log.info("%s initialization complete", type(self).__name__)
 
     def __repr__(self) -> str:
-        return f"{type(self).__name__}({self._model}, {self._display}, {self._settings}, {self._rotated})"
+        return f"{type(self).__name__}({self._model}, {self._display}, {type(self._settings).__name__}(), {self._rotated})"
 
     def update(self) -> None:
         """Update the display."""

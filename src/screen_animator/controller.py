@@ -42,7 +42,9 @@ class Controller:
         self._initialized = True
 
     def __repr__(self) -> str:
-        return f"{type(self).__name__}({self._settings}, {self._model})"
+        return (
+            f"{type(self).__name__}({type(self._settings).__name__}(), {self._model})"
+        )
 
     def run(self, event_manager: "EventManager") -> None:
         """Run `screen_animator` if view and model are ready."""
