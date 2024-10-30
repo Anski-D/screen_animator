@@ -775,7 +775,7 @@ wheels = [
 
 [[package]]
 name = "screen-animator"
-version = "0.12.0a0"
+version = "0.12.0"
 source = { editable = "." }
 dependencies = [
     { name = "cairosvg" },
@@ -786,7 +786,7 @@ dependencies = [
     { name = "tomli", marker = "python_full_version < '3.11'" },
 ]
 
-[package.dev-dependencies]
+[package.dependency-groups]
 dev = [
     { name = "pre-commit" },
     { name = "tox" },
@@ -809,7 +809,7 @@ requires-dist = [
     { name = "tomli", marker = "python_full_version < '3.11'", specifier = ">=2.0.2" },
 ]
 
-[package.metadata.requires-dev]
+[package.metadata.dependency-groups]
 dev = [
     { name = "pre-commit", specifier = ">=4.0.1" },
     { name = "tox", specifier = ">=4.21.2" },
