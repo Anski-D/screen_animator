@@ -46,7 +46,7 @@ def copy_examples() -> None:
 def _parse_args() -> argparse.Namespace:
     """Processes the command line arguments provided."""
     parser = argparse.ArgumentParser(
-        prog="ScreenAnimator",
+        prog="screen_animator",
         description="A Python app to generate animated messages and images on a screen, with a focus on the Raspberry Pi.",
     )
     parser.add_argument(
