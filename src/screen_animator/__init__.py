@@ -4,6 +4,7 @@ from functools import partial
 import argparse
 import logging
 from collections.abc import Callable
+from pathlib import Path
 
 import pygame as pg
 
@@ -38,6 +39,7 @@ EVENT_TYPES: list[tuple[int, int] | int] = [pg.QUIT, (pg.KEYDOWN, pg.K_q)]
 def copy_examples() -> None:
     """Copies `example` files to working directory."""
     for file_path in importlib.resources.files(example).iterdir():
+        print(f"Copying {file_path.name} to {Path.cwd().joinpath(file_path.name)}")
         shutil.copy2(
             str(file_path), file_path.name
         )  # `str` is used purely for type-checking
