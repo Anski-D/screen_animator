@@ -1,5 +1,6 @@
 import logging
-from collections.abc import Iterable
+from collections.abc import Iterable, Mapping
+from typing import Any
 
 import pygame as pg
 
@@ -21,7 +22,7 @@ class Controller:
         Stop running.
     """
 
-    def __init__(self, settings: dict, model: Model) -> None:
+    def __init__(self, settings: Mapping[str, Any], model: Model) -> None:
         """
         Set initial parameters.
 

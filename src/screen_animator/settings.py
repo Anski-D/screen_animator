@@ -1,8 +1,9 @@
 from pathlib import Path
 import random
 import logging
-from collections.abc import Iterable
+from collections.abc import Iterable, MutableMapping
 from os import PathLike
+from typing import Any
 
 import pygame as pg
 from mergedeep import merge
@@ -27,12 +28,14 @@ class SettingsImporter:
         Imports the settings from specified files and validates imported values.
     """
 
-    _settings: dict
+    _settings: MutableMapping[str, Any]
 
     def __repr__(self) -> str:
         return f"{type(self).__name__}()"
 
-    def import_settings(self, settings_files: Iterable[str | PathLike]) -> dict:
+    def import_settings(
+        self, settings_files: Iterable[str | PathLike]
+    ) -> MutableMapping[str, Any]:
         """
         Imports the settings from specified files, validates, and stores and
         returns a dictionary.
@@ -61,7 +64,7 @@ class SettingsImporter:
             with Path(settings_path).open("rb") as file:
                 settings_dicts.append(tomllib.load(file))
 
-        self._settings = dict(merge(*settings_dicts))
+        self._settings = merge(*settings_dicts)
 
     def _validate_settings(self) -> None:
         log.info("Validating input file matches expected format")
@@ -103,7 +106,7 @@ class SettingsImporter:
                 return tuple(input_item)
             case list():
                 return [self._convert_colors_to_tuples(item) for item in input_item]
-            case dict():
+            case MutableMapping():
                 return {
                     key: self._convert_colors_to_tuples(value)
                     for key, value in input_item.items()
@@ -126,7 +129,7 @@ class SettingsManager:
         Create the `pygame` font instance for rendering text.
     """
 
-    _settings: dict
+    _settings: MutableMapping[str, Any]
 
     def __init__(self, settings_files: Iterable[str | PathLike]) -> None:
         """
@@ -148,7 +151,7 @@ class SettingsManager:
         return f"{type(self).__name__}({self._settings_files})"
 
     @property
-    def settings(self) -> dict:
+    def settings(self) -> MutableMapping[str, Any]:
         """Dictionary of all settings."""
         return self._settings
 

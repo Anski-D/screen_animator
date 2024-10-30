@@ -1,4 +1,6 @@
 import logging
+from collections.abc import Mapping
+from typing import Any
 
 import pygame as pg
 
@@ -28,7 +30,11 @@ class View(Listener):
     perimeter: pg.Rect
 
     def __init__(
-        self, model: Model, display: pg.Surface, settings: dict, rotated: bool = False
+        self,
+        model: Model,
+        display: pg.Surface,
+        settings: Mapping[str, Any],
+        rotated: bool = False,
     ) -> None:
         """
         Set-up some initial parameters for the display.

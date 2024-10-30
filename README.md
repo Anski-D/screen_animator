@@ -54,7 +54,10 @@ screen_animator
 The following options can also be specified:
 
 `-i, --input`
-: Optional, default is `inputs.toml`. The location of the `TOML` file that contains the settings for the package.
+: Optional, default is `inputs.toml`. The file paths of the `TOML` files that contain the settings for the app. Multiple input files can be specified.
+
+> [!NOTE]
+> Settings in later files take precedence over earlier files in the list. E.g., if `[messages][messages]` is the list `["Foo", "Bar"]` in the first file, and `["Baz"]` in the final, the final settings will only contain `["Baz"]`.
 
 `-r, --rotate`
 : Optional flag, off by default. Sets whether the entire rendered animation should be rotated 180&deg;.
