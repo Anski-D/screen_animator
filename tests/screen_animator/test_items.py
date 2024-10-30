@@ -1,7 +1,7 @@
 import pygame as pg
 import pytest
 
-from screen_animator.items import Item, ScrollingMovement, RandomMovement
+from screen_animator.items import Item, ScrollingMovement, RandomMovement, Direction
 
 
 @pytest.fixture
@@ -24,31 +24,33 @@ class TestScrollingMovement:
     @pytest.mark.parametrize(
         "direction, output",
         [
-            ("up", ("y", -1)),
-            ("right", ("x", 1)),
-            ("down", ("y", 1)),
-            ("left", ("x", -1)),
+            (Direction.UP, ("y", -1)),
+            (Direction.RIGHT, ("x", 1)),
+            (Direction.DOWN, ("y", 1)),
+            (Direction.LEFT, ("x", -1)),
             ("test", ("x", -1)),
         ],
     )
-    def test_direction_setter(self, direction: str, output: tuple[str, int]) -> None:
+    def test_direction_setter(
+        self, direction: Direction | str, output: tuple[str, int]
+    ) -> None:
         """Direction set correctly."""
         movement = ScrollingMovement()
         movement.direction = direction
 
-        assert movement._axis, movement._sign == output
+        assert (movement._axis, movement._sign) == output
 
     @pytest.mark.parametrize(
-        "speed, direction, axis, value",
+        "speed, direction, value",
         [
-            (1, "up", "y", 248),
-            (2, "right", "x", 504),
-            (3, "down", "y", 256),
-            (5, "left", "x", 490),
+            (1, Direction.UP, 248),
+            (2, Direction.RIGHT, 504),
+            (3, Direction.DOWN, 256),
+            (5, Direction.LEFT, 490),
         ],
     )
     def test_move(
-        self, speed: int, direction: str, axis: str, value: int, example_item: Item
+        self, speed: int, direction: Direction, value: int, example_item: Item
     ) -> None:
         """Move in certain amount in correct direction."""
         item = example_item
@@ -56,6 +58,7 @@ class TestScrollingMovement:
         movement = ScrollingMovement(speed, direction)
         movement.move(item)
         movement.move(item)
+        axis = movement._directions[direction][0]
 
         assert getattr(item.rect, axis) == value
 

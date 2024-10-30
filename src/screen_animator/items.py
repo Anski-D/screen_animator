@@ -1,9 +1,17 @@
 import random
 import logging
+from enum import Enum, auto
 
 import pygame as pg
 
 log = logging.getLogger(__name__)
+
+
+class Direction(Enum):
+    UP = auto()
+    RIGHT = auto()
+    DOWN = auto()
+    LEFT = auto()
 
 
 class Movement:
@@ -102,13 +110,13 @@ class ScrollingMovement(Movement):
     """
 
     _directions = {
-        "up": ("y", -1),
-        "right": ("x", 1),
-        "down": ("y", 1),
-        "left": ("x", -1),
+        Direction.UP: ("y", -1),
+        Direction.RIGHT: ("x", 1),
+        Direction.DOWN: ("y", 1),
+        Direction.LEFT: ("x", -1),
     }
 
-    def __init__(self, speed: int = 0, direction: str = "left") -> None:
+    def __init__(self, speed: int = 0, direction: Direction = Direction.LEFT) -> None:
         """
         Initialise the scrolling style of movement with a set speed and direction.
 
@@ -129,15 +137,15 @@ class ScrollingMovement(Movement):
         return f"{type(self).__name__}({self.speed}, {self.direction})"
 
     @property
-    def direction(self) -> str:
+    def direction(self) -> Direction:
         """The direction of movement."""
         return self._direction
 
     @direction.setter
-    def direction(self, direction: str) -> None:
+    def direction(self, direction: Direction) -> None:
         self._direction = direction
         self._axis, self._sign = self._directions.get(
-            self._direction, self._directions["left"]
+            self._direction, self._directions[Direction.LEFT]
         )
 
     def move(self, item: Item) -> None:

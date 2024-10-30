@@ -47,7 +47,7 @@ class Controller:
         )
 
     def run(self, event_manager: "EventManager") -> None:
-        """Run `screen_animator` if view and model are ready."""
+        """Run main loop using `EventManager` to manager events."""
         log.info(
             "!!! %s%s !!!",
             type(self).__name__,

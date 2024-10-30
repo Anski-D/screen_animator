@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 import pygame as pg
 import numpy as np
 
-from screen_animator.items import ScrollingMovement, RandomMovement, Item
+from screen_animator.items import ScrollingMovement, RandomMovement, Item, Direction
 from screen_animator.settings import SettingsManager
 
 log = logging.getLogger(__name__)
@@ -150,7 +150,7 @@ class LeftScrollingTextItemGroup(ItemGroup):
             self._settings["messages"]["scroll_speed"]
             // self._settings["timings"]["fps"]
         )
-        self._scrolling_movement = self._movement(speed, "left")
+        self._scrolling_movement = self._movement(speed, Direction.LEFT)
 
     def __repr__(self) -> str:
         return f"{type(self).__name__}({self._settings_manager}, {self._perimeter})"
