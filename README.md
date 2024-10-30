@@ -56,9 +56,6 @@ The following options can also be specified:
 `-i, --input`
 : Optional, default is `inputs.toml`. The file paths of the `TOML` files that contain the settings for the app. Multiple input files can be specified.
 
-> [!NOTE]
-> Settings in later files take precedence over earlier files in the list. E.g., if `[messages][messages]` is the list `["Foo", "Bar"]` in the first file, and `["Baz"]` in the final, the final settings will only contain `["Baz"]`.
-
 `-r, --rotate`
 : Optional flag, off by default. Sets whether the entire rendered animation should be rotated 180&deg;.
 
@@ -75,10 +72,12 @@ The following options can also be specified:
 : Optional, off by default. No logging (other than minimal to the console) will occur unless specified. Once specified, logging will occur to a local log file. Examples include `INFO` or `DEBUG`.
 
 ### `inputs.toml`
-This `TOML` file is used as an input to the main `ScreenAnimator` class. All settings are required or the input validation will fail, and are explained below.
+The `TOML` files provide necessary settings to the app. All settings are required or the input validation will fail, and are explained below.
+
+Settings can be split across multiple files. Settings in later files take precedence over earlier files in the list. E.g., if `[messages][messages]` is the list `["Foo", "Bar"]` in the first file, and `["Baz"]` in the final, the final settings will only contain `["Baz"]`. This allows settings files to be 'layered' over each other; one could put settings that might be changed more frequently in a separate file that is specified later in the list of inputs.
 
 > [!NOTE]
-> The input file does not need to be called `inputs.toml`, as long the name matches the name provided to the `ScreenAnimator` class.
+> The input file does not need to be called `inputs.toml`, but it is the default file the app will try to use if no input file is specified.
 
 `colors`
 : A list of colors to use in the background and text. Each color should be provided as a list of red-green-blue (RGB). At least two colors are required to prevent the package getting stuck in a loop.
