@@ -65,6 +65,7 @@ class SettingsImporter:
                 settings_dicts.append(tomllib.load(file))
 
         self._settings = merge(*settings_dicts)
+        log.info("Collated settings:\n\t%s", self._settings)
 
     def _validate_settings(self) -> None:
         log.info("Validating input file matches expected format")
