@@ -120,7 +120,12 @@ def main() -> None:
     listeners = [quit_event := QuitEvent([screen_animator]), quit_event, view]
     event_manager = EventManager(listeners, event_types)
 
-    screen_animator.run(event_manager)
+    try:
+        screen_animator.run(event_manager)
+    except KeyboardInterrupt:
+        pass
+    finally:
+        print("Closing app")
 
 
 if __name__ == "__main__":
