@@ -4,7 +4,7 @@ from collections.abc import Iterable, Callable
 import pygame as pg
 
 from screen_animator.settings import SettingsManager
-from screen_animator.item_groups import ItemGroup
+from screen_animator.item_groups import ItemGroup, LeftScrollingTextItemGroup
 
 log = logging.getLogger(__name__)
 
@@ -68,3 +68,20 @@ class Model:
             item_group.update()
 
         pg.event.post(pg.Event(self.update_event_type))
+
+
+class SpeedChanger:
+    def __init__(self, item_group: LeftScrollingTextItemGroup) -> None:
+        self._item_group = item_group
+
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}({self._item_group})"
+
+    def increase(self) -> None:
+        pass
+
+    def decrease(self) -> None:
+        pass
+
+    def reset(self) -> None:
+        pass

@@ -155,6 +155,14 @@ class LeftScrollingTextItemGroup(ItemGroup):
     def __repr__(self) -> str:
         return f"{type(self).__name__}({self._settings_manager}, {self._perimeter})"
 
+    @property
+    def speed(self) -> int:
+        return self._scrolling_movement.speed
+
+    @speed.setter
+    def speed(self, speed: int) -> None:
+        self._scrolling_movement.speed = speed
+
     def create(self) -> None:
         """
         Create a message `Item` that scrolls to the left with a set speed.
