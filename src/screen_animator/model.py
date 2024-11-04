@@ -44,8 +44,6 @@ class Model:
         perimeter
             Outer boundary the model can operate within.
         """
-        super().__init__()
-
         self._settings_manager = settings_manager
         self._item_group_types = item_group_types
         self._perimeter = perimeter
