@@ -139,7 +139,7 @@ class TestSpeedChanger:
             ]
         )
 
-    @pytest.mark.parametrize("speed_input", [Speed.NOTSET, ""])
+    @pytest.mark.parametrize("speed_input", [Speed.MAINTAIN, ""])
     def test_change_speed_do_nothing(
         self, speed_input: Speed | str, example_speed_changer: SpeedChanger
     ) -> None:

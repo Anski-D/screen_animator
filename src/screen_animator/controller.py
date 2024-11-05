@@ -1,11 +1,12 @@
 import logging
 from collections.abc import Iterable, Mapping
 from typing import Any
+from abc import ABC
 
 import pygame as pg
 
 from screen_animator.listener import Listener
-from screen_animator.model import Model
+from screen_animator.model import Model, SpeedChanger, Speed
 
 log = logging.getLogger(__name__)
 
@@ -147,9 +148,9 @@ class EventManager:
                 listener.notify()
 
 
-class QuitEvent(Listener):
+class QuitAction(Listener):
     """
-    Custom listener for quit events.
+    Custom listener to perform quit action.
 
     Methods
     -------
@@ -160,6 +161,7 @@ class QuitEvent(Listener):
     def __init__(self, quitters: Iterable) -> None:
         """Store iterable of instances to quit when required."""
         self._quitters = quitters
+        log.info("Created %s", self)
 
     def __repr__(self) -> str:
         return f"{type(self).__name__}({self._quitters})"
@@ -168,3 +170,40 @@ class QuitEvent(Listener):
         """Iterate over instance to tell to quit."""
         for quitter in self._quitters:
             quitter.quit()
+
+
+class SpeedChangeAction(Listener):
+    """
+    Custom listener to carry out speed change actions.
+
+    Methods
+    -------
+    notify
+        Tell associated class instances to change speed.
+    """
+
+    _speed_action = Speed.MAINTAIN
+
+    def __init__(self, speed_changer: SpeedChanger) -> None:
+        """Store instance of `SpeedChanger` to manipulate."""
+        self._speed_changer = speed_changer
+        log.info("Created %s", self)
+
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}({self._speed_changer})"
+
+    def notify(self) -> None:
+        """Change speed using `SpeedChanger` according to the provided action."""
+        self._speed_changer.change_speed(self._speed_action)
+
+
+class IncreaseSpeedAction(SpeedChangeAction):
+    _speed_action = Speed.FASTER
+
+
+class DecreaseSpeedAction(SpeedChangeAction):
+    _speed_action = Speed.SLOWER
+
+
+class ResetSpeedAction(SpeedChangeAction):
+    _speed_action = Speed.RESET

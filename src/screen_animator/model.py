@@ -12,7 +12,7 @@ log = logging.getLogger(__name__)
 
 
 class Speed(Enum):
-    NOTSET = auto()
+    MAINTAIN = auto()
     RESET = auto()
     FASTER = auto()
     SLOWER = auto()
@@ -87,7 +87,7 @@ class SpeedChanger:
         log.info("Creating %s", self)
 
         self._change_speed = {
-            Speed.NOTSET: lambda: None,
+            Speed.MAINTAIN: lambda: None,
             Speed.RESET: self.reset,
             Speed.FASTER: self.increase,
             Speed.SLOWER: self.decrease,
@@ -101,7 +101,7 @@ class SpeedChanger:
         self._speeder.speed = self._speed
 
     def change_speed(self, speed_change: Speed) -> None:
-        self._change_speed.get(speed_change, self._change_speed[Speed.NOTSET])()
+        self._change_speed.get(speed_change, self._change_speed[Speed.MAINTAIN])()
 
     def increase(self) -> None:
         self._speeder.speed += int(self._speed_change * self._speed)

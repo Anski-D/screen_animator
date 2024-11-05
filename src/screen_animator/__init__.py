@@ -10,7 +10,7 @@ import pygame as pg
 
 from screen_animator import example
 from screen_animator.log_setup import setup_logging
-from screen_animator.controller import Controller, EventManager, QuitEvent
+from screen_animator.controller import Controller, EventManager, QuitAction
 from screen_animator.item_groups import (
     ItemGroup,
     TimedItemGroup,
@@ -117,7 +117,7 @@ def main() -> None:
     event_types = EVENT_TYPES + [model.update_event_type]
 
     screen_animator = Controller(settings_manager.settings, model)
-    listeners = [quit_event := QuitEvent([screen_animator]), quit_event, view]
+    listeners = [quit_action := QuitAction([screen_animator]), quit_action, view]
     event_manager = EventManager(listeners, event_types)
 
     try:
