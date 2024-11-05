@@ -1,12 +1,21 @@
 import logging
 from collections.abc import Iterable, Callable
+from enum import Enum, auto
 
 import pygame as pg
 
 from screen_animator.settings import SettingsManager
-from screen_animator.item_groups import ItemGroup, LeftScrollingTextItemGroup
+from screen_animator.item_groups import ItemGroup
+from screen_animator.items import Speeder
 
 log = logging.getLogger(__name__)
+
+
+class Speed(Enum):
+    NOTSET = auto()
+    RESET = auto()
+    FASTER = auto()
+    SLOWER = auto()
 
 
 class Model:
@@ -71,17 +80,32 @@ class Model:
 
 
 class SpeedChanger:
-    def __init__(self, item_group: LeftScrollingTextItemGroup) -> None:
-        self._item_group = item_group
+    _speed_change = 0.1
+
+    def __init__(self, speeder: Speeder) -> None:
+        self._speeder = speeder
+        log.info("Creating %s", self)
+
+        self._change_speed = {
+            Speed.NOTSET: lambda: None,
+            Speed.RESET: self.reset,
+            Speed.FASTER: self.increase,
+            Speed.SLOWER: self.decrease,
+        }
+        self._speed = self._speeder.speed
 
     def __repr__(self) -> str:
-        return f"{type(self).__name__}({self._item_group})"
-
-    def increase(self) -> None:
-        pass
-
-    def decrease(self) -> None:
-        pass
+        return f"{type(self).__name__}({self._speeder})"
 
     def reset(self) -> None:
-        pass
+        self._speeder.speed = self._speed
+
+    def change_speed(self, speed_change: Speed) -> None:
+        self._change_speed.get(speed_change, self._change_speed[Speed.NOTSET])()
+
+    def increase(self) -> None:
+        self._speeder.speed += int(self._speed_change * self._speed)
+
+    def decrease(self) -> None:
+        self._speeder.speed -= int(self._speed_change * self._speed)
+        self._speeder.speed = max(0, self._speeder.speed)

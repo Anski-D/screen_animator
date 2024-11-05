@@ -1,10 +1,19 @@
 import random
 import logging
 from enum import Enum, auto
+from typing import Protocol
 
 import pygame as pg
 
 log = logging.getLogger(__name__)
+
+
+class Speeder(Protocol):
+    @property
+    def speed(self) -> int: ...
+
+    @speed.setter
+    def speed(self, speed: int) -> None: ...
 
 
 class Direction(Enum):
@@ -129,12 +138,20 @@ class ScrollingMovement(Movement):
         """
         super().__init__()
 
-        self.speed = speed
+        self._speed = speed
         self.direction = direction
         log.info("Creating %s", self)
 
     def __repr__(self) -> str:
-        return f"{type(self).__name__}({self.speed}, {self.direction})"
+        return f"{type(self).__name__}({self._speed}, {self.direction})"
+
+    @property
+    def speed(self) -> int:
+        return self._speed
+
+    @speed.setter
+    def speed(self, speed: int) -> None:
+        self._speed = speed
 
     @property
     def direction(self) -> Direction:
@@ -158,7 +175,7 @@ class ScrollingMovement(Movement):
             Object to move.
         """
         rect = item.rect
-        new_position = getattr(rect, self._axis) + self._sign * self.speed
+        new_position = getattr(rect, self._axis) + self._sign * self._speed
         setattr(rect, self._axis, new_position)
 
 
