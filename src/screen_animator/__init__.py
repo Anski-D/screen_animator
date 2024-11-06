@@ -23,6 +23,11 @@ from screen_animator.image_loading import ImageLoader, SvgTypeImageLoader
 from screen_animator.model import Model
 from screen_animator.settings import SettingsManager
 from screen_animator.view import View
+from screen_animator.speed_changer import (
+    ResetSpeedAction,
+    IncreaseSpeedAction,
+    DecreaseSpeedAction,
+)
 
 log = logging.getLogger(__name__)
 
@@ -32,7 +37,13 @@ ITEM_GROUP_TYPES: list[Callable[[SettingsManager, pg.Rect], ItemGroup]] = [
     partial(TimedItemGroup, wrapped_group=RandomImagesItemGroup),
     LeftScrollingTextItemGroup,
 ]
-EVENT_TYPES: list[tuple[int, int] | int] = [pg.QUIT, (pg.KEYDOWN, pg.K_q)]
+EVENT_TYPES: list[tuple[int, int] | int] = [
+    pg.QUIT,
+    (pg.KEYDOWN, pg.K_q),
+    (pg.KEYDOWN, pg.K_DOWN),
+    (pg.KEYDOWN, pg.K_LEFT),
+    (pg.KEYDOWN, pg.K_RIGHT),
+]
 
 
 def copy_examples() -> None:
@@ -117,7 +128,14 @@ def main() -> None:
     event_types = EVENT_TYPES + [model.update_event_type]
 
     screen_animator = Controller(settings_manager.settings, model)
-    listeners = [quit_action := QuitAction([screen_animator]), quit_action, view]
+    listeners = [
+        quit_action := QuitAction([screen_animator]),
+        quit_action,
+        ResetSpeedAction(model.speed_changer),
+        IncreaseSpeedAction(model.speed_changer),
+        DecreaseSpeedAction(model.speed_changer),
+        view,
+    ]
     event_manager = EventManager(listeners, event_types)
 
     try:

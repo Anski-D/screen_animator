@@ -156,11 +156,12 @@ class LeftScrollingTextItemGroup(ItemGroup):
         return f"{type(self).__name__}({self._settings_manager}, {self._perimeter})"
 
     @property
-    def speed(self) -> int:
+    def speed(self) -> float:
+        """Speed of movement."""
         return self._scrolling_movement.speed
 
     @speed.setter
-    def speed(self, speed: int) -> None:
+    def speed(self, speed: float) -> None:
         self._scrolling_movement.speed = speed
 
     def create(self) -> None:

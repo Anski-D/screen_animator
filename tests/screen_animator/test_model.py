@@ -4,21 +4,28 @@ import pygame as pg
 from screen_animator.model import Model
 from screen_animator.item_groups import ItemGroup
 from screen_animator.settings import SettingsManager
+from screen_animator.speed_changer import SpeedChanger
 
 
 class TestModel:
     @pytest.fixture
-    def patch_item_group_type(self, monkeypatch) -> None:
+    def patch_item_group_init(self, monkeypatch) -> None:
         """Patch ItemGroup so that its init dunder just returns None."""
         monkeypatch.setattr(ItemGroup, "__init__", lambda *args, **kwargs: None)
         ItemGroup.__abstractmethods__ = set()
+
+    @pytest.fixture
+    def patch_speed_changer_init(self, monkeypatch) -> None:
+        """Patch SpeedChanger so that its init dunder just returns None."""
+        monkeypatch.setattr(SpeedChanger, "__init__", lambda *args, **kwargs: None)
 
     @pytest.fixture
     def example_model(
         self,
         example_settings_manager: SettingsManager,
         example_perimeter: pg.Rect,
-        patch_item_group_type,
+        patch_item_group_init,
+        patch_speed_changer_init,
     ) -> Model:
         """Create example Model"""
         return Model(

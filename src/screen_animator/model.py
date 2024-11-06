@@ -5,6 +5,7 @@ import pygame as pg
 
 from screen_animator.settings import SettingsManager
 from screen_animator.item_groups import ItemGroup
+from screen_animator.speed_changer import SpeedChanger, Speeder
 
 log = logging.getLogger(__name__)
 
@@ -57,10 +58,21 @@ class Model:
             item_group.create()
 
         self.update_event_type = pg.event.custom_type()
+        self._speed_changer = SpeedChanger(
+            *[
+                item_group
+                for item_group in self.item_groups
+                if isinstance(item_group, Speeder)
+            ]
+        )
         log.info("%s initialization complete", type(self).__name__)
 
     def __repr__(self) -> str:
         return f"{type(self).__name__}({self._settings_manager}, {self._item_group_types}, {self._perimeter})"
+
+    @property
+    def speed_changer(self) -> SpeedChanger:
+        return self._speed_changer
 
     def update(self) -> None:
         """Update all aspects of the model."""

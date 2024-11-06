@@ -15,9 +15,32 @@ class Speed(Enum):
 
 
 class SpeedChanger:
+    """
+    Change speed of associated `Speeder` instances.
+
+    Methods
+    -------
+    change_speed
+        Change the speed according to provided speed change request.
+    reset
+        Reset speed to original value.
+    increase
+        Make the speed higher.
+    decrease
+        Make the speed lower.
+    """
+
     _speed_change = 0.1
 
     def __init__(self, speeder: Speeder) -> None:
+        """
+        Set up instance with `Speeder` to manipulate.
+
+        Parameters
+        ----------
+        speeder
+            Instance of Speeder to manipulate.
+        """
         self._speeder = speeder
         log.info("Creating %s", self)
 
@@ -32,18 +55,29 @@ class SpeedChanger:
     def __repr__(self) -> str:
         return f"{type(self).__name__}({self._speeder})"
 
-    def reset(self) -> None:
-        self._speeder.speed = self._speed
-
     def change_speed(self, speed_change: Speed) -> None:
+        """
+        Change the speed according to provided speed change request.
+
+        Parameters
+        ----------
+        speed_change
+            Speed change request.
+        """
         self._change_speed.get(speed_change, self._change_speed[Speed.MAINTAIN])()
 
+    def reset(self) -> None:
+        """Reset speed to original value."""
+        self._speeder.speed = self._speed
+
     def increase(self) -> None:
-        self._speeder.speed += int(self._speed_change * self._speed)
+        """Make the speed higher."""
+        self._speeder.speed += self._speed_change * self._speed
 
     def decrease(self) -> None:
-        self._speeder.speed -= int(self._speed_change * self._speed)
-        self._speeder.speed = max(0, self._speeder.speed)
+        """Make the speed lower."""
+        self._speeder.speed -= self._speed_change * self._speed
+        self._speeder.speed = max(0.0, self._speeder.speed)
 
 
 class SpeedAction(Listener):
@@ -59,7 +93,14 @@ class SpeedAction(Listener):
     _speed_action = Speed.MAINTAIN
 
     def __init__(self, speed_changer: SpeedChanger) -> None:
-        """Store instance of `SpeedChanger` to manipulate."""
+        """
+        Store instance of `SpeedChanger` to manipulate.
+
+        Parameters
+        ----------
+        speed_changer
+            Instance of `SpeedChanger` to manipulate.
+        """
         self._speed_changer = speed_changer
         log.info("Created %s", self)
 
@@ -72,16 +113,22 @@ class SpeedAction(Listener):
 
 
 class MaintainSpeedAction(SpeedAction):
-    pass
+    """`SpeedAction` that keeps speed as-is."""
 
 
 class IncreaseSpeedAction(SpeedAction):
+    """SpeedAction that increases speed."""
+
     _speed_action = Speed.FASTER
 
 
 class DecreaseSpeedAction(SpeedAction):
+    """SpeedAction that decreases speed."""
+
     _speed_action = Speed.SLOWER
 
 
 class ResetSpeedAction(SpeedAction):
+    """SpeedAction that resets speed."""
+
     _speed_action = Speed.RESET
