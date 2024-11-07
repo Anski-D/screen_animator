@@ -1,6 +1,7 @@
 import logging
 from collections.abc import Iterable, Mapping
 from typing import Any
+from curses import window
 
 import pygame as pg
 
@@ -46,13 +47,14 @@ class Controller:
             f"{type(self).__name__}({type(self._settings).__name__}(), {self._model})"
         )
 
-    def run(self, event_manager: "EventManager") -> None:
+    def run(self, stdscr: window, event_manager: "EventManager") -> None:
         """Run main loop using `EventManager` to manager events."""
         log.info(
             "!!! %s%s !!!",
             type(self).__name__,
             " now running, entering main loop".upper(),
         )
+        stdscr.nodelay(True)
         timings_dict = self._settings["timings"]
         while self._initialized:
             self._clock.tick(timings_dict["fps"])

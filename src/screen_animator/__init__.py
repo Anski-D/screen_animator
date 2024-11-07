@@ -5,6 +5,7 @@ import argparse
 import logging
 from collections.abc import Callable
 from pathlib import Path
+import curses
 
 import pygame as pg
 
@@ -139,7 +140,7 @@ def main() -> None:
     event_manager = EventManager(listeners, event_types)
 
     try:
-        screen_animator.run(event_manager)
+        curses.wrapper(screen_animator.run, event_manager)
     except KeyboardInterrupt:
         pass
     finally:
