@@ -5,6 +5,7 @@ import argparse
 import logging
 from collections.abc import Callable
 from pathlib import Path
+from itertools import repeat
 
 import pygame as pg
 
@@ -39,10 +40,12 @@ ITEM_GROUP_TYPES: list[Callable[[SettingsManager, pg.Rect], ItemGroup]] = [
 ]
 EVENT_TYPES: list[tuple[int, int] | int] = [
     pg.QUIT,
-    (pg.KEYDOWN, pg.K_q),
-    (pg.KEYDOWN, pg.K_DOWN),
-    (pg.KEYDOWN, pg.K_LEFT),
-    (pg.KEYDOWN, pg.K_RIGHT),
+]
+KEYPRESS_EVENTS = [
+    pg.K_q,
+    pg.K_DOWN,
+    pg.K_LEFT,
+    pg.K_RIGHT,
 ]
 
 
@@ -125,9 +128,10 @@ def main() -> None:
     model = Model(settings_manager, item_group_types, display.get_rect())
     view = View(model, display, settings_manager.settings, args.rotate)
 
-    event_types = EVENT_TYPES + [model.update_event_type]
+    # event_types = EVENT_TYPES + [model.update_event_type]
 
     screen_animator = Controller(settings_manager.settings, model)
+    event_types = EVENT_TYPES + list(zip(repeat(screen_animator.keypress_manager.keypress_event_type), KEYPRESS_EVENTS)) + [model.update_event_type]
     listeners = [
         quit_action := QuitAction([screen_animator]),
         quit_action,

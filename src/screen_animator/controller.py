@@ -1,8 +1,11 @@
 import logging
 from collections.abc import Iterable, Mapping
 from typing import Any
+from multiprocessing import Process
+from threading import Thread
 
 import pygame as pg
+from sshkeyboard import listen_keyboard
 
 from screen_animator.listener import Listener
 from screen_animator.model import Model
@@ -37,8 +40,8 @@ class Controller:
         self._model = model
         log.info("Creating %s", self)
 
+        self.keypress_manager = KeypressManager()
         self._clock = pg.time.Clock()
-
         self._initialized = True
 
     def __repr__(self) -> str:
@@ -54,9 +57,13 @@ class Controller:
             " now running, entering main loop".upper(),
         )
         timings_dict = self._settings["timings"]
+        # keypress_process = Process(target=listen_keyboard, args=(self.keypress_manager.process_keypress,), daemon=True)
+        keypress_process = Thread(target=listen_keyboard, args=(self.keypress_manager.process_keypress,), daemon=True)
+        keypress_process.start()
         while self._initialized:
             self._clock.tick(timings_dict["fps"])
             self._model.update()
+            # listen_keyboard(self.keypress_manager.process_keypress)
             event_manager.manage_events()
             timings_dict["fps_actual"] = self._clock.get_fps()
 
@@ -169,3 +176,18 @@ class QuitAction(Listener):
         """Iterate over instance to tell to quit."""
         for quitter in self._quitters:
             quitter.quit()
+
+
+class KeypressManager:
+    def __init__(self) -> None:
+        self.keypress_event_type = pg.event.custom_type()
+        pg.event.set_blocked(pg.KEYDOWN)
+        log.info("Created %s", self)
+
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}()"
+
+    async def process_keypress(self, key: str) -> None:
+        pg.event.post(
+            pg.Event(self.keypress_event_type, getattr(pg, f"K_{key}")),
+        )
