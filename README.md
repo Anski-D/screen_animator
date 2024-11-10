@@ -1,5 +1,8 @@
 # Screen_Animator
 
+![GitHub Release](https://img.shields.io/github/v/release/Anski-D/screen_animator)
+![GitHub License](https://img.shields.io/github/license/Anski-D/screen_animator)
+![Python Version from PEP 621 TOML](https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2FAnski-D%2Fscreen_animator%2Frefs%2Fheads%2Fmain%2Fpyproject.toml)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
 
 `Screen_Animator` is a Python package to generate animated messages and images on a screen, with a focus on the Raspberry Pi.
