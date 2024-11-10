@@ -6,7 +6,7 @@
 
 The package uses an input and image files to generate messages that scroll right-to-left, and images that will randomly position themselves in the background, all while the colors continually change.
 
-`Screen_Animator` makes extensive use of the Pygame Community Edition (`pygame-ce`) package.
+`Screen_Animator` makes extensive use of the [Pygame Community Edition](https://pyga.me/) (`pygame-ce`) package.
 
 ## Prerequisites
 
