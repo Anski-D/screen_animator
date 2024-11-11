@@ -147,9 +147,9 @@ class EventManager:
                 listener.notify()
 
 
-class QuitEvent(Listener):
+class QuitAction(Listener):
     """
-    Custom listener for quit events.
+    Custom listener to perform quit action.
 
     Methods
     -------
@@ -160,6 +160,7 @@ class QuitEvent(Listener):
     def __init__(self, quitters: Iterable) -> None:
         """Store iterable of instances to quit when required."""
         self._quitters = quitters
+        log.info("Created %s", self)
 
     def __repr__(self) -> str:
         return f"{type(self).__name__}({self._quitters})"
