@@ -78,12 +78,12 @@ class TestSpeedChanger:
 
     @pytest.mark.parametrize(
         "speed_input, check_method",
-        [(Speed.FASTER, float.__gt__), (Speed.SLOWER, float.__lt__)],
+        [(Speed.FASTER, int.__gt__), (Speed.SLOWER, int.__lt__)],
     )
     def test_change_speed_changes(
         self,
         speed_input: Speed,
-        check_method: Callable[[float, float], bool],
+        check_method: Callable[[float | int, float | int], bool],
         example_speed_changer: SpeedChanger,
     ) -> None:
         """Speed of `Speeder` is changed."""
@@ -153,11 +153,11 @@ class TestMaintainSpeedAction:
 
 @pytest.mark.parametrize(
     "speed_action, check_method",
-    [(IncreaseSpeedAction, float.__gt__), (DecreaseSpeedAction, float.__lt__)],
+    [(IncreaseSpeedAction, int.__gt__), (DecreaseSpeedAction, int.__lt__)],
 )
 def test_speed_action_changes_speed(
     speed_action: type[SpeedAction],
-    check_method: Callable[[float, float], bool],
+    check_method: Callable[[float | int, float | int], bool],
     example_speed_changer: SpeedChanger,
 ) -> None:
     """Speed of `Speeder` is changed."""

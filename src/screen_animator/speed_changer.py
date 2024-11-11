@@ -72,11 +72,11 @@ class SpeedChanger:
 
     def increase(self) -> None:
         """Make the speed higher."""
-        self._speeder.speed += self._speed_change * self._speed
+        self._speeder.speed += round(self._speed_change * self._speed)
 
     def decrease(self) -> None:
         """Make the speed lower."""
-        self._speeder.speed -= self._speed_change * self._speed
+        self._speeder.speed -= round(self._speed_change * self._speed)
         self._speeder.speed = max(0.0, self._speeder.speed)
 
 
