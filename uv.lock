@@ -785,7 +785,7 @@ wheels = [
 
 [[package]]
 name = "screen-animator"
-version = "0.13.0a0"
+version = "0.13.0"
 source = { editable = "." }
 dependencies = [
     { name = "cairosvg" },
