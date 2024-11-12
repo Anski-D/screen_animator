@@ -331,9 +331,15 @@ class RandomImagesItemGroup(TimeableItemGroup):
                 image.update()
                 reattempts_allowed -= 1
                 reattempts_taken_total += 1
-                if reattempts_taken_total % 100000 == 0:
+                if reattempts_taken_total >= 1000 and reattempts_allowed <= 0:
                     log.debug(
-                        "%s reattempts so far, currently on image %s of %s",
+                        "Limit of image reposition attempts reached for image %s/%s",
+                        image_idx,
+                        num_items,
+                    )
+                elif reattempts_taken_total % 10000 == 0:
+                    log.debug(
+                        "%s total reattempts so far, currently on image %s of %s",
                         reattempts_taken_total,
                         image_idx,
                         num_items,
