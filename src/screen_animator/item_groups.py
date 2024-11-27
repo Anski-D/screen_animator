@@ -205,8 +205,7 @@ class LeftScrollingTextItemGroup(ItemGroup):
             else:
                 try:
                     message.content = self._generate_message(
-                        getattr(message, "message_text"),
-                        getattr(message, "font"),
+                        message.message_text, message.font
                     )
                 except AttributeError:
                     pass
