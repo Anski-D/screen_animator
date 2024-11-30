@@ -117,18 +117,18 @@ class MaintainSpeedAction(SpeedAction):
 
 
 class IncreaseSpeedAction(SpeedAction):
-    """SpeedAction that increases speed."""
+    """`SpeedAction` that increases speed."""
 
     _speed_action = Speed.FASTER
 
 
 class DecreaseSpeedAction(SpeedAction):
-    """SpeedAction that decreases speed."""
+    """`SpeedAction` that decreases speed."""
 
     _speed_action = Speed.SLOWER
 
 
 class ResetSpeedAction(SpeedAction):
-    """SpeedAction that resets speed."""
+    """`SpeedAction` that resets speed."""
 
     _speed_action = Speed.RESET
