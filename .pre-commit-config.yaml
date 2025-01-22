@@ -12,24 +12,20 @@ repos:
     -   id: check-ast
     -   id: check-docstring-first
 -   repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.5.1
+    rev: 0.5.22
     hooks:
     -   id: uv-lock
--   repo: https://github.com/psf/black
-    rev: 24.10.0
-    hooks:
-    -   id: black
 -   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.13.0
+    rev: v1.14.1
     hooks:
     -   id: mypy
         files: ^src/
--   repo: https://github.com/PyCQA/pylint
-    rev: v3.3.1
+-   repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.9.2
     hooks:
-    -   id: pylint
-        args: [-j 0, --errors-only, --disable=import-error]
+    -   id: ruff
         files: ^src/
+    -   id: ruff-format
 -   repo: local
     hooks:
     -   id: tox check not slow
