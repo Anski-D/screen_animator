@@ -189,7 +189,7 @@ class SettingsManager:
         """
         messages_dict = self._settings["messages"]
 
-        return f'{random.choice(messages_dict["messages"])}{messages_dict["separator"]}'
+        return f"{random.choice(messages_dict['messages'])}{messages_dict['separator']}"
 
     def set_font(self) -> None:
         """Create the `pygame` font instance for rendering messages."""

@@ -98,7 +98,7 @@ class TestSettingsManager:
         messages_dict = example_settings_dict_with_tuples["messages"]
 
         assert settings_manager.generate_message_text() in [
-            f'{message}{messages_dict["separator"]}'
+            f"{message}{messages_dict['separator']}"
             for message in messages_dict["messages"]
         ]
 
